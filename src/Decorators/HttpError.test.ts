@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { getMockResponse } from '../__mocks__/Express/response.mock';
+import { getMockResponse } from '../__mocks__/Express/responseMock';
 import { handleHttpError, HttpError } from './HttpError';
 
 describe('HttpError', () => {

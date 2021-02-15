@@ -1,5 +1,5 @@
 {
-  "name": "doc.ts",
+  "name": "@mwinberry/doc-ts",
   "version": "0.0.1",
   "description": "A micro framework for typescript express apps.",
   "main": "lib/index.js",

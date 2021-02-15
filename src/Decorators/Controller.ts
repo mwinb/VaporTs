@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { MiddleWare, RouteDoc, ExpressController } from '..';
 import { RouteDocMeta } from '../Interfaces';
 export function Controller(path: string, middleWare: MiddleWare[] = []) {
-  return (target: Record<string, any>): Record<string, any> => {
+  return (target: any): Record<string, any> => {
     const meta = getMeta(target.prototype);
     meta.url = path;
     meta.middleWare = [...meta.middleWare, ...middleWare];
