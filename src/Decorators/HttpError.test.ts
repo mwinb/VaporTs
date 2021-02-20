@@ -2,7 +2,7 @@ import { Response } from 'express';
 import { getMockResponse } from '../__mocks__/Express/responseMock';
 import { handleHttpError, HttpError, HttpErrorHandler } from './HttpError';
 
-let mockClass = {
+const mockClass = {
   mockFunction: Function
 };
 
