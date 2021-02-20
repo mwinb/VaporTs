@@ -1,5 +1,5 @@
-import { RouteDocMeta } from '..';
+import { ControllerDoc } from '..';
 
 export interface ExpressController {
-  routeDocMeta?: RouteDocMeta;
+  controllerDoc?: ControllerDoc;
 }

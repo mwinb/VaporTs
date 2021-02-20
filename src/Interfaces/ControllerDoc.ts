@@ -1,7 +1,7 @@
 import { MiddleWare, RouteDoc } from '..';
 
-export interface RouteDocMeta {
-  url: string;
+export interface ControllerDoc {
+  path: string;
   routes: Map<string, RouteDoc>;
-  middleWare: MiddleWare[];
+  middleware: MiddleWare[];
 }

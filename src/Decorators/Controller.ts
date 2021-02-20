@@ -1,27 +1,27 @@
 import { Router } from 'express';
 import { MiddleWare, RouteDoc, ExpressController } from '..';
-import { RouteDocMeta } from '../Interfaces';
+import { ControllerDoc } from '../Interfaces';
 export function Controller(path: string, middleWare: MiddleWare[] = []) {
-  return (target: any): Record<string, any> => {
-    const meta = getMeta(target.prototype);
-    meta.url = path;
-    meta.middleWare = [...meta.middleWare, ...middleWare];
+  return (target: any): any => {
+    const controllerDoc = getControllerDoc(target.prototype);
+    controllerDoc.path = path;
+    controllerDoc.middleware = [...controllerDoc.middleware, ...middleWare];
     return target;
   };
 }
 
-export function getMeta(target: ExpressController): RouteDocMeta {
-  if (!target.routeDocMeta) {
-    target.routeDocMeta = {
-      url: '',
+export function getControllerDoc(target: ExpressController): ControllerDoc {
+  if (!target.controllerDoc) {
+    target.controllerDoc = {
+      path: '',
       routes: new Map<string, RouteDoc>(),
-      middleWare: []
+      middleware: []
     };
   }
-  return target.routeDocMeta;
+  return target.controllerDoc;
 }
 
-export function initBaseRoute(router: Router, controller: Record<string, any>): void {
-  const meta = getMeta(controller);
-  if (meta.middleWare.length) router.use(meta.url, ...meta.middleWare);
+export function initControllerMiddleware(router: Router, controller: Record<string, any>): void {
+  const routeDoc = getControllerDoc(controller);
+  if (routeDoc.middleware.length) router.use(routeDoc.path, routeDoc.middleware);
 }

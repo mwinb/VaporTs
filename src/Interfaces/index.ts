@@ -1,3 +1,4 @@
 export * from './RouteDoc';
-export * from './RouteDocMeta';
+export * from './ControllerDoc';
 export * from './ExpressController';
+export * from './DocAppConfig';

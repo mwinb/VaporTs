@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -87,56 +87,56 @@
 <a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Router } from 'express';
 import { MiddleWare, RouteDoc, ExpressController } from '..';
-import { RouteDocMeta } from '../Interfaces';
-<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >C</span>ontroller(</span>path: string, middleWare: MiddleWare[] = <span class="branch-0 cbranch-no" title="branch not covered" >[])</span> {
-<span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >(t</span>arget: Record&lt;string, any&gt;): Record&lt;string, any&gt; =&gt; {</span>
-    const meta = <span class="cstat-no" title="statement not covered" >getMeta(target.prototype);</span>
-<span class="cstat-no" title="statement not covered" >    meta.url = path;</span>
-<span class="cstat-no" title="statement not covered" >    meta.middleWare = [...meta.middleWare, ...middleWare];</span>
-<span class="cstat-no" title="statement not covered" >    return target;</span>
+import { ControllerDoc } from '../Interfaces';
+export function Controller(path: string, middleWare: MiddleWare[] = []) {
+  return (target: any): any =&gt; {
+    const controllerDoc = getControllerDoc(target.prototype);
+    controllerDoc.path = path;
+    controllerDoc.middleware = [...controllerDoc.middleware, ...middleWare];
+    return target;
   };
 }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >g</span>etMeta(</span>target: ExpressController): RouteDocMeta {
-<span class="cstat-no" title="statement not covered" >  if (!target.routeDocMeta) {</span>
-<span class="cstat-no" title="statement not covered" >    target.routeDocMeta = {</span>
-      url: '',
+export function getControllerDoc(target: ExpressController): ControllerDoc {
+  if (!target.controllerDoc) {
+    target.controllerDoc = {
+      path: '',
       routes: new Map&lt;string, RouteDoc&gt;(),
-      middleWare: []
+      middleware: []
     };
   }
-<span class="cstat-no" title="statement not covered" >  return target.routeDocMeta;</span>
+  return target.controllerDoc;
 }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >i</span>nitBaseRoute(</span>router: Router, controller: Record&lt;string, any&gt;): void {
-  const meta = <span class="cstat-no" title="statement not covered" >getMeta(controller);</span>
-<span class="cstat-no" title="statement not covered" >  if (meta.middleWare.length) <span class="cstat-no" title="statement not covered" >router.use(meta.url, ...meta.middleWare);</span></span>
+export function initControllerMiddleware(router: Router, controller: Record&lt;string, any&gt;): void {
+  const routeDoc = getControllerDoc(controller);
+  if (routeDoc.middleware.length) router.use(routeDoc.path, routeDoc.middleware);
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -145,7 +145,7 @@ import { RouteDocMeta } from '../Interfaces';
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Feb 15 2021 14:03:54 GMT-0700 (Mountain Standard Time)
+                at Sat Feb 20 2021 00:26:32 GMT-0700 (Mountain Standard Time)
             </div>
         </div>
         <script src="../prettify.js"></script>

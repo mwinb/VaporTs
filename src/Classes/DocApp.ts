@@ -1,35 +1,44 @@
 import { Application, Request, Response, Router } from 'express';
-import { getRoutes, initBaseRoute, initializeRoutes, RouteDoc } from '..';
+import { getRoutes, initControllerMiddleware, initializeRoutes, RouteDoc } from '..';
+import { DocAppConfig } from '../Interfaces/DocAppConfig';
 
-class DocApp {
-  routes: RouteDoc[] = [{ method: 'GET', path: '/' }];
+export class DocApp implements DocAppConfig {
+  routes: RouteDoc[] = [];
+  public showApi: boolean;
+  public path: string;
+  public controllers: Record<string, any>[];
+  public middleware: any[];
+  public app: Application;
+  public router: Router;
 
-  constructor(
-    public route: string,
-    public showApi: boolean,
-    private controllers: Record<string, any>[],
-    private middleWares: any[],
-    private app: Application,
-    private router: Router
-  ) {
+  constructor({ path = '', showApi = true, controllers = [], middleware = [], app, router }: DocAppConfig) {
+    this.path = path;
+    this.showApi = showApi;
+    this.controllers = controllers;
+    this.middleware = middleware;
+    this.app = app;
+    this.router = router;
+    if (showApi) this.routes.push({ method: 'GET', path: '/' + path });
     this.initializeMiddlewares();
     this.initializeControllers();
   }
 
   initializeMiddlewares(): void {
-    this.app.use(this.route, this.middleWares);
+    if (this.middleware.length) this.app.use(this.path, this.middleware);
   }
 
   initializeControllers(): void {
     this.controllers.forEach(controller => {
-      initBaseRoute(this.router, controller);
-      initializeRoutes(this.router, controller);
-      this.routes = [...this.routes, ...getRoutes(controller)];
+      if (Object.getPrototypeOf(controller).controllerDoc) {
+        initControllerMiddleware(this.router, controller);
+        initializeRoutes(this.router, controller);
+        this.routes = [...this.routes, ...getRoutes(controller)];
+      }
     });
 
-    this.app.use(this.route, this.router);
+    this.app.use(this.path, this.router);
 
-    this.showApi && this.app.use(this.route, this.api);
+    this.showApi && this.app.use(this.path, this.api);
   }
 
   api = (_req: Request, res: Response): void => {
@@ -45,7 +54,7 @@ class DocApp {
         ${(() => {
           let routesHtml = '';
           this.routes.forEach(val => {
-            routesHtml += `<h3>${val.method} : <a href="${this.route}${val.path}">${this.route}${val.path}</a></h3>`;
+            routesHtml += `<h3>${val.method} : <a href="${this.path}${val.path}">${this.path}${val.path}</a></h3>`;
           });
           return routesHtml;
         })()}
@@ -54,5 +63,3 @@ class DocApp {
     );
   };
 }
-
-export default DocApp;
