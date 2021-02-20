@@ -1,5 +1,6 @@
-export const getRouterMock = () => {
+export const getMockrouter = () => {
   return {
-    use: jest.fn()
+    use: jest.fn(),
+    get: jest.fn()
   };
 };

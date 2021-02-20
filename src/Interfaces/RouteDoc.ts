@@ -1,7 +1,8 @@
-import { MiddleWare, RouteMethod } from '..';
+import { Middleware } from '../Types/Middleware';
+import { RouteMethod } from '../Types/RouteMethod';
 
 export interface RouteDoc {
   method: RouteMethod;
   path: string;
-  middleWare?: MiddleWare[];
+  middleware?: Middleware[];
 }

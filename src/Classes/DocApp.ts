@@ -1,6 +1,8 @@
-import { Application, Request, Response, Router } from 'express';
-import { getRoutes, initControllerMiddleware, initializeRoutes, RouteDoc } from '..';
+import { Application, Router, Request, Response } from 'express';
+import { initializeRoutes, getRouteDocs } from '../Decorators/Route';
+import { initControllerMiddleware } from '../Decorators/Controller';
 import { DocAppConfig } from '../Interfaces/DocAppConfig';
+import { RouteDoc } from '../Interfaces/RouteDoc';
 
 export class DocApp implements DocAppConfig {
   routes: RouteDoc[] = [];
@@ -8,23 +10,30 @@ export class DocApp implements DocAppConfig {
   public path: string;
   public controllers: Record<string, any>[];
   public middleware: any[];
-  public app: Application;
+  public expressApplication: Application;
   public router: Router;
 
-  constructor({ path = '', showApi = true, controllers = [], middleware = [], app, router }: DocAppConfig) {
+  constructor({
+    path = '',
+    showApi = true,
+    middleware = [],
+    controllers,
+    expressApplication: app,
+    router
+  }: DocAppConfig) {
     this.path = path;
     this.showApi = showApi;
     this.controllers = controllers;
     this.middleware = middleware;
-    this.app = app;
+    this.expressApplication = app;
     this.router = router;
-    if (showApi) this.routes.push({ method: 'GET', path: '/' + path });
+    showApi && this.routes.push({ method: 'GET', path: this.path.length ? '' : '/' });
     this.initializeMiddlewares();
     this.initializeControllers();
   }
 
   initializeMiddlewares(): void {
-    if (this.middleware.length) this.app.use(this.path, this.middleware);
+    if (this.middleware.length) this.expressApplication.use(this.path, this.middleware);
   }
 
   initializeControllers(): void {
@@ -32,13 +41,13 @@ export class DocApp implements DocAppConfig {
       if (Object.getPrototypeOf(controller).controllerDoc) {
         initControllerMiddleware(this.router, controller);
         initializeRoutes(this.router, controller);
-        this.routes = [...this.routes, ...getRoutes(controller)];
+        this.routes = [...this.routes, ...getRouteDocs(controller)];
       }
     });
 
-    this.app.use(this.path, this.router);
+    this.expressApplication.use(this.path, this.router);
 
-    this.showApi && this.app.use(this.path, this.api);
+    this.showApi && this.expressApplication.use(this.path, this.api);
   }
 
   api = (_req: Request, res: Response): void => {

@@ -1,8 +1,8 @@
 import express from 'express';
 import SatelliteService from './satellites.service';
 import SatelliteModel from './satellites.model';
-import { Controller, Route } from '../../../src';
 import morgan from 'morgan';
+import { Controller, Route } from '../../../src';
 @Controller('/satellite', [morgan('tiny')])
 class SatelliteController {
   exampleModel: SatelliteModel = { name: 'Sat Name', lat: 1234, lon: 1234, id: 101010, status: 'Example Satus' };

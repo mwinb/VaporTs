@@ -1,4 +1,4 @@
-import { ControllerDoc } from '..';
+import { ControllerDoc } from './ControllerDoc';
 
 export interface ExpressController {
   controllerDoc?: ControllerDoc;

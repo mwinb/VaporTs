@@ -1,11 +1,13 @@
 import { Router } from 'express';
-import { getControllerDoc, HttpErrorHandler } from '..';
-import { RouteMethod, MiddleWare, RouteDoc } from '..';
+import { RouteDoc } from '../Interfaces/RouteDoc';
+import { RouteMethod } from '../Types/RouteMethod';
+import { RouteParams } from '../Types/RouteParams';
+import { getControllerDoc } from './Controller';
+import { HttpErrorHandler } from './HttpError';
 
-type RouteParams = { path?: string; middleWare?: MiddleWare[]; applyHttpError?: boolean };
 export function Route(
   method: RouteMethod,
-  { path = '', middleWare = [], applyHttpError = true }: RouteParams = {}
+  { path = '', middleware = [], applyHttpError = true }: RouteParams = {}
 ): (target: Record<string, any>, propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor {
   return function (
     target: Record<string, any>,
@@ -13,25 +15,30 @@ export function Route(
     descriptor: PropertyDescriptor
   ): PropertyDescriptor {
     const meta = getControllerDoc(target);
-    meta.routes.set(propertyKey, { path: path, method: method, middleWare: middleWare });
+    meta.routes.set(propertyKey, { path: path, method: method, middleware: middleware });
     if (applyHttpError) {
       return HttpErrorHandler(target, propertyKey, descriptor);
     }
-    descriptor['meta'] = 'test';
-    console.log();
     return descriptor;
   };
 }
 
-export function getRouterMethods(controller: Record<string, any>): string[] {
+export function getRouteMethodNames(controller: Record<string, any>): string[] {
   return Object.getOwnPropertyNames(Object.getPrototypeOf(controller)).filter(name => {
     const method = controller[name];
     return method instanceof Function && name !== 'constructor';
   });
 }
 
+export function getRouteDocs(controller: Record<string, any>): RouteDoc[] {
+  const meta = getControllerDoc(Object.getPrototypeOf(controller));
+  return Array.from(meta.routes.values()).map(r => {
+    return { path: meta.path + r.path, method: r.method };
+  });
+}
+
 export function initializeRoutes(router: Router, controller: Record<string, any>): void {
-  const methods = getRouterMethods(controller);
+  const methods = getRouteMethodNames(controller);
   const meta = getControllerDoc(Object.getPrototypeOf(controller));
   methods
     .filter(m => meta.routes.has(m))
@@ -41,14 +48,7 @@ export function initializeRoutes(router: Router, controller: Record<string, any>
       console.log(
         `Docjs: Binding ${controller.constructor.name}.${m} to ${routeDoc.method} @ ${meta.path}${routeDoc.path}`
       );
-      router[routeDoc.method.toLowerCase()](`${meta.path}${routeDoc.path}`, ...routeDoc.middleWare, controller[m]);
+      router[routeDoc.method.toLowerCase()](`${meta.path}${routeDoc.path}`, ...routeDoc.middleware, controller[m]);
     });
   console.log('\n');
-}
-
-export function getRoutes(controller: Record<string, any>): RouteDoc[] {
-  const meta = getControllerDoc(Object.getPrototypeOf(controller));
-  return Array.from(meta.routes.values()).map(r => {
-    return { path: meta.path + r.path, method: r.method };
-  });
 }

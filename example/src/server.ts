@@ -1,14 +1,17 @@
-import { DocApp } from '../../src/Classes/DocApp';
 import express from 'express';
+import { DocApp } from '../../src';
 import SatelliteController from './Satellites/satellites.controller';
 
 const port = 5000;
-const app = new DocApp({
+const expressApp = express();
+const appV1 = new DocApp({
+  path: '/v1',
   controllers: [new SatelliteController()],
-  app: express(),
+  expressApplication: expressApp,
   router: express.Router()
 });
-app.app.listen(port, () => {
+
+appV1.expressApplication.listen(port, () => {
   console.log(`App listening on the port ${port}`);
-  if (app.showApi) console.log(`View: http://localhost:${port}${app.path}`);
+  if (appV1.showApi) console.log(`View v1: http://localhost:${port}${appV1.path}`);
 });

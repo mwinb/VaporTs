@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { ExpressController } from '..';
+import { ExpressController } from '../Interfaces/ExpressController';
 import { MockControllerWithMiddleWare, MockControllerWithoutMiddleWare } from '../__mocks__/controllerMocks';
 import { mockMiddleware } from '../__mocks__/Express/mockMiddleware';
-import { getRouterMock } from '../__mocks__/Express/routerMock';
+import { getMockrouter } from '../__mocks__/Express/routerMock';
 import { getControllerDoc, initControllerMiddleware } from './Controller';
 
 describe('Controller decorator', () => {
@@ -31,7 +31,7 @@ describe('Controller decorator', () => {
   describe('initControllerMiddleware', () => {
     let router: Router;
     beforeEach(() => {
-      router = getRouterMock() as any;
+      router = getMockrouter() as any;
     });
     it('does not initialize the controllers middleware if no middleware was provided', () => {
       initControllerMiddleware(router, testController);
@@ -40,7 +40,7 @@ describe('Controller decorator', () => {
     it('initializes the controllers middle ware', () => {
       testController = new MockControllerWithMiddleWare();
       initControllerMiddleware(router, testController);
-      expect(router.use).toHaveBeenCalledWith(testController.controllerDoc.path, [mockMiddleware]);
+      expect(router.use).toHaveBeenCalledWith(testController.controllerDoc.path, mockMiddleware);
     });
   });
 });
