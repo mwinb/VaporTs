@@ -1,8 +1,8 @@
 {
-  "name": "tsalgs",
-  "version": "1.0.0",
+  "name": "doc-ts-example",
+  "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "start": "nodemon ./src/server.ts",
