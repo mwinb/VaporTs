@@ -15,7 +15,7 @@ export class DocApp implements DocAppConfig {
 
   constructor({
     path = '',
-    showApi = true,
+    showApi = false,
     middleware = [],
     controllers,
     expressApplication: app,

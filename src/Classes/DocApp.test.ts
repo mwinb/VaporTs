@@ -32,8 +32,16 @@ describe('Constructor', () => {
       expect(testDocApp.path).toBe('');
     });
 
-    it('sets show api to true by default', () => {
-      expect(testDocApp.showApi).toBeTruthy();
+    it('sets show api to false by default', () => {
+      expect(testDocApp.showApi).toBeFalsy();
+    });
+
+    it('does not add a RouteDoc to the app for the api', () => {
+      expect(testDocApp.routes[0].path).not.toEqual('');
+    });
+
+    it('does not add the api path to the app', () => {
+      expect(mockExpressApp.use).not.toHaveBeenLastCalledWith(testDocApp.path, testDocApp.api);
     });
 
     it('initializes app controllers on construction', () => {
@@ -42,6 +50,18 @@ describe('Constructor', () => {
 
     it('initializes middleware on construction', () => {
       expect(initializeMiddleware).toHaveBeenCalled();
+    });
+  });
+
+  describe('No Api', () => {
+    beforeEach(() => {
+      testDocApp = new DocApp({
+        showApi: true,
+        controllers: [new MockControllerWithRoutes()],
+        middleware: [mockMiddleware],
+        expressApplication: mockExpressApp,
+        router: getMockrouter() as any
+      });
     });
 
     it('adds a GET method to DocApps RouteDocs if the showApi method is set to true', () => {
@@ -61,27 +81,6 @@ describe('Constructor', () => {
       const mockResponse = getMockResponse();
       testDocApp.api({} as any, mockResponse);
       expect(mockResponse.send).toHaveBeenCalled();
-    });
-  });
-
-  describe('No Api', () => {
-    beforeEach(() => {
-      testDocApp = new DocApp({
-        path: '/testApp',
-        showApi: false,
-        controllers: [new MockControllerWithRoutes()],
-        middleware: [mockMiddleware],
-        expressApplication: mockExpressApp,
-        router: getMockrouter() as any
-      });
-    });
-
-    it('does not add a RouteDoc to the app for the api', () => {
-      expect(testDocApp.routes[0].path).not.toEqual('');
-    });
-
-    it('does not add the api path to the app', () => {
-      expect(mockExpressApp.use).not.toHaveBeenLastCalledWith(testDocApp.path, testDocApp.api);
     });
   });
 
@@ -106,6 +105,7 @@ describe('Constructor', () => {
     beforeEach(() => {
       testDocApp = new DocApp({
         path: '/testApp',
+        showApi: true,
         controllers: [new MockControllerWithRoutes()],
         middleware: [mockMiddleware],
         expressApplication: mockExpressApp,
@@ -123,6 +123,7 @@ describe('Constructor', () => {
     beforeEach(() => {
       testDocApp = new DocApp({
         path: '/testApp',
+        showApi: true,
         controllers: [{}],
         middleware: [mockMiddleware],
         expressApplication: mockExpressApp,
