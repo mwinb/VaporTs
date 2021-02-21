@@ -20,40 +20,41 @@ beforeEach(() => {
 describe('Satellites Controller', () => {
   it('should get all satellites', () => {
     satController.getAllSats(mockRequest, mockResponse);
-    expect(mockResponse.send).toHaveBeenCalledWith(satController.satService.sattelites);
+    expect(mockResponse.send).toHaveBeenCalledWith(satController.satService.satellites);
   });
 
-  it('can add a satellite', () => {
-    mockRequest = { body: { name: 'Sat Name', lat: 1234, lon: 1234, status: 'Example Satus' } };
-    satController.addSat(mockRequest, mockResponse);
-    expect(mockResponse.send).toHaveBeenCalledWith({
-      id: 3,
-      lat: 1234,
-      lon: 1234,
-      name: 'Sat Name',
-      status: 'Example Satus'
+  describe('Adding Satellite', () => {
+    it('can add a satellite', async () => {
+      mockRequest = { body: { name: 'Sat Name', lat: 1234, lon: 1234, status: 'Example Status' } };
+      await satController.addSat(mockRequest, mockResponse);
+      expect(mockResponse.send).toHaveBeenCalledWith({
+        id: 3,
+        lat: 1234,
+        lon: 1234,
+        name: 'Sat Name',
+        status: 'Example Status'
+      });
+    });
+
+    it('should send a 400 with a failure message if the required fields are not provided when adding a satellite', async () => {
+      mockRequest = { body: {} };
+      await satController.addSat(mockRequest, mockResponse);
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+    });
+
+    it('should send a 500 error if an unknown error occurs when adding a satellite', async () => {
+      jest.spyOn(SatelliteService.prototype, 'addOne').mockImplementationOnce((newSat: SatelliteModel) => {
+        throw new Error();
+      });
+      mockRequest = { body: { name: 'Sat Name', lat: 1234, lon: 1234, status: 'Example Status' } };
+      await satController.addSat(mockRequest, mockResponse);
+      expect(mockResponse.status).toHaveBeenCalledWith(500);
     });
   });
-
-  it('should send a 400 with a failure message if the required fields are not provided when adding a satellite', () => {
-    mockRequest = { body: {} };
-    satController.addSat(mockRequest, mockResponse);
-    expect(mockResponse.status).toHaveBeenCalledWith(400);
-  });
-
-  it('should send a 500 error if an unknown error occurs when adding a satellite', () => {
-    jest.spyOn(SatelliteService.prototype, 'addOne').mockImplementationOnce((newSat: SatelliteModel) => {
-      throw new Error();
-    });
-    mockRequest = { body: { name: 'Sat Name', lat: 1234, lon: 1234, status: 'Example Satus' } };
-    satController.addSat(mockRequest, mockResponse);
-    expect(mockResponse.sendStatus).toHaveBeenCalledWith(500);
-  });
-
   describe('patching satellite', () => {
     let satToPatch: SatelliteModel;
     beforeEach(() => {
-      satToPatch = satController.satService.sattelites[0];
+      satToPatch = satController.satService.satellites[0];
     });
     it('can patch a satellite', () => {
       satToPatch.name = 'New Name';
@@ -69,7 +70,7 @@ describe('Satellites Controller', () => {
       expect(mockResponse.status).toHaveBeenCalledWith(400);
     });
 
-    it('returns a 400 if the patch data does not conain one of the required fields', () => {
+    it('returns a 400 if the patch data does not contain one of the required fields', () => {
       mockRequest.body = { id: satToPatch.id };
       satController.patchSat(mockRequest, mockResponse);
       expect(mockResponse.status).toHaveBeenCalledWith(400);
@@ -85,10 +86,10 @@ describe('Satellites Controller', () => {
     });
   });
 
-  describe('Getting by id', () => {
+  describe('Getting Satellite by id', () => {
     let requestedSatellite: SatelliteModel;
     beforeEach(() => {
-      requestedSatellite = satController.satService.sattelites[0];
+      requestedSatellite = satController.satService.satellites[0];
     });
     it('can get a satellite by id', () => {
       mockRequest.params = { id: requestedSatellite.id };

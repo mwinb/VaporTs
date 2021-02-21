@@ -1,5 +1,3 @@
-import SatelliteService from './satellites.service';
-
 export type SatName = string;
 export type SatLon = number;
 export type SatLat = number;

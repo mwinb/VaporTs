@@ -14,8 +14,6 @@ DocTs is a minimal framework built to support a simple and only slightly opinion
 
 ## Controller
 
----
-
 ### Parameters:
 
 - Path: String (required)
@@ -40,8 +38,6 @@ class ExampleController {}
 ---
 
 ## Route
-
----
 
 ### Parameters:
 
@@ -71,8 +67,6 @@ class ExampleController {
 ---
 
 ## HttpErrorHandler
-
----
 
 The HttpErrorHandler is applied to all Routes by default, but can also be used as an individual decorator. This handler wraps asynchronous Route decorated functions in a try catch that listens for an HttpError to be thrown. The HttpError takes in the code and the response message. When caught by the handler, the express response status is set to the HttpErrors code and a json object with the code and message are sent. All uncaught errors respond with a 500 and an ambiguous error message.
 

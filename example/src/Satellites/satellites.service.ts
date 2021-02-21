@@ -1,17 +1,17 @@
 import SatelliteModel, { IncomingSatModel, SatId } from './satellites.model';
-import sats from './sattelites.json';
+import sats from './satellites.json';
 
 class SatelliteService {
-  sattelites: SatelliteModel[] = [];
+  satellites: SatelliteModel[] = [];
 
   constructor() {
-    this.sattelites = sats.map((sat, i) => {
+    this.satellites = sats.map((sat, i) => {
       return { ...sat, id: i };
     });
   }
 
   get satCount(): number {
-    return this.sattelites.length - 1;
+    return this.satellites.length - 1;
   }
 
   isValidSatId = (id: SatId): boolean => id <= this.satCount && id >= 0;
@@ -27,23 +27,23 @@ class SatelliteService {
   };
 
   getAll(): SatelliteModel[] {
-    return this.sattelites;
+    return this.satellites;
   }
 
   getOne(id: SatId): SatelliteModel {
-    return this.sattelites[id];
+    return this.satellites[id];
   }
 
   addOne(newSat: SatelliteModel): SatelliteModel {
-    newSat.id = this.sattelites.length;
-    this.sattelites.push(newSat);
+    newSat.id = this.satellites.length;
+    this.satellites.push(newSat);
     return newSat;
   }
 
   patchOne(newSat: SatelliteModel): SatelliteModel {
-    const oldSat = this.sattelites[newSat.id];
+    const oldSat = this.satellites[newSat.id];
     const patchedSat = { ...oldSat, ...newSat };
-    this.sattelites[newSat.id] = patchedSat;
+    this.satellites[newSat.id] = patchedSat;
     return patchedSat;
   }
 }

@@ -2,33 +2,29 @@ import express from 'express';
 import SatelliteService from './satellites.service';
 import SatelliteModel from './satellites.model';
 import morgan from 'morgan';
-import { Controller, Route } from '../../../src';
+import { Controller, HttpError, Route } from '@mwinberry/doc-ts';
 @Controller('/satellite', [morgan('tiny')])
 class SatelliteController {
   exampleModel: SatelliteModel = { name: 'Sat Name', lat: 1234, lon: 1234, id: 101010, status: 'Example Satus' };
 
   constructor(public satService = new SatelliteService()) {}
 
-  @Route('GET')
+  @Route('GET', { applyHttpError: false })
   getAllSats(_req: express.Request, res: express.Response) {
     res.send(this.satService.getAll());
   }
 
   @Route('POST')
-  addSat(req: express.Request, res: express.Response) {
+  async addSat(req: express.Request, res: express.Response) {
     const sat = req.body;
     if (!this.satService.canCreateSatellite(sat)) {
-      res.status(400).json({ message: 'Invalid properties provided.' });
+      throw new HttpError(400, 'InvalidProperties provided.');
     }
-    try {
-      const newSat = this.satService.addOne({ ...sat, id: undefined });
-      res.send(newSat);
-    } catch {
-      res.sendStatus(500);
-    }
+    const newSat = this.satService.addOne({ ...sat, id: undefined });
+    res.send(newSat);
   }
 
-  @Route('PATCH')
+  @Route('PATCH', { applyHttpError: false })
   patchSat(req: express.Request, res: express.Response) {
     const sat = req.body;
     if (!this.satService.canPatchSatellite(sat)) {
@@ -42,7 +38,7 @@ class SatelliteController {
     }
   }
 
-  @Route('GET', { path: '/:id' })
+  @Route('GET', { path: '/:id', applyHttpError: false })
   getSatById(req: express.Request, res: express.Response) {
     const { id } = req.params;
     if (!this.satService.isValidSatId(+id)) res.status(404).json({ message: 'Satellite not found.' });
@@ -53,7 +49,7 @@ class SatelliteController {
     }
   }
 
-  @Route('GET', { path: '-api' })
+  @Route('GET', { path: '-api', applyHttpError: false })
   getModel(_req: express.Request, res: express.Response) {
     res.send(
       `<!doctype html>
