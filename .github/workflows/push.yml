@@ -7,12 +7,16 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  CI/CD:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: 14
-      - run: npm ci
-      - run: npm test
+      - name: build
+        run: npm ci
+      - name: Jest Tests
+        run: npm test
+      - name: eslint
+        run: npm run lint
