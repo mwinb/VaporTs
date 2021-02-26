@@ -7,7 +7,6 @@ export class HttpError extends Error {
 }
 
 export const handleHttpError = (error: Error, res: Response): void => {
-  console.log(error.message);
   if (error instanceof HttpError) {
     res.status(error.code).json({ code: error.code, message: error.message });
   } else {
@@ -25,7 +24,6 @@ export function HttpErrorHandler(
     try {
       await originalMethod.apply(this, args);
     } catch (err) {
-      console.log(args[1]);
       handleHttpError(err, args[1]);
     }
   };

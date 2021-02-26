@@ -46,7 +46,7 @@ export function initializeRoutes(router: Router, controller: Record<string, any>
       const routeDoc = meta.routes.get(m);
       controller[m] = controller[m].bind(controller);
       console.log(
-        `Docjs: Binding ${controller.constructor.name}.${m} to ${routeDoc.method} @ ${meta.path}${routeDoc.path}`
+        `DocTs: Binding ${controller.constructor.name}.${m} to ${routeDoc.method} @ ${meta.path}${routeDoc.path}`
       );
       router[routeDoc.method.toLowerCase()](`${meta.path}${routeDoc.path}`, ...routeDoc.middleware, controller[m]);
     });
