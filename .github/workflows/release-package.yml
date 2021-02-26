@@ -25,12 +25,12 @@ jobs:
           node-version: 14
           registry-url: https://registry.npmjs.org/
       - run: npm ci
-      - run: git config --global user.name "GitHub CD bot"
-      - run: git config --global user.email "github-cd-bot@example.com"
+      - run: git config --global user.name "mwinb"
+      - run: git config --global user.email "michael.winberry@github.com"
       - run: npm version ${{ github.event.release.tag_name }} --allow-same-version
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - run: git push
+      - run: git push origin HEAD:main
         env:
           github-token: ${{ secrets.GITHUB_TOKEN }}
