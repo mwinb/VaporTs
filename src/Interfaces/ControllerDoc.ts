@@ -1,4 +1,4 @@
-import { Middleware } from '../Types/Middleware';
+import { Middleware } from '../Types/MiddlewareType';
 import { RouteDoc } from './RouteDoc';
 
 export interface ControllerDoc {

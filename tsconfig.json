@@ -13,5 +13,5 @@
     "declaration": true
   },
   "include": ["./src/**/*"],
-  "exclude": ["./src/**/*test*", "./src/__mocks__/**/*", "./example/**/*"]
+  "exclude": ["./src/**/*test*", "./src/__mocks__/**/*"]
 }

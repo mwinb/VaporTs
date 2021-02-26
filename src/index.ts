@@ -6,6 +6,6 @@ export * from './Interfaces/ControllerDoc';
 export * from './Interfaces/DocAppConfig';
 export * from './Interfaces/ExpressController';
 export * from './Interfaces/RouteDoc';
-export * from './Types/Middleware';
+export * from './Types/MiddlewareType';
 export * from './Types/RouteMethod';
 export * from './Types/RouteParams';

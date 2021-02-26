@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { ControllerDoc } from '../Interfaces/ControllerDoc';
 import { RouteDoc } from '../Interfaces/RouteDoc';
-import { Middleware } from '../Types/Middleware';
+import { Middleware } from '../Types/MiddlewareType';
 
 export function Controller(path: string, middleware: Middleware[] = []) {
   return (target: any): any => {
