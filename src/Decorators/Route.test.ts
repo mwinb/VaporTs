@@ -24,7 +24,11 @@ describe('Router Decorator', () => {
   });
 
   it('adds the decorated function path to the target controllers controllerDocs', () => {
-    expect(routes.get('mockRouteWithPath').path).toEqual('/:param');
+    expect(routes.get('mockRouteWithPath').paths.pop()).toEqual('/:param');
+  });
+
+  it('handles multiple paths', () => {
+    expect(routes.get('mockRouteWithMultiplePaths').paths.length).toBe(2);
   });
 
   it('adds the decorated functions middleware to the target controllers controllerDocs', () => {
@@ -71,7 +75,7 @@ describe('Getting RouteDocs', () => {
 
   it('adds the controller path to the routes path within the route docs', () => {
     const routeDocs = getRouteDocs(testController);
-    expect(routeDocs[0].path).toContain('/test');
+    expect(routeDocs[0].paths).toContain('/test');
   });
 });
 
@@ -79,15 +83,18 @@ describe('initializing routes', () => {
   it('initializes the decorated route methods and adds them to the provided router', () => {
     const mockRouter = getMockrouter() as any;
     const routeDocs = Array.from(getControllerDoc(testController).routes.entries());
+    let callIndex = 1;
     initializeRoutes(mockRouter, testController);
-    expect(mockRouter.get).toHaveBeenCalledTimes(routeDocs.length);
-    routeDocs.forEach((routerMethod: [string, RouteDoc], index: number) => {
-      expect(mockRouter.get).toHaveBeenNthCalledWith(
-        index + 1,
-        '/test' + routerMethod[1].path,
-        ...routerMethod[1].middleware,
-        testController[routerMethod[0]]
-      );
+    routeDocs.forEach((routerMethod: [string, RouteDoc]) => {
+      routerMethod[1].paths.forEach((p: string, i: number) => {
+        expect(mockRouter.get).toHaveBeenNthCalledWith(
+          callIndex,
+          '/test' + p,
+          ...routerMethod[1].middleware,
+          testController[routerMethod[0]]
+        );
+        callIndex += 1;
+      });
     });
   });
 });

@@ -27,7 +27,7 @@ export class DocApp implements DocAppConfig {
     this.middleware = middleware;
     this.expressApplication = app;
     this.router = router;
-    showApi && this.routes.push({ method: 'GET', path: this.path.length ? '' : '/' });
+    showApi && this.routes.push({ method: 'GET', paths: [this.path.length ? '' : '/'] });
     this.initializeMiddlewares();
     this.initializeControllers();
   }
@@ -63,7 +63,9 @@ export class DocApp implements DocAppConfig {
         ${(() => {
           let routesHtml = '';
           this.routes.forEach(val => {
-            routesHtml += `<h3>${val.method} : <a href="${this.path}${val.path}">${this.path}${val.path}</a></h3>`;
+            val.paths.forEach((p: string) => {
+              routesHtml += `<h3>${val.method} : <a href="${this.path}${p}">${this.path}${p}</a></h3>`;
+            });
           });
           return routesHtml;
         })()}

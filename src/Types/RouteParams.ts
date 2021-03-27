@@ -1,3 +1,3 @@
 import { Middleware } from './Middleware';
 
-export type RouteParams = { path?: string; middleware?: Middleware[]; applyHttpError?: boolean };
+export type RouteParams = { path?: string | string[]; middleware?: Middleware[]; applyHttpError?: boolean };

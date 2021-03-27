@@ -31,6 +31,11 @@ export class MockControllerWithRoutes {
     await this.mockFn(...args);
   }
 
+  @Route('GET', { path: ['/pathone', '/pathtwo'] })
+  async mockRouteWithMultiplePaths(...args: any[]) {
+    await this.mockFn(...args);
+  }
+
   @Route('GET', { applyHttpError: false })
   async mockRouteNoHttpError(...args: any[]) {
     try {

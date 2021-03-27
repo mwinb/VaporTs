@@ -37,7 +37,7 @@ describe('Constructor', () => {
     });
 
     it('does not add a RouteDoc to the app for the api', () => {
-      expect(testDocApp.routes[0].path).not.toEqual('');
+      expect(testDocApp.routes[0].paths.pop()).not.toEqual('');
     });
 
     it('does not add the api path to the app', () => {
@@ -66,7 +66,7 @@ describe('Constructor', () => {
 
     it('adds a GET method to DocApps RouteDocs if the showApi method is set to true', () => {
       expect(testDocApp.routes[0].method).toEqual('GET');
-      expect(testDocApp.routes[0].path).toEqual('/');
+      expect(testDocApp.routes[0].paths.shift()).toEqual('/');
     });
 
     it('adds the api path to the router if show api is true', () => {
@@ -115,7 +115,7 @@ describe('Constructor', () => {
 
     it('sets the api doc path to an empty string if a custom path is provided', () => {
       expect(testDocApp.routes[0].method).toEqual('GET');
-      expect(testDocApp.routes[0].path).toEqual('');
+      expect(testDocApp.routes[0].paths.pop()).toEqual('');
     });
   });
 

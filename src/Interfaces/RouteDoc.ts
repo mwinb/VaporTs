@@ -3,6 +3,6 @@ import { RouteMethod } from '../Types/RouteMethod';
 
 export interface RouteDoc {
   method: RouteMethod;
-  path: string;
+  paths: string[];
   middleware?: Middleware[];
 }

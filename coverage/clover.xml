@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1616884368618" clover="3.2.0">
+  <project timestamp="1616884368618" name="All files">
+    <metrics statements="87" coveredstatements="87" conditionals="30" coveredconditionals="30" methods="27" coveredmethods="27" elements="144" coveredelements="144" complexity="0" loc="87" ncloc="87" packages="2" files="4" classes="4"/>
+    <package name="Classes">
+      <metrics statements="28" coveredstatements="28" conditionals="13" coveredconditionals="13" methods="8" coveredmethods="8"/>
+      <file name="DocApp.ts" path="/Users/mwinberry/npmPackages/DocTS/src/Classes/DocApp.ts">
+        <metrics statements="28" coveredstatements="28" conditionals="13" coveredconditionals="13" methods="8" coveredmethods="8"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="13" type="stmt"/>
+        <line num="24" count="13" type="stmt"/>
+        <line num="25" count="13" type="stmt"/>
+        <line num="26" count="13" type="stmt"/>
+        <line num="27" count="13" type="stmt"/>
+        <line num="28" count="13" type="stmt"/>
+        <line num="29" count="13" type="stmt"/>
+        <line num="30" count="13" type="cond" truecount="4" falsecount="0"/>
+        <line num="31" count="13" type="stmt"/>
+        <line num="32" count="13" type="stmt"/>
+        <line num="36" count="13" type="cond" truecount="2" falsecount="0"/>
+        <line num="40" count="13" type="stmt"/>
+        <line num="41" count="13" type="cond" truecount="2" falsecount="0"/>
+        <line num="42" count="12" type="stmt"/>
+        <line num="43" count="12" type="stmt"/>
+        <line num="44" count="12" type="stmt"/>
+        <line num="48" count="13" type="stmt"/>
+        <line num="50" count="13" type="cond" truecount="2" falsecount="0"/>
+        <line num="53" count="13" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="66" count="6" type="stmt"/>
+        <line num="67" count="7" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="Decorators">
+      <metrics statements="59" coveredstatements="59" conditionals="17" coveredconditionals="17" methods="19" coveredmethods="19"/>
+      <file name="Controller.ts" path="/Users/mwinberry/npmPackages/DocTS/src/Decorators/Controller.ts">
+        <metrics statements="13" coveredstatements="13" conditionals="5" coveredconditionals="5" methods="4" coveredmethods="4"/>
+        <line num="6" count="3" type="cond" truecount="1" falsecount="0"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="8" count="9" type="stmt"/>
+        <line num="9" count="9" type="stmt"/>
+        <line num="10" count="9" type="stmt"/>
+        <line num="11" count="9" type="stmt"/>
+        <line num="15" count="3" type="stmt"/>
+        <line num="16" count="75" type="cond" truecount="2" falsecount="0"/>
+        <line num="17" count="9" type="stmt"/>
+        <line num="23" count="75" type="stmt"/>
+        <line num="26" count="3" type="stmt"/>
+        <line num="27" count="14" type="stmt"/>
+        <line num="28" count="14" type="cond" truecount="2" falsecount="0"/>
+      </file>
+      <file name="HttpError.ts" path="/Users/mwinberry/npmPackages/DocTS/src/Decorators/HttpError.ts">
+        <metrics statements="16" coveredstatements="16" conditionals="2" coveredconditionals="2" methods="4" coveredmethods="4"/>
+        <line num="3" count="4" type="stmt"/>
+        <line num="4" count="5" type="stmt"/>
+        <line num="5" count="5" type="stmt"/>
+        <line num="9" count="4" type="stmt"/>
+        <line num="10" count="5" type="stmt"/>
+        <line num="11" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="12" count="4" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="18" count="4" type="stmt"/>
+        <line num="23" count="16" type="stmt"/>
+        <line num="24" count="16" type="stmt"/>
+        <line num="25" count="3" type="stmt"/>
+        <line num="26" count="3" type="stmt"/>
+        <line num="28" count="2" type="stmt"/>
+        <line num="29" count="2" type="stmt"/>
+        <line num="32" count="16" type="stmt"/>
+      </file>
+      <file name="Route.ts" path="/Users/mwinberry/npmPackages/DocTS/src/Decorators/Route.ts">
+        <metrics statements="30" coveredstatements="30" conditionals="10" coveredconditionals="10" methods="11" coveredmethods="11"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="6" count="3" type="stmt"/>
+        <line num="8" count="3" type="stmt"/>
+        <line num="12" count="15" type="stmt"/>
+        <line num="17" count="15" type="stmt"/>
+        <line num="18" count="15" type="cond" truecount="2" falsecount="0"/>
+        <line num="19" count="15" type="stmt"/>
+        <line num="20" count="15" type="cond" truecount="2" falsecount="0"/>
+        <line num="21" count="12" type="stmt"/>
+        <line num="23" count="3" type="stmt"/>
+        <line num="27" count="3" type="stmt"/>
+        <line num="28" count="14" type="stmt"/>
+        <line num="29" count="98" type="stmt"/>
+        <line num="30" count="98" type="cond" truecount="2" falsecount="0"/>
+        <line num="34" count="3" type="stmt"/>
+        <line num="35" count="15" type="stmt"/>
+        <line num="36" count="15" type="stmt"/>
+        <line num="37" count="88" type="stmt"/>
+        <line num="38" count="75" type="stmt"/>
+        <line num="42" count="3" type="stmt"/>
+        <line num="43" count="13" type="stmt"/>
+        <line num="44" count="13" type="stmt"/>
+        <line num="45" count="13" type="stmt"/>
+        <line num="46" count="65" type="stmt"/>
+        <line num="48" count="65" type="stmt"/>
+        <line num="49" count="65" type="stmt"/>
+        <line num="50" count="65" type="stmt"/>
+        <line num="51" count="77" type="stmt"/>
+        <line num="54" count="77" type="stmt"/>
+        <line num="57" count="13" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

@@ -44,7 +44,7 @@ class ExampleController {}
 - Method: string
   - 'POST' | 'PATCH' | 'PUT' | 'GET' | 'DELETE' | 'HEAD' | 'CONNECT' | 'OPTIONS' | 'TRACE'
 - RouteParams: { } (optional)
-  - path: string (optional)
+  - path: string | string[] (optional)
   - middleware: Middleware[] (optional)
   - applyHttpError: boolean (optional, default: true)
 
@@ -58,6 +58,9 @@ class ExampleController {
 
   @Route('GET', { path: '/:id', middleware: [routeMiddleware] })
   async exampleGetOneFunction(req, res) {}
+
+  @Route('GET', { path: ['/pathone', '/pathtwo'] })
+  async exampleGetWithTwoPaths(req, res) {}
 
   @Route('PATCH', { applyHttpError: false })
   examplePatchNoHttpError(req, res, next) {}
