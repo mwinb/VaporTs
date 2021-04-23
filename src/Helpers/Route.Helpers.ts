@@ -1,28 +1,5 @@
 import { Router } from 'express';
-import { RouteDoc } from '../Interfaces/RouteDoc';
-import { RouteMethod } from '../Types/RouteMethod';
-import { RouteParams } from '../Types/RouteParams';
-import { getControllerDoc } from './Controller';
-import { HttpErrorHandler } from './HttpError';
-
-export function Route(
-  method: RouteMethod,
-  { path = '', middleware = [], applyHttpError = true }: RouteParams = {}
-): (target: Record<string, any>, propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor {
-  return function (
-    target: Record<string, any>,
-    propertyKey: string,
-    descriptor: PropertyDescriptor
-  ): PropertyDescriptor {
-    const meta = getControllerDoc(target);
-    const paths = typeof path === 'string' ? [path] : path;
-    meta.routes.set(propertyKey, { paths: paths, method: method, middleware: middleware });
-    if (applyHttpError) {
-      return HttpErrorHandler(target, propertyKey, descriptor);
-    }
-    return descriptor;
-  };
-}
+import { RouteDoc, getControllerDoc } from '..';
 
 export function getRouteMethodNames(controller: Record<string, any>): string[] {
   return Object.getOwnPropertyNames(Object.getPrototypeOf(controller)).filter(name => {

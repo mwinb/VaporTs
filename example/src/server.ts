@@ -1,5 +1,5 @@
 import express from 'express';
-import { DocApp } from '@mwinberry/doc-ts';
+import { DocApp } from '../../src';
 import SatelliteController from './Satellites/satellites.controller';
 
 const port = 5000;
@@ -9,7 +9,8 @@ const appV1 = new DocApp({
   showApi: true,
   controllers: [new SatelliteController()],
   expressApplication: expressApp,
-  router: express.Router()
+  router: express.Router(),
+  middleware: [express.json()]
 });
 
 expressApp.listen(port, () => {

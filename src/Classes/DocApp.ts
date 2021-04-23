@@ -1,8 +1,12 @@
 import { Application, Router, Request, Response } from 'express';
-import { initializeRoutes, getRouteDocs } from '../Decorators/Route';
-import { initControllerMiddleware } from '../Decorators/Controller';
-import { DocAppConfig } from '../Interfaces/DocAppConfig';
-import { RouteDoc } from '../Interfaces/RouteDoc';
+import {
+  DocAppConfig,
+  RouteDoc,
+  initControllerMiddleware,
+  initializeRoutes,
+  getRouteDocs,
+  objectIsExpressController
+} from '..';
 
 export class DocApp implements DocAppConfig {
   routes: RouteDoc[] = [];
@@ -38,7 +42,7 @@ export class DocApp implements DocAppConfig {
 
   initializeControllers(): void {
     this.controllers.forEach(controller => {
-      if (Object.getPrototypeOf(controller).controllerDoc) {
+      if (objectIsExpressController(controller)) {
         initControllerMiddleware(this.router, controller);
         initializeRoutes(this.router, controller);
         this.routes = [...this.routes, ...getRouteDocs(controller)];

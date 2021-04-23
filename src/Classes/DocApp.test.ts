@@ -1,10 +1,9 @@
-import { MockControllerWithRoutes } from '../__mocks__/controllerMocks';
-import { mockMiddleware } from '../__mocks__/Express/mockMiddleware';
-import { getMockrouter } from '../__mocks__/Express/routerMock';
-import { DocApp } from './DocApp';
 import { Application } from 'express';
+import { DocApp, getRouteDocs } from '..';
+import { getMockrouter } from '../__mocks__/Express/routerMock';
 import { getMockResponse } from '../__mocks__/Express/responseMock';
-import { getRouteDocs } from '../Decorators/Route';
+import { mockMiddleware } from '../__mocks__/Express/mockMiddleware';
+import { MockControllerWithRoutes } from '../__mocks__/controllerMocks';
 
 let testDocApp: DocApp;
 let mockExpressApp: Application;

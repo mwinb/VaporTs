@@ -1,5 +1,5 @@
-import { Controller } from '../Decorators/Controller';
-import { Route } from '../Decorators/Route';
+import { Controller } from '../Decorators/Controller.Decorator';
+import { Route } from '../Decorators/Route.Decorator';
 import { mockMiddleware } from './Express/mockMiddleware';
 @Controller('/test')
 export class MockControllerWithoutMiddleWare {}
