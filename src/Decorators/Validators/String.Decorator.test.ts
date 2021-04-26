@@ -1,20 +1,24 @@
-import { isString } from '../..';
-import { getValidatorDoc } from '../../Helpers/Validator.Helpers';
+import { isStringValidator } from '../..';
+import { getValidatorDoc, isArrayValidator } from '../../Helpers/Validator.Helpers';
 import { MockValidatorClass } from '../../__mocks__/ValidatorMocks';
 
 describe('String', () => {
+  const validatorClass = new MockValidatorClass();
   it('Sets the field name and type in the validator class validatorDoc fieldMap', () => {
-    const validatorClass = new MockValidatorClass();
-    expect(getValidatorDoc(validatorClass).validators.get('stringField').pop()).toEqual(isString);
+    expect(getValidatorDoc(validatorClass).validators.get('stringField').pop()).toEqual(isStringValidator);
+  });
+
+  it('handles string arrays by passing a ValidatorConfig object', () => {
+    expect(getValidatorDoc(validatorClass).validators.get('stringArrayField').shift()).toEqual(isArrayValidator);
   });
 });
 
-describe('isString', () => {
+describe('isStringValidator', () => {
   it('returns true if it is a string', () => {
-    expect(isString('I am a string')).toBeTruthy();
+    expect(isStringValidator('I am a string')).toBeTruthy();
   });
 
   it('returns false if it is not a string', () => {
-    expect(isString(false)).toBeFalsy();
+    expect(isStringValidator(false)).toBeFalsy();
   });
 });
