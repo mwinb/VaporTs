@@ -1,5 +1,4 @@
-import { Controller } from '../Decorators/Controller.Decorator';
-import { Route } from '../Decorators/Route.Decorator';
+import { Controller, Route } from '..';
 import { mockMiddleware } from './Express/mockMiddleware';
 @Controller('/test')
 export class MockControllerWithoutMiddleWare {}
@@ -17,27 +16,27 @@ export class MockControllerWithRoutes {
     this.errorFn = jest.fn();
   }
   @Route('GET')
-  async mockRoute(...args: any[]) {
+  async mockRoute(...args: any[]): Promise<void> {
     await this.mockFn(...args);
   }
 
   @Route('GET', { path: '/:param' })
-  async mockRouteWithPath() {
+  async mockRouteWithPath(): Promise<void> {
     await this.mockFn();
   }
 
   @Route('GET', { middleware: [mockMiddleware] })
-  async mockRouteWithMiddleware(...args: any[]) {
+  async mockRouteWithMiddleware(...args: any[]): Promise<void> {
     await this.mockFn(...args);
   }
 
   @Route('GET', { path: ['/pathone', '/pathtwo'] })
-  async mockRouteWithMultiplePaths(...args: any[]) {
+  async mockRouteWithMultiplePaths(...args: any[]): Promise<void> {
     await this.mockFn(...args);
   }
 
   @Route('GET', { applyHttpError: false })
-  async mockRouteNoHttpError(...args: any[]) {
+  async mockRouteNoHttpError(...args: any[]): Promise<void> {
     try {
       await this.mockFn(...args);
     } catch (err) {

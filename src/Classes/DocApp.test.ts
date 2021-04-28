@@ -119,19 +119,21 @@ describe('Constructor', () => {
   });
 
   describe('Invalid controllers', () => {
-    beforeEach(() => {
-      testDocApp = new DocApp({
-        path: '/testApp',
-        showApi: true,
-        controllers: [{}],
-        middleware: [mockMiddleware],
-        expressApplication: mockExpressApp,
-        router: getMockrouter() as any
-      });
-    });
-
-    it('does not add route docs if the controller does not have controllerDoc field', () => {
-      expect(testDocApp.routes.length).toBe(1);
+    it('throws an error if a provided controller is not a DocTsController', () => {
+      let thrownError;
+      try {
+        testDocApp = new DocApp({
+          path: '/testApp',
+          showApi: true,
+          controllers: [{}],
+          middleware: [mockMiddleware],
+          expressApplication: mockExpressApp,
+          router: getMockrouter() as any
+        });
+      } catch (error) {
+        thrownError = error;
+      }
+      expect(thrownError).toBeDefined();
     });
   });
 });

@@ -1,21 +1,36 @@
-import { Application, Router, Request, Response } from 'express';
 import {
-  DocAppConfig,
   RouteDoc,
-  initControllerMiddleware,
-  initializeRoutes,
+  DocAppConfig,
   getRouteDocs,
-  objectIsExpressController
+  DocTsController,
+  initializeRoutes,
+  isDocTsController,
+  initControllerMiddleware
 } from '..';
+import { Application, Router, Request, Response } from 'express';
 
 export class DocApp implements DocAppConfig {
   routes: RouteDoc[] = [];
-  public showApi: boolean;
   public path: string;
-  public controllers: Record<string, any>[];
+  public router: Router;
+  public showApi: boolean;
   public middleware: any[];
   public expressApplication: Application;
-  public router: Router;
+  private _controllers: DocTsController[];
+
+  get controllers(): DocTsController[] {
+    return this._controllers;
+  }
+
+  set controllers(controllers: DocTsController[]) {
+    controllers.forEach(controller => {
+      if (!isDocTsController(controller))
+        throw new Error(
+          `DocTs: ${controller} is not a valid DocTsController. Ensure that it is decorated with @Controller.`
+        );
+    });
+    this._controllers = controllers;
+  }
 
   constructor({
     path = '',
@@ -42,11 +57,9 @@ export class DocApp implements DocAppConfig {
 
   initializeControllers(): void {
     this.controllers.forEach(controller => {
-      if (objectIsExpressController(controller)) {
-        initControllerMiddleware(this.router, controller);
-        initializeRoutes(this.router, controller);
-        this.routes = [...this.routes, ...getRouteDocs(controller)];
-      }
+      initControllerMiddleware(this.router, controller);
+      initializeRoutes(this.router, controller);
+      this.routes = [...this.routes, ...getRouteDocs(controller)];
     });
 
     this.expressApplication.use(this.path, this.router);

@@ -1,8 +1,8 @@
-import { ExpressController } from '..';
+import { DocTsController } from '..';
 import { MockControllerWithoutMiddleWare } from '../__mocks__/controllerMocks';
 
 describe('Controller decorator', () => {
-  let testController: ExpressController;
+  let testController: DocTsController;
 
   beforeEach(() => {
     testController = new MockControllerWithoutMiddleWare();

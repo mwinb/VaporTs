@@ -35,7 +35,7 @@ describe('initializing routes', () => {
     let callIndex = 1;
     initializeRoutes(mockRouter, testController);
     routeDocs.forEach((routerMethod: [string, RouteDoc]) => {
-      routerMethod[1].paths.forEach((p: string, i: number) => {
+      routerMethod[1].paths.forEach((p: string) => {
         expect(mockRouter.get).toHaveBeenNthCalledWith(
           callIndex,
           '/test' + p,

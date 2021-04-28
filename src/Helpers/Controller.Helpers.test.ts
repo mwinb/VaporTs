@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import { getMockrouter } from '../__mocks__/Express/routerMock';
 import { mockMiddleware } from '../__mocks__/Express/mockMiddleware';
-import { getControllerDoc, initControllerMiddleware, ExpressController } from '..';
+import { getControllerDoc, initControllerMiddleware, DocTsController } from '..';
 import { MockControllerWithMiddleWare, MockControllerWithoutMiddleWare } from '../__mocks__/controllerMocks';
+import { isDocTsController } from './Controller.Helpers';
 
-let testController: ExpressController;
+let testController: DocTsController;
 beforeEach(() => {
   testController = new MockControllerWithoutMiddleWare();
 });
@@ -29,5 +30,15 @@ describe('initControllerMiddleware', () => {
     testController = new MockControllerWithMiddleWare();
     initControllerMiddleware(router, testController);
     expect(router.use).toHaveBeenCalledWith(testController.controllerDoc.path, mockMiddleware);
+  });
+});
+
+describe('objectIsDocTsController', () => {
+  it('returns true if the object has a controller doc on prototype.', () => {
+    expect(isDocTsController(testController)).toBeTruthy();
+  });
+
+  it('returns false if the provided object does not have a controller doc', () => {
+    expect(isDocTsController({})).toBeFalsy();
   });
 });

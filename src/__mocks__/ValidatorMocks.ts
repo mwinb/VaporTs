@@ -1,27 +1,66 @@
-import { String, Boolean, Number } from '..';
-import { Validator } from '../Classes/Validator';
-import { isStringValidator } from '../Decorators/Validators/String.Decorator';
-import { ValidateProperty } from '../Decorators/Validators/ValidatorProperty';
+import { String, Boolean, Number, SetPropertyEvaluators, isStringEvaluator, Validator, JsonObject } from '..';
 
-export class MockValidatorClass extends Validator {
+export class MockSubSubValidator {
+  @String()
+  stringField: string;
+}
+
+export class MockSubValidator {
+  constructor(stringField = 'Test', booleanField = true, numberField = 10) {
+    this.stringField = stringField;
+    this.booleanField = booleanField;
+    this.numberField = numberField;
+  }
+
   @String()
   stringField: string;
 
-  @String({ isArray: true, validateArrayItems: false })
+  @Boolean()
+  booleanField: boolean;
+
+  @Number()
+  numberField: number;
+
+  @Validator(new MockSubSubValidator())
+  subSubValidator: MockSubSubValidator;
+}
+
+export class MockValidatorClass {
+  @String()
+  stringField: string;
+
+  @String({ isArray: true, evaluateEachItem: false })
   stringArrayField: string[];
 
   @Boolean()
   booleanField: boolean;
 
-  @Boolean({ isArray: true, validateArrayItems: false })
+  @Boolean({ isArray: true, evaluateEachItem: false })
   booleanArrayField: boolean[];
 
   @Number()
   numberField: number;
 
-  @Number({ isArray: true, validateArrayItems: false })
+  @Number({ isArray: true, evaluateEachItem: false })
   numberArrayField: number[];
 
-  @ValidateProperty([isStringValidator])
+  @JsonObject()
+  objectField: Record<string, any>;
+
+  @JsonObject({ isArray: true, evaluateEachItem: false })
+  objectArrayField: Record<string, any>[];
+
+  @SetPropertyEvaluators([isStringEvaluator], { isArray: false, evaluateEachItem: false })
   validatorProperty: string;
+
+  @Validator(new MockSubValidator())
+  validatorField: MockSubValidator;
+
+  @Validator(new MockSubValidator(), { isArray: true, evaluateEachItem: false })
+  validatorArrayField: MockSubValidator[];
+}
+
+export class MockValidatorClassWithNonValidatorObject {
+  @Validator({})
+  nonDocTsValidatorField: any;
 }

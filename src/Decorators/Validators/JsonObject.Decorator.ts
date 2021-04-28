@@ -1,8 +1,8 @@
-import { ValidatorFieldConfig, SetPropertyEvaluators, isStringEvaluator } from '../..';
+import { ValidatorFieldConfig, isJsonObjectEvaluator, SetPropertyEvaluators } from '../..';
 
-export const String = (
+export const JsonObject = (
   validationConfig: ValidatorFieldConfig = { isArray: false, evaluateEachItem: true }
 ): PropertyDecorator => {
-  const evaluators = [isStringEvaluator];
+  const evaluators = [isJsonObjectEvaluator];
   return SetPropertyEvaluators(evaluators, validationConfig);
 };
