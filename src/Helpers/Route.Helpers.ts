@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { RouteDoc, getControllerDoc } from '..';
+import { RouteDoc, getControllerDoc, Logger } from '..';
 
 export function getRouteMethodNames(controller: Record<string, any>): string[] {
   return Object.getOwnPropertyNames(Object.getPrototypeOf(controller)).filter(name => {
@@ -20,16 +20,16 @@ export function initializeRoutes(router: Router, controller: Record<string, any>
   const methods = getRouteMethodNames(controller);
   const controllerDoc = getControllerDoc(Object.getPrototypeOf(controller));
   methods
-    .filter(m => controllerDoc.routes.has(m))
-    .map(m => {
-      const routeDoc = controllerDoc.routes.get(m);
-      controller[m] = controller[m].bind(controller);
-      routeDoc.paths.map(p => {
-        console.log(
-          `DocTs: Binding ${controller.constructor.name}.${m} to ${routeDoc.method} @ ${controllerDoc.path + p}`
+    .filter(method => controllerDoc.routes.has(method))
+    .map(method => {
+      const routeDoc = controllerDoc.routes.get(method);
+      controller[method] = controller[method].bind(controller);
+      routeDoc.paths.map(path => {
+        Logger.log(
+          `DocTs: Binding ${controller.constructor.name}.${method} to ${routeDoc.method} @ ${controllerDoc.path + path}`
         );
-        router[routeDoc.method.toLowerCase()](controllerDoc.path + p, ...routeDoc.middleware, controller[m]);
+        router[routeDoc.method.toLowerCase()](controllerDoc.path + path, ...routeDoc.middleware, controller[method]);
       });
     });
-  console.log('\n');
+  Logger.log('\n');
 }

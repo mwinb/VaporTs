@@ -1,9 +1,9 @@
-import { RouteMethod, RouteParams, getControllerDoc, HttpErrorHandler } from '..';
+import { RouteMethod, RouteParams, getControllerDoc, HttpErrorHandler, PropertyDescriptorDecorator } from '..';
 
 export function Route(
   method: RouteMethod,
   { path = '', middleware = [], applyHttpError = true }: RouteParams = {}
-): (target: Record<string, any>, propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor {
+): PropertyDescriptorDecorator {
   return function (
     target: Record<string, any>,
     propertyKey: string,

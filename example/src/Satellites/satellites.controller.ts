@@ -1,8 +1,8 @@
+import morgan from 'morgan';
 import express from 'express';
 import SatelliteService from './satellites.service';
-import SatelliteModel from './satellites.model';
-import morgan from 'morgan';
-import { Controller, HttpError, Route } from '@mwinberry/doc-ts';
+import { Controller, Route, Validate } from '../../../src';
+import SatelliteModel, { PatchSatelliteValidator, PostSatelliteValidator } from './satellites.model';
 @Controller('/satellite', [morgan('tiny')])
 class SatelliteController {
   exampleModel: SatelliteModel = { name: 'Sat Name', lat: 1234, lon: 1234, id: 101010, status: 'Example Satus' };
@@ -15,30 +15,26 @@ class SatelliteController {
   }
 
   @Route('POST')
+  @Validate(new PostSatelliteValidator(), 'body')
   async addSat(req: express.Request, res: express.Response) {
     const sat = req.body;
-    if (!this.satService.canCreateSatellite(sat)) {
-      throw new HttpError(400, 'InvalidProperties provided.');
-    }
     const newSat = this.satService.addOne({ ...sat, id: undefined });
     res.send(newSat);
   }
 
-  @Route('PATCH', { applyHttpError: false })
-  patchSat(req: express.Request, res: express.Response) {
+  @Route('PATCH')
+  @Validate(new PatchSatelliteValidator(), 'body')
+  async patchSat(req: express.Request, res: express.Response) {
     const sat = req.body;
-    if (!this.satService.canPatchSatellite(sat)) {
-      res.status(400).json({ message: 'Invalid properties provided.' });
+    if (!this.satService.isValidSatId(sat.id)) {
+      res.status(400).json({ message: 'Invalid Sat Id.' });
     }
-    try {
-      const patchedSat = this.satService.patchOne(sat);
-      res.send(patchedSat);
-    } catch {
-      res.sendStatus(500);
-    }
+    const patchedSat = this.satService.patchOne(sat);
+    res.send(patchedSat);
   }
 
   @Route('GET', { path: '/:id', applyHttpError: false })
+  @Validate(new PatchSatelliteValidator(), 'params')
   getSatById(req: express.Request, res: express.Response) {
     const { id } = req.params;
     if (!this.satService.isValidSatId(+id)) res.status(404).json({ message: 'Satellite not found.' });

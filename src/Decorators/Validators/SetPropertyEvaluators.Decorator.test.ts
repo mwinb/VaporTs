@@ -5,7 +5,8 @@ describe('ValidatorProperty', () => {
   const mockValidatorClass = new MockValidatorClass();
 
   it('adds the provided evaluators to the validatorDoc.properties', () => {
-    console.log(mockValidatorClass);
-    expect(getValidatorDoc(mockValidatorClass).evaluators.get('validatorProperty').pop()).toEqual(isStringEvaluator);
+    expect(getValidatorDoc(mockValidatorClass).fieldValidators.get('validatorProperty').evaluators.pop()).toEqual(
+      isStringEvaluator
+    );
   });
 });

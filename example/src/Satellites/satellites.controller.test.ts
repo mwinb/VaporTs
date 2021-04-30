@@ -1,6 +1,6 @@
-import SatelliteController from './satellites.controller';
 import SatelliteModel from './satellites.model';
 import SatelliteService from './satellites.service';
+import SatelliteController from './satellites.controller';
 
 let mockResponse: any;
 let mockRequest: any;
@@ -56,14 +56,14 @@ describe('Satellites Controller', () => {
     beforeEach(() => {
       satToPatch = satController.satService.satellites[0];
     });
-    it('can patch a satellite', () => {
+    it('can patch a satellite', async () => {
       satToPatch.name = 'New Name';
       mockRequest.body = satToPatch;
-      satController.patchSat(mockRequest, mockResponse);
+      await satController.patchSat(mockRequest, mockResponse);
       expect(mockResponse.send).toHaveBeenCalledWith(satToPatch);
     });
 
-    it('returns a 400 if the patch data id is invalid', () => {
+    it('returns a 400 if the patch data id is invalid', async () => {
       satToPatch.id = 1010101010101010101010;
       mockRequest.body = satToPatch;
       satController.patchSat(mockRequest, mockResponse);
@@ -71,18 +71,18 @@ describe('Satellites Controller', () => {
     });
 
     it('returns a 400 if the patch data does not contain one of the required fields', () => {
-      mockRequest.body = { id: satToPatch.id };
+      mockRequest.body = {};
       satController.patchSat(mockRequest, mockResponse);
       expect(mockResponse.status).toHaveBeenCalledWith(400);
     });
 
-    it('returns a 500 if an unknown error occurs', () => {
+    it('returns a 500 if an unknown error occurs', async () => {
       mockRequest.body = { ...satToPatch, name: 'New Name' };
       jest.spyOn(SatelliteService.prototype, 'patchOne').mockImplementationOnce((newSat: SatelliteModel) => {
         throw new Error();
       });
-      satController.patchSat(mockRequest, mockResponse);
-      expect(mockResponse.sendStatus).toHaveBeenCalledWith(500);
+      await satController.patchSat(mockRequest, mockResponse);
+      expect(mockResponse.status).toHaveBeenCalledWith(500);
     });
   });
 

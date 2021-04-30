@@ -1,11 +1,15 @@
 import {
-  getValidatorEvaluator,
-  isDocTsValidator,
-  SetPropertyEvaluators,
-  ValidatorFieldConfig,
+  Logger,
   JsonObject,
-  DocTsValidator
+  DocTsValidator,
+  isDocTsValidator,
+  ValidatorFieldConfig,
+  getValidatorEvaluator,
+  SetPropertyEvaluators,
+  invalidDocTsValidatorWarning
 } from '../..';
+import { getValidatorDoc } from '../../Helpers/ValidatorDoc.Helpers';
+import { DEFAULT_VALIDATOR_FIELD_CONFIG } from '../../Interfaces/ValidatorDoc.Interface';
 
 export const EvaluateValidator = (
   validator: DocTsValidator,
@@ -19,17 +23,16 @@ export const warnAndEvaluateJsonObject = (
   validatorDoc: Record<string, any>,
   validatorConfig: ValidatorFieldConfig
 ): PropertyDecorator => {
-  console.log(
-    `\nDocTs: ${validatorDoc} is not a valid DocTsValidator.\nField will be validated with isJsonObject validator\n`
-  );
+  Logger.log(invalidDocTsValidatorWarning(validatorDoc));
   return JsonObject(validatorConfig);
 };
 
 export const Validator = (
   validatorDoc: Record<string, any>,
-  validatorConfig: ValidatorFieldConfig = { isArray: false, evaluateEachItem: true }
+  validationConfig: ValidatorFieldConfig = {}
 ): PropertyDecorator => {
+  const config = { ...DEFAULT_VALIDATOR_FIELD_CONFIG, ...validationConfig };
   return isDocTsValidator(validatorDoc)
-    ? EvaluateValidator(validatorDoc, validatorConfig)
-    : warnAndEvaluateJsonObject(validatorDoc, validatorConfig);
+    ? EvaluateValidator(validatorDoc, config)
+    : warnAndEvaluateJsonObject(validatorDoc, config);
 };

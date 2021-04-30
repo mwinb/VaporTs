@@ -5,7 +5,15 @@ export class MockSubSubValidator {
   stringField: string;
 }
 
-export class MockSubValidator {
+export class MockValidatorWithSubValidator {
+  @String()
+  stringField: string;
+
+  @Validator(new MockSubSubValidator())
+  subValidator: MockSubSubValidator;
+}
+
+export class MockSubValidatorWithOptionalSubValidator {
   constructor(stringField = 'Test', booleanField = true, numberField = 10) {
     this.stringField = stringField;
     this.booleanField = booleanField;
@@ -21,8 +29,8 @@ export class MockSubValidator {
   @Number()
   numberField: number;
 
-  @Validator(new MockSubSubValidator())
-  subSubValidator: MockSubSubValidator;
+  @Validator(new MockSubSubValidator(), { optional: true })
+  optionalSubSubValidator: MockSubSubValidator;
 }
 
 export class MockValidatorClass {
@@ -53,11 +61,11 @@ export class MockValidatorClass {
   @SetPropertyEvaluators([isStringEvaluator], { isArray: false, evaluateEachItem: false })
   validatorProperty: string;
 
-  @Validator(new MockSubValidator())
-  validatorField: MockSubValidator;
+  @Validator(new MockSubValidatorWithOptionalSubValidator())
+  validatorField: MockSubValidatorWithOptionalSubValidator;
 
-  @Validator(new MockSubValidator(), { isArray: true, evaluateEachItem: false })
-  validatorArrayField: MockSubValidator[];
+  @Validator(new MockSubValidatorWithOptionalSubValidator(), { isArray: true, evaluateEachItem: false })
+  validatorArrayField: MockSubValidatorWithOptionalSubValidator[];
 }
 
 export class MockValidatorClassWithNonValidatorObject {

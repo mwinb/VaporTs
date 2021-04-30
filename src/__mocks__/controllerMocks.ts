@@ -1,4 +1,5 @@
-import { Controller, Route } from '..';
+import { Controller, Route, Validate } from '..';
+import { MockSubSubValidator } from './ValidatorMocks';
 import { mockMiddleware } from './Express/mockMiddleware';
 @Controller('/test')
 export class MockControllerWithoutMiddleWare {}
@@ -42,5 +43,26 @@ export class MockControllerWithRoutes {
     } catch (err) {
       this.errorFn(err);
     }
+  }
+}
+
+@Controller('/test')
+export class MockControllerWithRouteValidation {
+  mockFn: (...args: any[]) => Promise<void>;
+  errorFn: (...args: any[]) => void;
+
+  constructor() {
+    this.mockFn = jest.fn();
+    this.errorFn = jest.fn();
+  }
+
+  @Validate(new MockSubSubValidator(), 'body')
+  async mockRoute(...args: any[]): Promise<void> {
+    await this.mockFn(...args);
+  }
+
+  @Validate({ invalidField: 'string' }, 'body')
+  async mockInvalidValidatorRoute(...args: any[]): Promise<void> {
+    await this.mockFn(...args);
   }
 }
