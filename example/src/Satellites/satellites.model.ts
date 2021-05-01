@@ -1,4 +1,4 @@
-import { Number, String } from '../../../src';
+import { Number, String } from '@mwinberry/doc-ts';
 export type SatName = string;
 export type SatLon = number;
 export type SatLat = number;

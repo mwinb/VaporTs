@@ -1,5 +1,5 @@
 import express from 'express';
-import { DocApp } from '../../src';
+import { DocApp } from '@mwinberry/doc-ts';
 import SatelliteController from './Satellites/satellites.controller';
 
 const port = 5000;

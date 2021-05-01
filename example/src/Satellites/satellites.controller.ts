@@ -1,7 +1,7 @@
 import morgan from 'morgan';
 import express from 'express';
 import SatelliteService from './satellites.service';
-import { Controller, HttpError, Route, Validate } from '../../../src';
+import { Controller, HttpError, Route, Validate } from '@mwinberry/doc-ts';
 import SatelliteModel, {
   GetSatelliteValidator,
   PatchSatelliteValidator,
