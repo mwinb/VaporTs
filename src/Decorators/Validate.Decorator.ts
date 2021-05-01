@@ -13,7 +13,7 @@ import {
 
 const getEvaluatorMethodOverride = (
   evaluator: Evaluator,
-  ogMethod: Function,
+  ogMethod: (...args: any[]) => void | Promise<void>,
   requestFieldToValidate: string
 ): ((...args: any[]) => Promise<void>) => {
   return async function (...args: any[]) {

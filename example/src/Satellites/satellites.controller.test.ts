@@ -92,24 +92,15 @@ describe('Satellites Controller', () => {
       requestedSatellite = satController.satService.satellites[0];
     });
     it('can get a satellite by id', () => {
-      mockRequest.params = { id: requestedSatellite.id };
+      mockRequest.params = { id: requestedSatellite.id.toString() };
       satController.getSatById(mockRequest, mockResponse);
       expect(mockResponse.json).toHaveBeenCalledWith(requestedSatellite);
     });
 
     it('responds with a 404 if the sat id is not found', () => {
-      mockRequest.params = { id: 10101010 };
+      mockRequest.params = { id: '10101010' };
       satController.getSatById(mockRequest, mockResponse);
       expect(mockResponse.status).toHaveBeenLastCalledWith(404);
-    });
-
-    it('responds with a 500 if an unknown error is thrown', () => {
-      mockRequest.params = { id: requestedSatellite.id };
-      jest.spyOn(SatelliteService.prototype, 'getOne').mockImplementationOnce((id: number) => {
-        throw new Error();
-      });
-      satController.getSatById(mockRequest, mockResponse);
-      expect(mockResponse.sendStatus).toHaveBeenLastCalledWith(500);
     });
   });
 

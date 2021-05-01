@@ -1,8 +1,12 @@
 import morgan from 'morgan';
 import express from 'express';
 import SatelliteService from './satellites.service';
-import { Controller, Route, Validate } from '../../../src';
-import SatelliteModel, { PatchSatelliteValidator, PostSatelliteValidator } from './satellites.model';
+import { Controller, HttpError, Route, Validate } from '../../../src';
+import SatelliteModel, {
+  GetSatelliteValidator,
+  PatchSatelliteValidator,
+  PostSatelliteValidator
+} from './satellites.model';
 @Controller('/satellite', [morgan('tiny')])
 class SatelliteController {
   exampleModel: SatelliteModel = { name: 'Sat Name', lat: 1234, lon: 1234, id: 101010, status: 'Example Satus' };
@@ -33,16 +37,12 @@ class SatelliteController {
     res.send(patchedSat);
   }
 
-  @Route('GET', { path: '/:id', applyHttpError: false })
-  @Validate(new PatchSatelliteValidator(), 'params')
+  @Route('GET', { path: '/:id' })
+  @Validate(new GetSatelliteValidator(), 'params')
   getSatById(req: express.Request, res: express.Response) {
-    const { id } = req.params;
-    if (!this.satService.isValidSatId(+id)) res.status(404).json({ message: 'Satellite not found.' });
-    try {
-      res.json(this.satService.getOne(+id));
-    } catch {
-      res.sendStatus(500);
-    }
+    const sat = this.satService.getOne(+req.params.id);
+    if (!sat) throw new HttpError(404, 'Satellite not found.');
+    res.json(sat);
   }
 
   @Route('GET', { path: '-api', applyHttpError: false })

@@ -44,4 +44,11 @@ export class PatchSatelliteValidator {
   status: SatStatus;
 }
 
+export class GetSatelliteValidator {
+  @String({
+    evaluators: [(arg: any) => !isNaN(parseInt(arg))]
+  })
+  id: SatId;
+}
+
 export default SatelliteModel;

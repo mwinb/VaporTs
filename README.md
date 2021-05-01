@@ -16,8 +16,8 @@ DocTs is a minimal framework built to support a simple and only slightly opinion
 
 ### Parameters:
 
-- Path: String (required)
-- Middleware: Middleware[] (optional)
+- `Path: String` (required)
+- `Middleware: Middleware[]` (optional)
 
 ### Examples:
 
@@ -41,12 +41,12 @@ class ExampleController {}
 
 ### Parameters:
 
-- Method: string (required)
-  - 'POST' | 'PATCH' | 'PUT' | 'GET' | 'DELETE' | 'HEAD' | 'CONNECT' | 'OPTIONS' | 'TRACE'
-- RouteParams: { } (optional)
-  - path: string | string[] (optional)
-  - middleware: Middleware[] (optional)
-  - applyHttpError: boolean (optional, default: true)
+- `Method: string` (required)
+  - `'POST' | 'PATCH' | 'PUT' | 'GET' | 'DELETE' | 'HEAD' | 'CONNECT' | 'OPTIONS' | 'TRACE'`
+- `RouteParams: { } `(optional)
+  - `path: string | string[]` (optional)
+  - `middleware: Middleware[]` (optional)
+  - `applyHttpError: boolean `(optional, default: true)
 
 ### Examples:
 
@@ -185,8 +185,8 @@ class SpecializedValidators {
 ```typescript
 const ValidateObjectId = (validationConfig: ValidatorFieldConfig = {}): PropertyDecorator => {
   const config = { ...DEFAULT_VALIDATOR_CONFIG, ...validationConfig };
-  const evaluators = [isObjectId, ...evaluators];
-  return SetPropertyEvaluators({...config, evaluators);
+  const evaluators = [isObjectId, ...config.evaluators];
+  return SetPropertyEvaluators({ ...config, evaluators });
 };
 
 class CustomValidatorExample {
@@ -199,7 +199,7 @@ class CustomValidatorExample {
 
 ## HttpErrorHandler
 
-The HttpErrorHandler is applied to all Routes by default, but can also be used as an individual decorator. This handler wraps asynchronous Route decorated functions in a try catch that listens for an HttpError to be thrown. The HttpError takes in the code and the response message. When caught by the handler, the express response status is set to the HttpErrors code and a json object with the code and message are sent. All uncaught errors respond with a 500 and an ambiguous error message.
+The HttpErrorHandler is applied to all Routes by default, but can also be used as an individual decorator. This handler wraps asynchronous Route decorated functions in a try catch that listens for an HttpError to be thrown. The HttpError takes in the code and the response message. When caught by the handler, the express response status is set to the HttpErrors code and a json object with the code and message are sent. All uncaught errors respond with a 500 and an ambiguous error message. Uncaught errors are also logged to the console.
 
 ### Example - response (caught):
 
@@ -223,16 +223,17 @@ The DocApp class is responsible for binding all routes, methods, and middleware 
 
 ### Parameters:
 
-- DocAppConfig: {}
-  - path: string (optional, defaults to root)
-  - showApi: boolean (optional, default: false)
+- `DocAppConfig: {}`
+  - `path: string` (optional, defaults to root)
+  - `showApi: boolean` (optional, default: false)
     - This provides a simple html page @GET/path that lists all routes as links and their respective methods.
-  - middleware: Middleware[] (optional)
+  - `middleware: Middleware[]` (optional)
     - Sets the path middleware.
-  - controllers: Controller[] (required)
-    - any class with the Controller Decorator will ignore any other classes in controller initialization.
-  - expressApplication: Express.Application (required)
-  - router: Express.Router (required)
+  - `controllers: Controller[]` (required)
+    - any class with the Controller Decorator.
+    - Throws error with information about the class if a non-controller decorated classes are passed
+  - `expressApplication: Express.Application` (required)
+  - `router: Express.Router` (required)
 
 ### Example:
 
@@ -263,8 +264,8 @@ Extends the Error class and is caught with the HttpErrorHandler decorator or by 
 
 ### Parameters:
 
-- code: number (required)
-- message: string (required)
+- `code: number` (required)
+- `message: string` (required)
 
 ### Example:
 
