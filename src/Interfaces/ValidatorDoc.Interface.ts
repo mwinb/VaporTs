@@ -4,13 +4,8 @@ export interface DocTsValidator {
   validatorDoc: ValidatorDoc;
 }
 
-export interface FieldValidator {
-  evaluators: Evaluator[];
-  config: ValidatorFieldConfig;
-}
-
 export interface ValidatorDoc {
-  fieldValidators: Map<string, FieldValidator>;
+  fieldValidators: Map<string, ValidatorFieldConfig>;
 }
 
 export interface ValidatorFieldConfig {

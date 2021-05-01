@@ -1,5 +1,4 @@
-import { ValidatorDoc, Evaluator, DocTsValidator, FieldValidator } from '..';
-import { HttpError } from '../Classes/HttpError';
+import { ValidatorDoc, Evaluator, DocTsValidator, ValidatorFieldConfig, HttpError } from '..';
 
 export const isNumberEvaluator = (arg: unknown): boolean => typeof arg === 'number';
 export const isStringEvaluator = (arg: unknown): boolean => typeof arg === 'string';
@@ -14,7 +13,7 @@ export const invalidDocTsValidatorWarning = (validator: Record<string, any>): st
 export const getValidatorDoc = (target: Record<string, any>): ValidatorDoc => {
   if (!target.validatorDoc) {
     const validatorDoc: ValidatorDoc = {
-      fieldValidators: new Map<string, FieldValidator>()
+      fieldValidators: new Map<string, ValidatorFieldConfig>()
     };
     target.validatorDoc = validatorDoc;
   }
@@ -38,7 +37,7 @@ export const getValidatorEvaluator = (arg: DocTsValidator): Evaluator => {
         return evaluateField();
       };
       const handleOptionalTrue = () => (hasField ? evaluateField() : true);
-      return evaluator.config.optional ? handleOptionalTrue() : handleOptionalFalse();
+      return evaluator.optional ? handleOptionalTrue() : handleOptionalFalse();
     });
   };
 };

@@ -1,13 +1,14 @@
 import {
   Evaluator,
   ValidatorDoc,
-  FieldValidator,
   getValidatorDoc,
   isDocTsValidator,
   isNumberEvaluator,
   isStringEvaluator,
   isBooleanEvaluator,
   isJsonObjectEvaluator,
+  ValidatorFieldConfig,
+  getValidatorEvaluator,
   DEFAULT_VALIDATOR_FIELD_CONFIG
 } from '..';
 import {
@@ -15,7 +16,6 @@ import {
   MockValidatorWithSubValidator,
   MockSubValidatorWithOptionalSubValidator
 } from '../__mocks__/ValidatorMocks';
-import { getValidatorEvaluator } from './ValidatorDoc.Helpers';
 
 describe('isBooleanEvaluator', () => {
   it('returns true if it is a boolean', () => {
@@ -77,8 +77,8 @@ describe('Get Validator Doc', () => {
   it('returns an existing validator doc', async () => {
     const validatorObject: { validatorDoc: ValidatorDoc } = {
       validatorDoc: {
-        fieldValidators: new Map<string, FieldValidator>([
-          ['field', { evaluators: [isStringEvaluator], config: DEFAULT_VALIDATOR_FIELD_CONFIG }]
+        fieldValidators: new Map<string, ValidatorFieldConfig>([
+          ['field', { ...DEFAULT_VALIDATOR_FIELD_CONFIG, evaluators: [isStringEvaluator] }]
         ])
       }
     };

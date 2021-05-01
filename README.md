@@ -185,7 +185,7 @@ class SpecializedValidators {
 ```typescript
 const ValidateObjectId = (validationConfig: ValidatorFieldConfig = {}): PropertyDecorator => {
   const config = { ...DEFAULT_VALIDATOR_CONFIG, ...validationConfig };
-  const evaluators = [isObjectId, ...config.evaluators];
+  const evaluators = [isObjectId, ...evaluators];
   return SetPropertyEvaluators({...config, evaluators);
 };
 

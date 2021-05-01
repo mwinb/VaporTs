@@ -1,4 +1,4 @@
-import SatelliteModel, { IncomingSatModel, SatId } from './satellites.model';
+import SatelliteModel, { SatId } from './satellites.model';
 import sats from './satellites.json';
 
 class SatelliteService {
@@ -15,16 +15,6 @@ class SatelliteService {
   }
 
   isValidSatId = (id: SatId): boolean => id <= this.satCount && id >= 0;
-
-  canCreateSatellite = (incoming: IncomingSatModel): boolean => {
-    const { name, lat, lon, status } = incoming;
-    return name && lat && lon && status;
-  };
-
-  canPatchSatellite = (incoming: IncomingSatModel): boolean => {
-    const { name, lat, lon, status, id } = incoming;
-    return this.isValidSatId(id) && (name || lat || lon || status);
-  };
 
   getAll(): SatelliteModel[] {
     return this.satellites;

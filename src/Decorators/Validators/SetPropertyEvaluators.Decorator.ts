@@ -6,6 +6,6 @@ export const SetPropertyEvaluators = (validatorConfig: ValidatorFieldConfig): Pr
     const configuredEvaluators = validatorConfig.isArray
       ? getArrayEvaluators(validatorConfig)
       : validatorConfig.evaluators;
-    validatorDoc.fieldValidators.set(propertyKey, { evaluators: configuredEvaluators, config: validatorConfig });
+    validatorDoc.fieldValidators.set(propertyKey, { ...validatorConfig, evaluators: configuredEvaluators });
   };
 };
