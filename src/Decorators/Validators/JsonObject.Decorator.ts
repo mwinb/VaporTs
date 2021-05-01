@@ -7,6 +7,5 @@ import {
 
 export const JsonObject = (validationConfig: ValidatorFieldConfig = {}): PropertyDecorator => {
   const config = { ...DEFAULT_VALIDATOR_FIELD_CONFIG, ...validationConfig };
-  const evaluators = [isJsonObjectEvaluator];
-  return SetPropertyEvaluators(evaluators, config);
+  return SetPropertyEvaluators({ ...config, evaluators: [isJsonObjectEvaluator, ...config.evaluators] });
 };

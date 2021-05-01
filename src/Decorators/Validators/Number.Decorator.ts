@@ -2,6 +2,5 @@ import { isNumberEvaluator, SetPropertyEvaluators, ValidatorFieldConfig, DEFAULT
 
 export const Number = (validationConfig: ValidatorFieldConfig = {}): PropertyDecorator => {
   const config = { ...DEFAULT_VALIDATOR_FIELD_CONFIG, ...validationConfig };
-  const evaluators = [isNumberEvaluator];
-  return SetPropertyEvaluators(evaluators, config);
+  return SetPropertyEvaluators({ ...config, evaluators: [isNumberEvaluator, ...config.evaluators] });
 };

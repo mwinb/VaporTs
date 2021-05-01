@@ -2,6 +2,5 @@ import { ValidatorFieldConfig, SetPropertyEvaluators, isStringEvaluator, DEFAULT
 
 export const String = (validationConfig: ValidatorFieldConfig = {}): PropertyDecorator => {
   const config = { ...DEFAULT_VALIDATOR_FIELD_CONFIG, ...validationConfig };
-  const evaluators = [isStringEvaluator];
-  return SetPropertyEvaluators(evaluators, config);
+  return SetPropertyEvaluators({ ...config, evaluators: [isStringEvaluator, ...config.evaluators] });
 };

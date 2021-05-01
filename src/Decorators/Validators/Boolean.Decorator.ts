@@ -2,6 +2,5 @@ import { isBooleanEvaluator, SetPropertyEvaluators, ValidatorFieldConfig, DEFAUL
 
 export const Boolean = (validationConfig: ValidatorFieldConfig = {}): PropertyDecorator => {
   const config = { ...DEFAULT_VALIDATOR_FIELD_CONFIG, ...validationConfig };
-  const evaluators = [isBooleanEvaluator];
-  return SetPropertyEvaluators(evaluators, config);
+  return SetPropertyEvaluators({ ...config, evaluators: [isBooleanEvaluator, ...config.evaluators] });
 };

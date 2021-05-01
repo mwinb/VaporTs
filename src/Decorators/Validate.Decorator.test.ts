@@ -24,4 +24,10 @@ describe('ValidateRoute', () => {
     await mockRouteValidatorController.mockInvalidValidatorRoute({ body: { booleanField: true } }, mockResponse);
     expect(mockRouteValidatorController.mockFn).toHaveBeenCalledTimes(1);
   });
+
+  it('sends a 501 status if the request field is invalid', async () => {
+    await mockRouteValidatorController.mockInvalidRequestFieldRoute({ body: { stringField: 'string' } }, mockResponse);
+    expect(mockRouteValidatorController.mockFn).not.toHaveBeenCalled();
+    expect(mockResponse.status).toHaveBeenLastCalledWith(501);
+  });
 });

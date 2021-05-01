@@ -17,10 +17,12 @@ export interface ValidatorFieldConfig {
   isArray?: boolean;
   evaluateEachItem?: boolean;
   optional?: boolean;
+  evaluators?: Evaluator[];
 }
 
 export const DEFAULT_VALIDATOR_FIELD_CONFIG: ValidatorFieldConfig = {
   isArray: false,
   evaluateEachItem: true,
-  optional: false
+  optional: false,
+  evaluators: []
 };

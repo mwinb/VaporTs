@@ -49,11 +49,9 @@ export class MockControllerWithRoutes {
 @Controller('/test')
 export class MockControllerWithRouteValidation {
   mockFn: (...args: any[]) => Promise<void>;
-  errorFn: (...args: any[]) => void;
 
   constructor() {
     this.mockFn = jest.fn();
-    this.errorFn = jest.fn();
   }
 
   @Validate(new MockSubSubValidator(), 'body')
@@ -63,6 +61,11 @@ export class MockControllerWithRouteValidation {
 
   @Validate({ invalidField: 'string' }, 'body')
   async mockInvalidValidatorRoute(...args: any[]): Promise<void> {
+    await this.mockFn(...args);
+  }
+
+  @Validate(new MockSubSubValidator(), 'invalidRequestField')
+  async mockInvalidRequestFieldRoute(...args: any[]): Promise<void> {
     await this.mockFn(...args);
   }
 }

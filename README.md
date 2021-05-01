@@ -41,7 +41,7 @@ class ExampleController {}
 
 ### Parameters:
 
-- Method: string
+- Method: string (required)
   - 'POST' | 'PATCH' | 'PUT' | 'GET' | 'DELETE' | 'HEAD' | 'CONNECT' | 'OPTIONS' | 'TRACE'
 - RouteParams: { } (optional)
   - path: string | string[] (optional)
@@ -64,6 +64,134 @@ class ExampleController {
 
   @Route('PATCH', { applyHttpError: false })
   examplePatchNoHttpError(req, res, next) {}
+}
+```
+
+---
+
+## Validate
+
+In order to use Validate an instance of a class that uses one of the Validation Decorators is needed. Handles all validation failures with the HttpError class. See the DocTsValidator Class description below.
+
+### Parameters:
+
+- `validator: DocTsValidator` (required)
+  - The DocTsValidator meta data is applied to any class that uses a validator decorator.
+- `requestFieldToValidate: string` (required)
+  - The Express Request(req) field upon which validation will be run:
+    - `'body' | 'params' | 'query' ...`
+    - Throws an `HttpError` with a 501 status and logs information about the function if invalid field is provided.
+
+### Examples:
+
+```typescript
+class ExampleValidator {
+  @String()
+  someString: string;
+}
+
+@Controller('/example')
+class ExampleController {
+  @Route('PATCH')
+  @Validate(new ExampleValidator(), 'body')
+  examplePatch(req, res) {}
+}
+```
+
+## Validators
+
+Field decorators can be used to create a DocTsValidator needed in the Validate Decorator. There are two types of Validators:
+
+## Primitive
+
+- `@String`
+  - Validates that field is a string.
+- `@Boolean`
+  - Validates that field is a boolean.
+- `@Number`
+  - Validates that field is a number.
+- `@JsonObject`
+  - Validates that field is of type object ({})
+
+### Params
+
+- `validationConfig: ValidatorFieldConfig {}` (optional)
+  - `isArray: boolean (optional, default: false)`
+    - Adds Array Validation to the field.
+  - `evaluateEachItem: boolean (optional, default: true)`
+    - Validates each item in array when field isArray.
+    - Currently disabling removes type evaluation and only ensures that the field is an Array.
+  - `optional: boolean (optional, default: false)`
+    - Will not throw HttpError if undefined.
+    - Still validates the field if it exists.
+  - `evaluators: Evaluator[]` (optional)
+    - Additional custom validation functions to be run against the field.
+    - Does not replace the current evaluator.
+  - `type Evaluator = (valueToValidate: any) => boolean`
+
+### Example
+
+```typescript
+class ExampleDocTsValidator {
+  @String({ evaluators: [isObjectId] })
+  id: ObjectId;
+
+  @String()
+  stringField: string;
+
+  @Number()
+  numberField: number;
+
+  @Boolean()
+  booleanField: boolean;
+
+  @JsonObject({ optional: true })
+  jsonObject: {};
+
+  @String({ isArray: true })
+  stringArray: string[];
+}
+```
+
+## Specialized
+
+- `@Validator` (use for nested DocTsValidator objects)
+  - Params
+    - `validator: DocTsValidator` (required)
+    - `validationConfig: ValidatorFieldConfig` (required)
+  - Defaults to JsonObject validation if DocTsValidator is not passed in the validator param.
+- `@SetPropertyEvaluators` (Suggested as return value for custom validators, but it may be used directly.)
+  - `validationConfig: ValidatorFieldConfig` (required)
+
+### Example
+
+```typescript
+class SpecializedValidators {
+  @SetPropertyEvaluators({
+    isArray: false,
+    evaluateEachItem: false,
+    optional: true,
+    evaluators: [isObjectId]
+  })
+  id: ObjectId;
+
+  @Validator(new ExampleDocTsValidator(), { isArray: true })
+  examples: ExampleDocTsValidator[];
+}
+```
+
+### Example Custom Validator
+
+```typescript
+const ValidateObjectId = (validationConfig: ValidatorFieldConfig = {}): PropertyDecorator => {
+  const config = { ...DEFAULT_VALIDATOR_CONFIG, ...validationConfig };
+  const evaluators = [isObjectId, ...config.evaluators];
+  return SetPropertyEvaluators({...config, evaluators);
+};
+
+class CustomValidatorExample {
+  @ValidateObjectId()
+  Id: ObjectId;
 }
 ```
 

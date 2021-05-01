@@ -1,6 +1,7 @@
 import {
   Logger,
   Evaluator,
+  HttpError,
   RequestField,
   handleHttpError,
   isDocTsValidator,
@@ -12,7 +13,7 @@ import {
 
 const getEvaluatorMethodOverride = (
   evaluator: Evaluator,
-  ogMethod: any,
+  ogMethod: Function,
   requestFieldToValidate: string
 ): ((...args: any[]) => Promise<void>) => {
   return async function (...args: any[]) {
@@ -22,6 +23,9 @@ const getEvaluatorMethodOverride = (
       if (requestField !== undefined) {
         evaluator(requestField);
         await ogMethod.apply(this, args);
+      } else {
+        Logger.log(`\nDocTs: Invalid request field ${requestFieldToValidate} in Validate @ ${ogMethod.name}. \n`);
+        throw new HttpError(501, 'Not implemented.');
       }
     } catch (error) {
       handleHttpError(error, response);

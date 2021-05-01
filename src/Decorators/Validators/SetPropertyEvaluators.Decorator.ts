@@ -1,12 +1,11 @@
-import { Evaluator, ValidatorFieldConfig, getValidatorDoc, getArrayEvaluators } from '../..';
+import { ValidatorFieldConfig, getValidatorDoc, getArrayEvaluators } from '../..';
 
-export const SetPropertyEvaluators = (
-  evaluators: Evaluator[],
-  validatorConfig: ValidatorFieldConfig
-): PropertyDecorator => {
+export const SetPropertyEvaluators = (validatorConfig: ValidatorFieldConfig): PropertyDecorator => {
   return (target: any, propertyKey: string): void => {
     const validatorDoc = getValidatorDoc(target);
-    const configuredEvaluators = validatorConfig.isArray ? getArrayEvaluators(validatorConfig, evaluators) : evaluators;
+    const configuredEvaluators = validatorConfig.isArray
+      ? getArrayEvaluators(validatorConfig)
+      : validatorConfig.evaluators;
     validatorDoc.fieldValidators.set(propertyKey, { evaluators: configuredEvaluators, config: validatorConfig });
   };
 };

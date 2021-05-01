@@ -34,18 +34,18 @@ describe('createArrayItemEvaluator', () => {
 
 describe('getArrayEvaluators', () => {
   it('puts the isArrayEvaluator function at the front of the provided evaluator functions list if isArray is set to true and evaluateArrayItems is set to false', () => {
-    const evaluators = getArrayEvaluators({ isArray: true }, [jest.fn()]);
+    const evaluators = getArrayEvaluators({ isArray: true, evaluators: [jest.fn()] });
     expect(evaluators.shift()).toEqual(isArrayEvaluator);
   });
 
   it('returns the given validatorFns if both validateArrayItems and isArray are false', () => {
-    const evaluators = getArrayEvaluators({}, [() => true]);
+    const evaluators = getArrayEvaluators({ evaluators: [() => true] });
     expect(evaluators.shift()('anything')).toBeTruthy();
   });
 
   it('replaces all validatorFns with created arrayItemValidator if isArray and validateArrayItems is set to true', () => {
     const mockEvaluator = jest.fn();
-    const evaluators = getArrayEvaluators({ isArray: true, evaluateEachItem: true }, [mockEvaluator]);
+    const evaluators = getArrayEvaluators({ isArray: true, evaluateEachItem: true, evaluators: [mockEvaluator] });
     expect(evaluators.length).toEqual(1);
   });
 });

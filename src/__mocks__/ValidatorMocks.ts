@@ -58,7 +58,11 @@ export class MockValidatorClass {
   @JsonObject({ isArray: true, evaluateEachItem: false })
   objectArrayField: Record<string, any>[];
 
-  @SetPropertyEvaluators([isStringEvaluator], { isArray: false, evaluateEachItem: false })
+  @SetPropertyEvaluators({
+    isArray: false,
+    evaluateEachItem: false,
+    evaluators: [isStringEvaluator]
+  })
   validatorProperty: string;
 
   @Validator(new MockSubValidatorWithOptionalSubValidator())

@@ -23,6 +23,6 @@ export const getEvaluatorsForValidatorFieldConfig = (
     : getEvaluatorsForIsArray(isArray, validators);
 };
 
-export const getArrayEvaluators = (validatorConfig: ValidatorFieldConfig, evaluators: Evaluator[]): Evaluator[] => {
-  return getEvaluatorsForValidatorFieldConfig(validatorConfig, evaluators);
+export const getArrayEvaluators = (validatorConfig: ValidatorFieldConfig): Evaluator[] => {
+  return getEvaluatorsForValidatorFieldConfig(validatorConfig, validatorConfig.evaluators);
 };

@@ -8,15 +8,16 @@ import {
   SetPropertyEvaluators,
   invalidDocTsValidatorWarning
 } from '../..';
-import { getValidatorDoc } from '../../Helpers/ValidatorDoc.Helpers';
 import { DEFAULT_VALIDATOR_FIELD_CONFIG } from '../../Interfaces/ValidatorDoc.Interface';
 
 export const EvaluateValidator = (
   validator: DocTsValidator,
   validatorConfig: ValidatorFieldConfig
 ): PropertyDecorator => {
-  const evaluators = [getValidatorEvaluator(validator)];
-  return SetPropertyEvaluators(evaluators, validatorConfig);
+  return SetPropertyEvaluators({
+    ...validatorConfig,
+    evaluators: [getValidatorEvaluator(validator), ...validatorConfig.evaluators]
+  });
 };
 
 export const warnAndEvaluateJsonObject = (
