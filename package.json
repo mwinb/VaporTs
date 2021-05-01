@@ -28,7 +28,7 @@
     "decorators"
   ],
   "author": "Michael Winberry",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/mwinb/DocTS/issues"
   },
