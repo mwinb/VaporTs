@@ -219,7 +219,7 @@ res.status(500).json({ code: 500, message: 'Oops something went wrong.' });
 
 ## DocApp
 
-The DocApp class is responsible for binding all routes, methods, and middleware to an express application. It is recommended that any DocApp classes (many can be initialized for version control purposes) be instantiated at entry point of the application. For
+The DocApp class is responsible for binding all routes, methods, and middleware to an express application. It is recommended that any DocApp classes (many can be initialized for version control purposes) be instantiated at entry point of the application.
 
 ### Parameters:
 
