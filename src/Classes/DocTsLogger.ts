@@ -4,4 +4,4 @@ export class DocTsLogger {
   constructor(public log: LoggerFn = console.log) {}
 }
 
-export const Logger = new DocTsLogger();
+export const docTsLogger = new DocTsLogger();

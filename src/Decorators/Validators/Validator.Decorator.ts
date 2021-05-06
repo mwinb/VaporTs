@@ -1,5 +1,5 @@
 import {
-  Logger,
+  docTsLogger,
   JsonObject,
   DocTsValidator,
   isDocTsValidator,
@@ -24,7 +24,7 @@ export const warnAndEvaluateAsJsonObject = (
   validator: Record<string, any>,
   validatorConfig: ValidatorFieldConfig
 ): PropertyDecorator => {
-  Logger.log(invalidDocTsValidatorWarningMessage(validator));
+  docTsLogger.log(invalidDocTsValidatorWarningMessage(validator));
   return JsonObject(validatorConfig);
 };
 

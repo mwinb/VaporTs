@@ -1,6 +1,7 @@
 // Classes
 export * from './Classes/DocApp';
 export * from './Classes/HttpError';
+export * from './Classes/DocTsLogger';
 
 // Decorators
 export * from './Decorators/Route.Decorator';
@@ -45,5 +46,3 @@ export * from './Helpers/HttpError.Helpers';
 export * from './Helpers/Controller.Helpers';
 export * from './Evaluators/Array.Evaluator';
 export * from './Helpers/ValidatorDoc.Helpers';
-// Logs
-export * from './Logs/Logger';

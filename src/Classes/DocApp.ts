@@ -8,6 +8,7 @@ import {
   initControllerMiddleware
 } from '..';
 import { Application, Router, Request, Response } from 'express';
+import { docTsLogger } from './DocTsLogger';
 
 export class DocApp implements DocAppConfig {
   routes: RouteDoc[] = [];
@@ -36,10 +37,12 @@ export class DocApp implements DocAppConfig {
     path = '',
     showApi = false,
     middleware = [],
+    logger = console.log,
     controllers,
     expressApplication: app,
     router
   }: DocAppConfig) {
+    docTsLogger.log = logger;
     this.path = path;
     this.showApi = showApi;
     this.controllers = controllers;

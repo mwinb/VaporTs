@@ -1,4 +1,4 @@
-import { DocTsLogger } from './Logger';
+import { DocTsLogger } from './DocTsLogger';
 
 describe('DocTs Logger', () => {
   let mockLogger: jest.Mock<any, any>;

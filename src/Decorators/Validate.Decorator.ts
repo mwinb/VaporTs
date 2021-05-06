@@ -1,5 +1,5 @@
 import {
-  Logger,
+  docTsLogger,
   Evaluator,
   HttpError,
   RequestField,
@@ -25,7 +25,7 @@ const getEvaluatorMethodOverride = (
         evaluator(requestField);
         await ogMethod.apply(this, args);
       } else {
-        Logger.log(invalidRequestFieldMessage(requestFieldToValidate, ogMethod.name));
+        docTsLogger.log(invalidRequestFieldMessage(requestFieldToValidate, ogMethod.name));
         throw new HttpError(501, 'Not implemented.');
       }
     } catch (error) {
@@ -45,7 +45,7 @@ const applyEvaluator = (
 };
 
 const warnAndReturnJsonEvaluator = (validator: Record<string, any>): Evaluator => {
-  Logger.log(invalidDocTsValidatorWarningMessage(validator));
+  docTsLogger.log(invalidDocTsValidatorWarningMessage(validator));
   return isJsonObjectEvaluator;
 };
 
