@@ -5,10 +5,11 @@ import {
   RequestField,
   handleHttpError,
   isDocTsValidator,
-  getValidatorEvaluator,
   isJsonObjectEvaluator,
+  createValidatorEvaluator,
+  invalidRequestFieldMessage,
   PropertyDescriptorDecorator,
-  invalidDocTsValidatorWarning
+  invalidDocTsValidatorWarningMessage
 } from '..';
 
 const getEvaluatorMethodOverride = (
@@ -24,7 +25,7 @@ const getEvaluatorMethodOverride = (
         evaluator(requestField);
         await ogMethod.apply(this, args);
       } else {
-        Logger.log(`\nDocTs: Invalid request field ${requestFieldToValidate} in Validate @ ${ogMethod.name}. \n`);
+        Logger.log(invalidRequestFieldMessage(requestFieldToValidate, ogMethod.name));
         throw new HttpError(501, 'Not implemented.');
       }
     } catch (error) {
@@ -44,12 +45,12 @@ const applyEvaluator = (
 };
 
 const warnAndReturnJsonEvaluator = (validator: Record<string, any>): Evaluator => {
-  Logger.log(invalidDocTsValidatorWarning(validator));
+  Logger.log(invalidDocTsValidatorWarningMessage(validator));
   return isJsonObjectEvaluator;
 };
 
 const getRouteEvaluator = (validator: Record<string, any>): Evaluator => {
-  return isDocTsValidator(validator) ? getValidatorEvaluator(validator) : warnAndReturnJsonEvaluator(validator);
+  return isDocTsValidator(validator) ? createValidatorEvaluator(validator) : warnAndReturnJsonEvaluator(validator);
 };
 
 export const Validate = (

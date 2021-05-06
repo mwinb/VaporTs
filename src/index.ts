@@ -14,6 +14,14 @@ export * from './Decorators/Validators/Validator.Decorator';
 export * from './Decorators/Validators/JsonObject.Decorator';
 export * from './Decorators/Validators/SetPropertyEvaluators.Decorator';
 
+// Evaluators
+export * from './Evaluators/Number.Evaluator';
+export * from './Evaluators/String.Evaluator';
+export * from './Evaluators/Boolean.Evaluator';
+export * from './Evaluators/Validator.Evaluator';
+export * from './Evaluators/JsonObject.Evaluator';
+export * from './Evaluators/DocTsValidator.Evaluator';
+
 // Interfaces
 export * from './Interfaces/RouteDoc.Interface';
 export * from './Interfaces/DocAppConfig.Interface';
@@ -32,10 +40,10 @@ export * from './Types/PropertyDescriptorDecorator.Type';
 
 // Helpers
 export * from './Helpers/Route.Helpers';
+export * from './Helpers/Message.Helpers';
 export * from './Helpers/HttpError.Helpers';
 export * from './Helpers/Controller.Helpers';
+export * from './Evaluators/Array.Evaluator';
 export * from './Helpers/ValidatorDoc.Helpers';
-export * from './Helpers/ArrayEvaluator.Helpers';
-
 // Logs
 export * from './Logs/Logger';

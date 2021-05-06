@@ -77,10 +77,11 @@ In order to use Validate an instance of a class that uses one of the Validation 
 
 - `validator: DocTsValidator` (required)
   - The DocTsValidator meta data is applied to any class that uses a validator decorator.
+  - Throws an `HttpError` with a `400` status and information about the value and field that failed.
 - `requestFieldToValidate: string` (required)
   - The Express Request(req) field upon which validation will be run:
     - `'body' | 'params' | 'query' ...`
-    - Throws an `HttpError` with a 501 status and logs information about the function if invalid field is provided.
+    - Throws an `HttpError` with a `501` status and logs information about the function if invalid field is provided.
 
 ### Examples:
 
@@ -199,7 +200,7 @@ class CustomValidatorExample {
 
 ## HttpErrorHandler
 
-The HttpErrorHandler is applied to all Routes by default, but can also be used as an individual decorator. This handler wraps asynchronous Route decorated functions in a try catch that listens for an HttpError to be thrown. The HttpError takes in the code and the response message. When caught by the handler, the express response status is set to the HttpErrors code and a json object with the code and message are sent. All uncaught errors respond with a 500 and an ambiguous error message. Uncaught errors are also logged to the console.
+The HttpErrorHandler is applied to all Routes and Validators by default, but can also be used as an individual decorator. This handler wraps asynchronous Route or Validate decorated functions in a try catch that listens for an HttpError to be thrown. The HttpError takes in the code and the response message. When caught by the handler, the express response status is set to the HttpError code and a json object with the code and message are sent. All uncaught errors respond with a 500 and an ambiguous error message. Uncaught errors are also logged to the console.
 
 ### Example - response (caught):
 

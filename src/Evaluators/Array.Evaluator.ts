@@ -14,15 +14,8 @@ export const getEvaluatorsForIsArray = (isArray: boolean, evaluators: Evaluator[
   return isArray ? [isArrayEvaluator] : evaluators;
 };
 
-export const getEvaluatorsForValidatorFieldConfig = (
-  { isArray, evaluateEachItem }: ValidatorFieldConfig,
-  validators: Evaluator[]
-): Evaluator[] => {
+export const getArrayEvaluators = ({ isArray, evaluateEachItem, evaluators }: ValidatorFieldConfig): Evaluator[] => {
   return isArray && evaluateEachItem
-    ? [createArrayItemEvaluator(validators)]
-    : getEvaluatorsForIsArray(isArray, validators);
-};
-
-export const getArrayEvaluators = (validatorConfig: ValidatorFieldConfig): Evaluator[] => {
-  return getEvaluatorsForValidatorFieldConfig(validatorConfig, validatorConfig.evaluators);
+    ? [createArrayItemEvaluator(evaluators)]
+    : getEvaluatorsForIsArray(isArray, evaluators);
 };
