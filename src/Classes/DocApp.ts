@@ -1,5 +1,6 @@
 import {
   RouteDoc,
+  docTsLogger,
   DocAppConfig,
   getRouteDocs,
   DocTsController,
@@ -8,7 +9,6 @@ import {
   initControllerMiddleware
 } from '..';
 import { Application, Router, Request, Response } from 'express';
-import { docTsLogger } from './DocTsLogger';
 
 export class DocApp implements DocAppConfig {
   routes: RouteDoc[] = [];

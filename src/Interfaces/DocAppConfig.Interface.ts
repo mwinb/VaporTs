@@ -1,5 +1,5 @@
+import { LoggerFn } from '..';
 import { Application, Router } from 'express';
-import { LoggerFn } from '../Types/LoggerFn.Type';
 
 export interface DocAppConfig {
   path?: string;
