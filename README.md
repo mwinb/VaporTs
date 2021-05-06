@@ -230,6 +230,9 @@ The DocApp class is responsible for binding all routes, methods, and middleware 
     - This provides a simple html page @GET/path that lists all routes as links and their respective methods.
   - `middleware: Middleware[]` (optional)
     - Sets the path middleware.
+  - `logger: LoggerFn` (optional, default: console.log)
+    - Allows user to redirect with a custom logger function.
+    - `type LoggerFn = (message: any, ...additionalParams: any[]) => void | Promise<void>`
   - `controllers: Controller[]` (required)
     - any class with the Controller Decorator.
     - Throws error with information about the class if a non-controller decorated classes are passed
