@@ -1,12 +1,12 @@
-import morgan from 'morgan';
-import express from 'express';
-import SatelliteService from './satellites.service';
-import { Controller, HttpError, Route, Validate } from '@mwinberry/doc-ts';
 import SatelliteModel, {
   GetSatelliteValidator,
   PatchSatelliteValidator,
   PostSatelliteValidator
 } from './satellites.model';
+import morgan from 'morgan';
+import express from 'express';
+import SatelliteService from './satellites.service';
+import { Controller, HttpError, Route, Validate } from '@mwinberry/doc-ts';
 @Controller('/satellite', [morgan('tiny')])
 class SatelliteController {
   exampleModel: SatelliteModel = { name: 'Sat Name', lat: 1234, lon: 1234, id: 101010, status: 'Example Satus' };
