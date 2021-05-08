@@ -7,13 +7,13 @@ import { createValidatorEvaluator, Evaluator, isStringEvaluator } from '..';
 
 describe('Get Validator Evaluator', () => {
   it('returns an evaluator for a DocTsValidator', () => {
-    expect(typeof createValidatorEvaluator(new MockValidatorClass() as any) === 'function').toBeTruthy();
+    expect(typeof createValidatorEvaluator(new MockValidatorClass() as any, true) === 'function').toBeTruthy();
   });
 
   describe('ValidatorEvaluator - non optional fields', () => {
     let validatorEvaluator: Evaluator;
     beforeEach(() => {
-      validatorEvaluator = createValidatorEvaluator(new MockValidatorWithSubValidator() as any);
+      validatorEvaluator = createValidatorEvaluator(new MockValidatorWithSubValidator() as any, true);
     });
     it('returns true if the provided object passes all field evaluators', () => {
       expect(
@@ -52,7 +52,7 @@ describe('Get Validator Evaluator', () => {
   describe('ValidatorEvaulator - with optional fields', () => {
     let validatorEvaluator: Evaluator;
     beforeEach(() => {
-      validatorEvaluator = createValidatorEvaluator(new MockSubValidatorWithOptionalSubValidator() as any);
+      validatorEvaluator = createValidatorEvaluator(new MockSubValidatorWithOptionalSubValidator() as any, true);
     });
 
     it('ignores optional fields if they are not provided', () => {

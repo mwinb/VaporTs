@@ -82,6 +82,14 @@ In order to use Validate an instance of a class that uses one of the Validation 
   - The Express Request(req) field upon which validation will be run:
     - `'body' | 'params' | 'query' ...`
     - Throws an `HttpError` with a `501` status and logs information about the function if invalid field is provided.
+- `validateConfig: ValidateConfig` (optional):
+  - `isArray` (optional, default: `false`)
+    - Adds Array Validation to the `Express.Request` field.
+  - `evaluateEachItem` (optional, default: `true`)
+    - Validates each item in array when field isArray.
+    - Disabling removes type evaluation and only ensures that the field is an Array.
+  - `strip:` (optional, default: `true`)
+    - Removes any fields not specified in the provided Validator.
 
 ### Examples:
 
@@ -117,12 +125,12 @@ Field decorators can be used to create a DocTsValidator needed in the Validate D
 ### Params
 
 - `validationConfig: ValidatorFieldConfig {}` (optional)
-  - `isArray: boolean (optional, default: false)`
+  - `isArray: boolean` (optional, default: false)
     - Adds Array Validation to the field.
-  - `evaluateEachItem: boolean (optional, default: true)`
+  - `evaluateEachItem: boolean` (optional, default: true)
     - Validates each item in array when field isArray.
     - Currently disabling removes type evaluation and only ensures that the field is an Array.
-  - `optional: boolean (optional, default: false)`
+  - `optional: boolean` (optional, default: false)
     - Will not throw HttpError if undefined.
     - Still validates the field if it exists.
   - `evaluators: Evaluator[]` (optional)
@@ -157,10 +165,27 @@ class ExampleDocTsValidator {
 ## Specialized
 
 - `@Validator` (use for nested DocTsValidator objects)
+
   - Params
+
     - `validator: DocTsValidator` (required)
-    - `validationConfig: ValidatorFieldConfig` (required)
+    - `validationConfig: ValidatorConfig` (required)
+      - `isArray: boolean` (optional, default: false)
+        - Adds Array Validation to the field.
+      - `evaluateEachItem: boolean` (optional, default: true)
+        - Validates each item in array when field isArray.
+        - Currently disabling removes type evaluation and only ensures that the field is an Array.
+      - `optional: boolean` (optional, default: false)
+        - Will not throw HttpError if undefined.
+        - Still validates the field if it exists.
+      - `evaluators: Evaluator[]` (optional)
+        - Additional custom validation functions to be run against the field.
+        - Does not override the default Evaluator.
+      - `strip: boolean` (optional, default: true)
+        - Removes any fields not specified in the provided Validator.
+
   - Defaults to JsonObject validation if DocTsValidator is not passed in the validator param.
+
 - `@SetPropertyEvaluators` (Suggested as return value for custom validators, but it may be used directly.)
   - `validationConfig: ValidatorFieldConfig` (required)
 

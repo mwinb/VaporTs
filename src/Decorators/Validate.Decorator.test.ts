@@ -15,6 +15,19 @@ describe('ValidateRoute', () => {
     expect(mockRouteValidatorController.mockFn).toHaveBeenCalledTimes(1);
   });
 
+  it('strips any extra fields by default', async () => {
+    const mockReq = { body: { stringField: 'String', extraField: 'extra' } };
+    await mockRouteValidatorController.mockRoute(mockReq);
+    expect(mockReq.body['extraField']).toBeUndefined();
+  });
+
+  it('handles validating an array of the Validator Type from request field', async () => {
+    await mockRouteValidatorController.mockArrayValidatorRoute({
+      body: [{ stringField: 'String' }, { stringField: 'String2' }]
+    });
+    expect(mockRouteValidatorController.mockFn).toHaveBeenCalledTimes(1);
+  });
+
   it('sends a 400 status if it fails validation', async () => {
     await mockRouteValidatorController.mockRoute({ body: { booleanField: true } }, mockResponse);
     expect(mockResponse.status).toHaveBeenLastCalledWith(400);

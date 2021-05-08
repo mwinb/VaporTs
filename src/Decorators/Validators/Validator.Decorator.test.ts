@@ -1,5 +1,4 @@
-import { Evaluator } from '../../Types/Evaluator.Type';
-import { getValidatorDoc, isArrayEvaluator, isJsonObjectEvaluator } from '../..';
+import { getValidatorDoc, isArrayEvaluator, isJsonObjectEvaluator, Evaluator } from '../..';
 import { MockValidatorClass, MockValidatorClassWithNonValidatorObject } from '../../__mocks__/ValidatorMocks';
 
 describe('ValidatorObject', () => {
@@ -28,6 +27,20 @@ describe('ValidatorObject', () => {
         }
       })
     ).toBeTruthy();
+  });
+
+  it('Should strip extra unvalidated fields by default', () => {
+    const objectToValidate = {
+      stringField: 'string',
+      booleanField: false,
+      numberField: 10,
+      subSubValidator: {
+        stringField: 'string'
+      },
+      extraField: 'Remove Me'
+    };
+    validatorFieldEvaluator(objectToValidate);
+    expect(objectToValidate['extraField']).toBeUndefined();
   });
 
   it('handles validator arrays by passing a ValidatorFieldConfig object', () => {

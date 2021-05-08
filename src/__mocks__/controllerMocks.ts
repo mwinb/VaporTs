@@ -68,4 +68,9 @@ export class MockControllerWithRouteValidation {
   async mockInvalidRequestFieldRoute(...args: any[]): Promise<void> {
     await this.mockFn(...args);
   }
+
+  @Validate(new MockSubSubValidator(), 'body', { isArray: true })
+  async mockArrayValidatorRoute(...args: any[]): Promise<void> {
+    await this.mockFn(...args);
+  }
 }

@@ -57,9 +57,16 @@ const evaluateValidatorFields = (
   );
 };
 
-export const createValidatorEvaluator = (arg: DocTsValidator): Evaluator => {
+const stripFields = (objectToStrip: Record<string, any>, fieldValidators: Map<string, ValidatorFieldConfig>): void => {
+  Object.keys(objectToStrip).forEach(key => {
+    if (!fieldValidators.has(key)) delete objectToStrip[key];
+  });
+};
+
+export const createValidatorEvaluator = (arg: DocTsValidator, strip: boolean): Evaluator => {
   const validatorDoc = getValidatorDoc(arg);
   return (objectToEvaluate: Record<string, any>) => {
+    strip && stripFields(objectToEvaluate, validatorDoc.fieldValidators);
     return evaluateValidatorFields(Array.from(validatorDoc.fieldValidators.entries()), objectToEvaluate);
   };
 };
