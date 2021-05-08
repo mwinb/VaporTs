@@ -41,15 +41,6 @@ describe('Satellites Controller', () => {
       await satController.addSat(mockRequest, mockResponse);
       expect(mockResponse.status).toHaveBeenCalledWith(400);
     });
-
-    it('should send a 500 error if an unknown error occurs when adding a satellite', async () => {
-      jest.spyOn(SatelliteService.prototype, 'addOne').mockImplementationOnce((newSat: SatelliteModel) => {
-        throw new Error();
-      });
-      mockRequest = { body: { name: 'Sat Name', lat: 1234, lon: 1234, status: 'Example Status' } };
-      await satController.addSat(mockRequest, mockResponse);
-      expect(mockResponse.status).toHaveBeenCalledWith(500);
-    });
   });
   describe('patching satellite', () => {
     let satToPatch: SatelliteModel;
@@ -74,15 +65,6 @@ describe('Satellites Controller', () => {
       mockRequest.body = {};
       satController.patchSat(mockRequest, mockResponse);
       expect(mockResponse.status).toHaveBeenCalledWith(400);
-    });
-
-    it('returns a 500 if an unknown error occurs', async () => {
-      mockRequest.body = { ...satToPatch, name: 'New Name' };
-      jest.spyOn(SatelliteService.prototype, 'patchOne').mockImplementationOnce((newSat: SatelliteModel) => {
-        throw new Error();
-      });
-      await satController.patchSat(mockRequest, mockResponse);
-      expect(mockResponse.status).toHaveBeenCalledWith(500);
     });
   });
 
