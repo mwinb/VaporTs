@@ -46,7 +46,9 @@ class ExampleController {}
 - `RouteParams: { } `(optional)
   - `path: string | string[]` (optional)
   - `middleware: Middleware[]` (optional)
-  - `applyHttpError: boolean `(optional, default: true)
+  - `applyHttpError: boolean` (optional, default: true)
+  - `handleResponse: boolean` (optional, default: true)
+  - `responseCode: number` (optional, default: 200)
 
 ### Examples:
 
@@ -55,6 +57,9 @@ class ExampleController {}
 class ExampleController {
   @Route('GET')
   async exampleGetFunction(req, res) {}
+
+  @Route('POST', { responseCode: 201 })
+  async postWithCustomResponseCode(req) {}
 
   @Route('GET', { path: '/:id', middleware: [routeMiddleware] })
   async exampleGetOneFunction(req, res) {}
@@ -230,13 +235,38 @@ The HttpErrorHandler is applied to all Routes and Validators by default, but can
 ### Example - response (caught):
 
 ```typescript
-res.status(404).json({ code: 404, message: 'Not Found' });
+res.status(404).send({ code: 404, message: 'Not Found' });
 ```
 
 ### Example - response (uncaught):
 
 ```typescript
-res.status(500).json({ code: 500, message: 'Oops something went wrong.' });
+res.status(500).send({ code: 500, message: 'Oops something went wrong.' });
+```
+
+---
+
+## ResponseHandler
+
+The ResponseHandler functionality is applied to all Routes by default but can also be used as an individual decorator. This handler wraps an asynchronous Route and handles the `res.status` and `res.send` when the wrapped function returns data, and handles `res.sendStatus` when the function does not return data. The default status code is 200
+
+### Example:
+
+```typescript
+@Controller('/example')
+class ExampleController {
+  // Calls res.status(200).send(Example[]) if successful
+  @Route('GET')
+  async getExamples(req: express.Request): Example[] {
+    return await this.exampleService.getAllExamples();
+  }
+  // Calls res.sendStatus(201) if successful
+  @Route('PATCH', { responseCode: 201 })
+  @Validate(new ExamplePatchValidator(), 'body')
+  async patchExampleNoReturn(req: express.Request): Promise<void> {
+    await this.exampleService.patch(req.body);
+  }
+}
 ```
 
 ---
@@ -273,7 +303,7 @@ const expressApp = express();
 const appV1 = new DocApp({
   path: '/v1',
   showApi: true,
-  middleware: [pathMiddleware],
+  middleware: [pathMiddleware, express.json()],
   controllers: [new SatelliteController()],
   expressApplication: expressApp,
   router: express.Router()

@@ -31,6 +31,39 @@ describe('Router Decorator', () => {
     expect(routes.get('mockRouteWithMiddleware').middleware).toEqual([mockMiddleware]);
   });
 
+  describe('HandleResponse', () => {
+    let mockResponse: Response;
+    let returnVal: string;
+    beforeEach(() => {
+      mockResponse = getMockResponse();
+      returnVal = 'returnValue';
+      jest.spyOn(testController, 'mockFn').mockResolvedValueOnce(returnVal);
+    });
+
+    describe('defaults', () => {
+      beforeEach(async () => {
+        await testController.mockRoute({}, mockResponse);
+      });
+      it('applies the Response Handler by default', () => {
+        expect(mockResponse.send).toHaveBeenLastCalledWith(returnVal);
+      });
+
+      it('uses 200 for status code by default', () => {
+        expect(mockResponse.status).toHaveBeenLastCalledWith(200);
+      });
+    });
+
+    it('takes a custom code', async () => {
+      await testController.mockRouteWithCustomCode({}, mockResponse);
+      expect(mockResponse.status).toHaveBeenLastCalledWith(201);
+    });
+
+    it('allows for disabling response handling', async () => {
+      await testController.mockRouteWithoutResponseHandler({}, mockResponse);
+      expect(mockResponse.status).not.toHaveBeenCalled();
+    });
+  });
+
   describe('HttpError', () => {
     let mockRequest: Request;
     let mockResponse: Response;

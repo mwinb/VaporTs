@@ -6,8 +6,9 @@ export * from './Classes/DocTsLogger';
 // Decorators
 export * from './Decorators/Route.Decorator';
 export * from './Decorators/Validate.Decorator';
-export * from './Decorators/HttpError.Decorator';
 export * from './Decorators/Controller.Decorator';
+export * from './Decorators/ResponseHandler.Decorator';
+export * from './Decorators/HttpErrorHandler.Decorator';
 export * from './Decorators/Validators/String.Decorator';
 export * from './Decorators/Validators/Number.Decorator';
 export * from './Decorators/Validators/Boolean.Decorator';

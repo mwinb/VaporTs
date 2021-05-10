@@ -1,8 +1,21 @@
-import { RouteMethod, RouteParams, getControllerDoc, HttpErrorHandler, PropertyDescriptorDecorator } from '..';
+import {
+  RouteMethod,
+  RouteParams,
+  getControllerDoc,
+  applyResponseHandler,
+  applyHttpErrorHandler,
+  PropertyDescriptorDecorator
+} from '..';
+
+const applyHandlers = (descriptor: PropertyDescriptor, routeConfig: RouteParams): PropertyDescriptor => {
+  routeConfig.handleResponse && applyResponseHandler(routeConfig.responseCode, descriptor);
+  routeConfig.applyHttpError && applyHttpErrorHandler(descriptor);
+  return descriptor;
+};
 
 export function Route(
   method: RouteMethod,
-  { path = '', middleware = [], applyHttpError = true }: RouteParams = {}
+  { path = '', middleware = [], applyHttpError = true, handleResponse = true, responseCode = 200 }: RouteParams = {}
 ): PropertyDescriptorDecorator {
   return function (
     target: Record<string, any>,
@@ -12,9 +25,6 @@ export function Route(
     const meta = getControllerDoc(target);
     const paths = typeof path === 'string' ? [path] : path;
     meta.routes.set(propertyKey, { paths: paths, method: method, middleware: middleware });
-    if (applyHttpError) {
-      return HttpErrorHandler(target, propertyKey, descriptor);
-    }
-    return descriptor;
+    return applyHandlers(descriptor, { path, middleware, applyHttpError, handleResponse, responseCode });
   };
 }

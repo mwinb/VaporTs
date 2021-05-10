@@ -1,6 +1,7 @@
 import { Controller, Route, Validate } from '..';
 import { MockSubSubValidator } from './ValidatorMocks';
 import { mockMiddleware } from './Express/mockMiddleware';
+
 @Controller('/test')
 export class MockControllerWithoutMiddleWare {}
 
@@ -9,7 +10,7 @@ export class MockControllerWithMiddleWare {}
 
 @Controller('/test')
 export class MockControllerWithRoutes {
-  mockFn: (...args: any[]) => Promise<void>;
+  mockFn: (...args: any[]) => Promise<any>;
   errorFn: (...args: any[]) => void;
 
   constructor() {
@@ -17,29 +18,39 @@ export class MockControllerWithRoutes {
     this.errorFn = jest.fn();
   }
   @Route('GET')
-  async mockRoute(...args: any[]): Promise<void> {
-    await this.mockFn(...args);
+  async mockRoute(...args: any[]): Promise<any> {
+    return await this.mockFn(...args);
   }
 
   @Route('GET', { path: '/:param' })
-  async mockRouteWithPath(): Promise<void> {
-    await this.mockFn();
+  async mockRouteWithPath(): Promise<any> {
+    return await this.mockFn();
   }
 
   @Route('GET', { middleware: [mockMiddleware] })
-  async mockRouteWithMiddleware(...args: any[]): Promise<void> {
-    await this.mockFn(...args);
+  async mockRouteWithMiddleware(...args: any[]): Promise<any> {
+    return await this.mockFn(...args);
   }
 
   @Route('GET', { path: ['/pathone', '/pathtwo'] })
-  async mockRouteWithMultiplePaths(...args: any[]): Promise<void> {
+  async mockRouteWithMultiplePaths(...args: any[]): Promise<any> {
+    return await this.mockFn(...args);
+  }
+
+  @Route('GET', { handleResponse: false })
+  async mockRouteWithoutResponseHandler(...args: any[]): Promise<void> {
     await this.mockFn(...args);
   }
 
+  @Route('GET', { responseCode: 201 })
+  async mockRouteWithCustomCode(...args: any[]): Promise<any> {
+    return await this.mockFn(...args);
+  }
+
   @Route('GET', { applyHttpError: false })
-  async mockRouteNoHttpError(...args: any[]): Promise<void> {
+  async mockRouteNoHttpError(...args: any[]): Promise<any> {
     try {
-      await this.mockFn(...args);
+      return await this.mockFn(...args);
     } catch (err) {
       this.errorFn(err);
     }

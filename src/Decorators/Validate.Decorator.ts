@@ -26,13 +26,13 @@ const getEvaluatorMethodOverride = (
     try {
       if (requestField !== undefined) {
         evaluator(requestField);
-        await ogMethod.apply(this, args);
+        return await ogMethod.apply(this, args);
       } else {
         docTsLogger.log(invalidRequestFieldMessage(requestFieldToValidate, ogMethod.name));
         throw new HttpError(501, 'Not implemented.');
       }
     } catch (error) {
-      handleHttpError(error, response);
+      return handleHttpError(error, response);
     }
   };
 };
