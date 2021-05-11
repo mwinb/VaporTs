@@ -1,5 +1,6 @@
 import {
   RouteDoc,
+  Generator,
   getRouteDocs,
   getGenerators,
   getGeneratedFn,
@@ -41,7 +42,7 @@ describe('Getting RouteDocs', () => {
 
 describe('getting generated fn', () => {
   let mockResponse: Response;
-  let generators: any[];
+  let generators: Generator[];
   beforeEach(() => {
     mockResponse = getMockResponse();
     jest.spyOn(testController, 'mockFn').mockResolvedValue('Returned');

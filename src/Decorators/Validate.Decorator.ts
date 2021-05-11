@@ -14,26 +14,29 @@ import {
   PropertyDescriptorDecorator,
   invalidDocTsValidatorWarningMessage
 } from '..';
+import { getControllerDoc } from '../Helpers/Controller.Helpers';
+import { Middleware } from '../Types/Middleware.Type';
 
 export const generateValidatorHandler = (
   evaluator: Evaluator,
-  ogMethod: (...args: any[]) => any,
   requestFieldToValidate: string
-): ((...args: any[]) => Promise<void>) => {
-  return async function (...args: any[]) {
-    const requestField = args[0][requestFieldToValidate];
-    const response = args[1];
-    try {
-      if (requestField !== undefined) {
-        evaluator(requestField);
-        return await ogMethod.apply(this, args);
-      } else {
-        docTsLogger.log(invalidRequestFieldMessage(requestFieldToValidate, ogMethod.name));
-        throw new HttpError(501, 'Not implemented.');
+): ((...args: any[]) => Middleware) => {
+  return (ogMethod: (...args: any[]) => any) => {
+    return async function (...args: any[]) {
+      const requestField = args[0][requestFieldToValidate];
+      const response = args[1];
+      try {
+        if (requestField !== undefined) {
+          evaluator(requestField);
+          return await ogMethod.apply(this, args);
+        } else {
+          docTsLogger.log(invalidRequestFieldMessage(requestFieldToValidate, ogMethod.name));
+          throw new HttpError(501, 'Not implemented.');
+        }
+      } catch (error) {
+        return handleHttpError(error, response);
       }
-    } catch (error) {
-      return handleHttpError(error, response);
-    }
+    };
   };
 };
 
@@ -43,7 +46,7 @@ const applyEvaluator = (
   requestField: RequestField
 ): PropertyDescriptor => {
   const ogMethod = propertyDescriptor.value;
-  propertyDescriptor.value = generateValidatorHandler(evaluator, ogMethod, requestField);
+  propertyDescriptor.value = generateValidatorHandler(evaluator, requestField)(ogMethod);
   return propertyDescriptor;
 };
 

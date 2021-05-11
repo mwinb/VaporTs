@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { RouteDoc, getControllerDoc, docTsLogger } from '..';
+import { RouteDoc, getControllerDoc, docTsLogger, Generator } from '..';
 import { Middleware } from '../Types/Middleware.Type';
 
 export function getRouteMethodNames(controller: Record<string, any>): string[] {
@@ -17,7 +17,10 @@ export function getRouteDocs(controller: Record<string, any>): RouteDoc[] {
   });
 }
 
-export const applyGenerators = (originalFunction: any, generators: any[]): any => {
+export const applyGenerators = (
+  originalFunction: (...args: any[]) => Promise<any> | any,
+  generators: Generator[]
+): Middleware => {
   let newFn = originalFunction;
   generators.forEach(g => {
     newFn = g(newFn);
@@ -25,11 +28,11 @@ export const applyGenerators = (originalFunction: any, generators: any[]): any =
   return newFn;
 };
 
-export const getGeneratedFn = (generators: any[], method: any): Middleware => {
+export const getGeneratedFn = (generators: Generator[], method: (...args: any) => Promise<any> | any): Middleware => {
   return generators ? applyGenerators(method, generators) : method;
 };
 
-export const getGenerators = (routeDoc: RouteDoc): any[] => {
+export const getGenerators = (routeDoc: RouteDoc): Generator[] => {
   return (routeDoc && routeDoc.generators) || [];
 };
 

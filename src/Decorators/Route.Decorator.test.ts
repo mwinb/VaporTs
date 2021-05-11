@@ -1,10 +1,8 @@
-import { Request, Response } from 'express';
+import { Response, Request } from 'express';
 import { getMockResponse } from '../__mocks__/Express/responseMock';
 import { mockMiddleware } from '../__mocks__/Express/mockMiddleware';
 import { MockControllerWithRoutes } from '../__mocks__/controllerMocks';
-import { RouteDoc, getControllerDoc, HttpError } from '..';
-import { applyGenerators } from '../Helpers/Route.Helpers';
-import { getResponseHandlerGenerator } from './ResponseHandler.Decorator';
+import { RouteDoc, getControllerDoc, HttpError, Generator } from '..';
 
 let testController: MockControllerWithRoutes;
 
@@ -36,7 +34,7 @@ describe('Router Decorator', () => {
   describe('HandleResponse', () => {
     let mockResponse: Response;
     let returnVal: string;
-    let generators: any[];
+    let generators: Generator[];
     beforeEach(() => {
       mockResponse = getMockResponse();
       returnVal = 'returnValue';
@@ -70,7 +68,7 @@ describe('Router Decorator', () => {
       testController.mockRouteWithCustomCode = testController.mockRouteWithCustomCode.bind(testController);
       generators = getControllerDoc(testController).routes.get('mockRouteWithCustomCode').generators;
 
-      await generators[1](testController.mockRouteWithCustomCode)({}, mockResponse);
+      await generators[1](testController.mockRouteWithCustomCode)({} as Request, mockResponse, {});
       expect(mockResponse.status).toHaveBeenLastCalledWith(201);
     });
 
@@ -81,7 +79,7 @@ describe('Router Decorator', () => {
   });
 
   describe('HttpError', () => {
-    let generators: any[];
+    let generators: Generator[];
     let mockResponse: Response;
     beforeEach(() => {
       jest.spyOn(testController, 'mockFn').mockRejectedValueOnce(new HttpError(404, 'Not Found'));
@@ -92,7 +90,7 @@ describe('Router Decorator', () => {
 
     it('adds async httpError handling by default', async () => {
       generators = getControllerDoc(testController).routes.get('mockRoute').generators;
-      await generators[0](testController.mockRoute)({}, mockResponse);
+      await generators[0](testController.mockRoute)({} as Request, mockResponse, {});
       expect(mockResponse.status).toHaveBeenCalledWith(404);
     });
 

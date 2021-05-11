@@ -32,6 +32,7 @@ export * from './Interfaces/ControllerDoc.Interface';
 
 // Types
 export * from './Types/LoggerFn.Type';
+export * from './Types/Generator.Type';
 export * from './Types/Evaluator.Type';
 export * from './Types/Middleware.Type';
 export * from './Types/RouteMethod.Type';

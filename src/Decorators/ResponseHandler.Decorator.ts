@@ -1,11 +1,11 @@
 import { Response } from 'express';
-import { Middleware } from '../Types/Middleware.Type';
+import { Middleware, Generator } from '..';
 
 const handleResponse = (code: number, res: Response, result: any): void => {
   result !== undefined ? res.status(code).send(result) : res.sendStatus(code);
 };
 
-export const getResponseHandlerGenerator = (code: number): any => {
+export const getResponseHandlerGenerator = (code: number): Generator => {
   return function (originalFunction: (...args: any[]) => any): Middleware {
     return generateResponseHandler(code, originalFunction);
   };

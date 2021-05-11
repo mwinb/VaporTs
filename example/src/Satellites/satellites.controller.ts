@@ -39,7 +39,7 @@ class SatelliteController {
 
   @Route('GET', { path: '/:id' })
   @Validate(new GetSatelliteValidator(), 'params')
-  async getSatById(req: express.Request, res: express.Response) {
+  async getSatById(req: express.Request, _res: express.Response) {
     const sat = this.satService.getOne(+req.params.id);
     if (!sat) throw new HttpError(404, 'Satellite not found.');
     return sat;
