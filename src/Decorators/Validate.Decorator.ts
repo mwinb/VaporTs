@@ -15,9 +15,9 @@ import {
   invalidDocTsValidatorWarningMessage
 } from '..';
 
-const getEvaluatorMethodOverride = (
+export const generateValidatorHandler = (
   evaluator: Evaluator,
-  ogMethod: (...args: any[]) => void | Promise<void>,
+  ogMethod: (...args: any[]) => any,
   requestFieldToValidate: string
 ): ((...args: any[]) => Promise<void>) => {
   return async function (...args: any[]) {
@@ -43,7 +43,7 @@ const applyEvaluator = (
   requestField: RequestField
 ): PropertyDescriptor => {
   const ogMethod = propertyDescriptor.value;
-  propertyDescriptor.value = getEvaluatorMethodOverride(evaluator, ogMethod, requestField);
+  propertyDescriptor.value = generateValidatorHandler(evaluator, ogMethod, requestField);
   return propertyDescriptor;
 };
 
