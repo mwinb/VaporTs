@@ -1,6 +1,17 @@
-import { getControllerDoc, RouteDoc, getRouteDocs, getRouteMethodNames, initializeRoutes } from '..';
-import { MockControllerWithRoutes } from '../__mocks__/controllerMocks';
+import {
+  RouteDoc,
+  getRouteDocs,
+  getGenerators,
+  getGeneratedFn,
+  getControllerDoc,
+  initializeRoutes,
+  getRouteMethodNames,
+  generateHttpErrorHandler
+} from '..';
+import { Response } from 'express';
 import { getMockrouter } from '../__mocks__/Express/routerMock';
+import { getMockResponse } from '../__mocks__/Express/responseMock';
+import { MockControllerWithRoutes } from '../__mocks__/controllerMocks';
 
 let testController: MockControllerWithRoutes;
 
@@ -28,6 +39,37 @@ describe('Getting RouteDocs', () => {
   });
 });
 
+describe('getting generated fn', () => {
+  let mockResponse: Response;
+  let generators: any[];
+  beforeEach(() => {
+    mockResponse = getMockResponse();
+    jest.spyOn(testController, 'mockFn').mockResolvedValue('Returned');
+    testController.mockRoute = testController.mockRoute.bind(testController);
+    generators = getControllerDoc(testController).routes.get('mockRoute').generators;
+  });
+  it('creates a generatedFn using a routes generators', async () => {
+    await getGeneratedFn(generators, testController.mockRoute)({} as any, mockResponse, {});
+    expect(mockResponse.send).toHaveBeenCalledWith('Returned');
+  });
+
+  it('returns the original function if no generators exist', async () => {
+    expect(getGeneratedFn(undefined, testController.mockRoute)).toEqual(testController.mockRoute);
+  });
+});
+
+describe('getting generators from RouteDoc', () => {
+  it('returns the route docs generators if it has them', () => {
+    const generators = [generateHttpErrorHandler];
+    const result = getGenerators({ generators } as RouteDoc);
+    expect(result).toEqual(generators);
+  });
+
+  it('returns an empty array if the RouteDoc does not have generators', () => {
+    expect(getGenerators({} as RouteDoc)).toEqual([]);
+  });
+});
+
 describe('initializing routes', () => {
   it('initializes the decorated route methods and adds them to the provided router', () => {
     const mockRouter = getMockrouter() as any;
@@ -35,12 +77,13 @@ describe('initializing routes', () => {
     let callIndex = 1;
     initializeRoutes(mockRouter, testController);
     routeDocs.forEach((routerMethod: [string, RouteDoc]) => {
+      console.log(routerMethod[1].paths);
       routerMethod[1].paths.forEach((p: string) => {
         expect(mockRouter.get).toHaveBeenNthCalledWith(
           callIndex,
           '/test' + p,
           ...routerMethod[1].middleware,
-          testController[routerMethod[0]]
+          expect.anything()
         );
         callIndex += 1;
       });

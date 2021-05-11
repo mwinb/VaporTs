@@ -1,6 +1,7 @@
 import SatelliteModel from './satellites.model';
 import SatelliteService from './satellites.service';
 import SatelliteController from './satellites.controller';
+import { HttpError } from '@mwinberry/doc-ts';
 
 let mockResponse: any;
 let mockRequest: any;
@@ -73,15 +74,26 @@ describe('Satellites Controller', () => {
     beforeEach(() => {
       requestedSatellite = satController.satService.satellites[0];
     });
-    it('can get a satellite by id', () => {
+    it('can get a satellite by id', async () => {
       mockRequest.params = { id: requestedSatellite.id.toString() };
-      satController.getSatById(mockRequest, mockResponse);
-      expect(mockResponse.json).toHaveBeenCalledWith(requestedSatellite);
+      const sat = await satController.getSatById(mockRequest, mockResponse);
+      expect(sat).toEqual(requestedSatellite);
     });
 
-    it('responds with a 404 if the sat id is not found', () => {
+    // it('throws an HttpError if the satellite is not found', () => {
+    //   mockRequest.params = { id: '10101010' };
+    //   let error;
+    //   try {
+    //     satController.getSatById(mockRequest, mockResponse);
+    //   } catch (err) {
+    //     error = err;
+    //   }
+    //   expect(error.code).toBe(404);
+    // });
+
+    it('responds with a 404 if the sat id is not found', async () => {
       mockRequest.params = { id: '10101010' };
-      satController.getSatById(mockRequest, mockResponse);
+      await satController.getSatById(mockRequest, mockResponse);
       expect(mockResponse.status).toHaveBeenLastCalledWith(404);
     });
   });

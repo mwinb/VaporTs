@@ -5,5 +5,5 @@ export interface RouteDoc {
   method: RouteMethod;
   paths: string[];
   middleware?: Middleware[];
-  generatedRouteFunction?: Middleware;
+  generators?: any[];
 }

@@ -6,7 +6,7 @@ import SatelliteModel, {
 import morgan from 'morgan';
 import express from 'express';
 import SatelliteService from './satellites.service';
-import { Controller, HttpError, Route, Validate } from '@mwinberry/doc-ts';
+import { Controller, HttpError, Route, Validate } from '../../../src';
 @Controller('/satellite', [morgan('tiny')])
 class SatelliteController {
   exampleModel: SatelliteModel = { name: 'Sat Name', lat: 1234, lon: 1234, id: 101010, status: 'Example Satus' };
@@ -39,10 +39,10 @@ class SatelliteController {
 
   @Route('GET', { path: '/:id' })
   @Validate(new GetSatelliteValidator(), 'params')
-  getSatById(req: express.Request, res: express.Response) {
+  async getSatById(req: express.Request, res: express.Response) {
     const sat = this.satService.getOne(+req.params.id);
     if (!sat) throw new HttpError(404, 'Satellite not found.');
-    res.json(sat);
+    return sat;
   }
 
   @Route('GET', { path: '-api', applyHttpError: false })

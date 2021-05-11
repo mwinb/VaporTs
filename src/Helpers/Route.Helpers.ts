@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { RouteDoc, getControllerDoc, docTsLogger } from '..';
+import { Middleware } from '../Types/Middleware.Type';
 
 export function getRouteMethodNames(controller: Record<string, any>): string[] {
   return Object.getOwnPropertyNames(Object.getPrototypeOf(controller)).filter(name => {
@@ -16,6 +17,22 @@ export function getRouteDocs(controller: Record<string, any>): RouteDoc[] {
   });
 }
 
+export const applyGenerators = (originalFunction: any, generators: any[]): any => {
+  let newFn = originalFunction;
+  generators.forEach(g => {
+    newFn = g(newFn);
+  });
+  return newFn;
+};
+
+export const getGeneratedFn = (generators: any[], method: any): Middleware => {
+  return generators ? applyGenerators(method, generators) : method;
+};
+
+export const getGenerators = (routeDoc: RouteDoc): any[] => {
+  return (routeDoc && routeDoc.generators) || [];
+};
+
 export function initializeRoutes(router: Router, controller: Record<string, any>): void {
   const methods = getRouteMethodNames(controller);
   const controllerDoc = getControllerDoc(Object.getPrototypeOf(controller));
@@ -28,7 +45,11 @@ export function initializeRoutes(router: Router, controller: Record<string, any>
         docTsLogger.log(
           `DocTs: Binding ${controller.constructor.name}.${method} to ${routeDoc.method} @ ${controllerDoc.path + path}`
         );
-        router[routeDoc.method.toLowerCase()](controllerDoc.path + path, ...routeDoc.middleware, controller[method]);
+        router[routeDoc.method.toLowerCase()](
+          controllerDoc.path + path,
+          ...routeDoc.middleware,
+          getGeneratedFn(getGenerators(routeDoc), controller[method])
+        );
       });
     });
   docTsLogger.log('\n');
