@@ -1,3 +1,4 @@
+import morgan from 'morgan';
 import express from 'express';
 import { DocApp } from '../../src';
 import SatelliteController from './Satellites/satellites.controller';
@@ -10,7 +11,7 @@ const appV1 = new DocApp({
   controllers: [new SatelliteController()],
   expressApplication: expressApp,
   router: express.Router(),
-  middleware: [express.json()]
+  middleware: [express.json(), morgan('tiny')]
 });
 
 expressApp.listen(port, () => {

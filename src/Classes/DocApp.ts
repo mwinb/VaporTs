@@ -2,18 +2,18 @@ import {
   RouteDoc,
   docTsLogger,
   DocAppConfig,
-  getRouteDocs,
   DocTsController,
   initializeRoutes,
   isDocTsController,
+  getRoutesDocumentation,
   initControllerMiddleware
 } from '..';
 import { Application, Router, Request, Response } from 'express';
 
 export class DocApp implements DocAppConfig {
-  routes: RouteDoc[] = [];
   public path: string;
   public router: Router;
+  routes: RouteDoc[] = [];
   public showApi: boolean;
   public middleware: any[];
   public expressApplication: Application;
@@ -34,21 +34,21 @@ export class DocApp implements DocAppConfig {
   }
 
   constructor({
+    router,
     path = '',
+    controllers,
     showApi = false,
     middleware = [],
     logger = console.log,
-    controllers,
-    expressApplication: app,
-    router
+    expressApplication: app
   }: DocAppConfig) {
-    docTsLogger.log = logger;
     this.path = path;
+    this.router = router;
     this.showApi = showApi;
-    this.controllers = controllers;
+    docTsLogger.log = logger;
     this.middleware = middleware;
     this.expressApplication = app;
-    this.router = router;
+    this.controllers = controllers;
     showApi && this.routes.push({ method: 'GET', paths: [this.path.length ? '' : '/'] });
     this.initializeMiddlewares();
     this.initializeControllers();
@@ -62,7 +62,7 @@ export class DocApp implements DocAppConfig {
     this.controllers.forEach(controller => {
       initControllerMiddleware(this.router, controller);
       initializeRoutes(this.router, controller);
-      this.routes = [...this.routes, ...getRouteDocs(controller)];
+      this.routes = [...this.routes, ...getRoutesDocumentation(controller)];
     });
 
     this.expressApplication.use(this.path, this.router);

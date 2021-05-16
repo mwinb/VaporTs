@@ -1,13 +1,11 @@
 import {
   RouteDoc,
   Generator,
-  getRouteDocs,
-  getGenerators,
-  getGeneratedFn,
+  getModifiedRouteMethod,
   getControllerDoc,
   initializeRoutes,
   getRouteMethodNames,
-  generateHttpErrorHandler
+  getRoutesDocumentation
 } from '..';
 import { Response } from 'express';
 import { getMockrouter } from '../__mocks__/Express/routerMock';
@@ -27,15 +25,15 @@ describe('Getting Router Methods', () => {
   });
 });
 
-describe('Getting RouteDocs', () => {
-  it('returns a list of a controllers route docs', () => {
+describe('Getting Route Documentation', () => {
+  it('returns a list of a controllers routes documents', () => {
     const expectedRouteDocs = Array.from(getControllerDoc(testController).routes.values());
-    const actualRouteDocs = getRouteDocs(testController);
+    const actualRouteDocs = getRoutesDocumentation(testController);
     expect(expectedRouteDocs.length).toEqual(actualRouteDocs.length);
   });
 
-  it('adds the controller path to the routes path within the route docs', () => {
-    const routeDocs = getRouteDocs(testController);
+  it('adds the controller path to the routes path within the route documents', () => {
+    const routeDocs = getRoutesDocumentation(testController);
     expect(routeDocs[0].paths).toContain('/test');
   });
 });
@@ -50,24 +48,12 @@ describe('getting generated fn', () => {
     generators = getControllerDoc(testController).routes.get('mockRoute').generators;
   });
   it('creates a generatedFn using a routes generators', async () => {
-    await getGeneratedFn(generators, testController.mockRoute)({} as any, mockResponse, {});
+    await getModifiedRouteMethod(generators, testController.mockRoute)({} as any, mockResponse, {});
     expect(mockResponse.send).toHaveBeenCalledWith('Returned');
   });
 
   it('returns the original function if no generators exist', async () => {
-    expect(getGeneratedFn(undefined, testController.mockRoute)).toEqual(testController.mockRoute);
-  });
-});
-
-describe('getting generators from RouteDoc', () => {
-  it('returns the route docs generators if it has them', () => {
-    const generators = [generateHttpErrorHandler];
-    const result = getGenerators({ generators } as RouteDoc);
-    expect(result).toEqual(generators);
-  });
-
-  it('returns an empty array if the RouteDoc does not have generators', () => {
-    expect(getGenerators({} as RouteDoc)).toEqual([]);
+    expect(getModifiedRouteMethod(undefined, testController.mockRoute)).toEqual(testController.mockRoute);
   });
 });
 

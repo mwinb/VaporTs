@@ -1,5 +1,5 @@
 import { Application } from 'express';
-import { DocApp, getRouteDocs } from '..';
+import { DocApp, getRoutesDocumentation } from '..';
 import { getMockrouter } from '../__mocks__/Express/routerMock';
 import { getMockResponse } from '../__mocks__/Express/responseMock';
 import { mockMiddleware } from '../__mocks__/Express/mockMiddleware';
@@ -14,8 +14,8 @@ describe('Constructor', () => {
   mockExpressApp = { use: jest.fn() } as any;
 
   beforeEach(() => {
-    initializeControllers = jest.spyOn(DocApp.prototype, 'initializeMiddlewares');
     initializeMiddleware = jest.spyOn(DocApp.prototype, 'initializeControllers');
+    initializeControllers = jest.spyOn(DocApp.prototype, 'initializeMiddlewares');
   });
 
   describe('All Required Set', () => {
@@ -73,7 +73,7 @@ describe('Constructor', () => {
     });
 
     it('adds all controllers route docs to the apps route docs', () => {
-      expect(testDocApp.routes.length).toBe(getRouteDocs(new MockControllerWithRoutes()).length + 1);
+      expect(testDocApp.routes.length).toBe(getRoutesDocumentation(new MockControllerWithRoutes()).length + 1);
     });
 
     it('returns an api with the list of routes and their methods', () => {

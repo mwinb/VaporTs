@@ -7,7 +7,9 @@
     "build": "tsc",
     "start": "nodemon ./src/server.ts",
     "test": "jest --watchAll",
-    "test:unit": "jest --watchAll=false --silent --coverage --bail",
+    "test:unit": "jest -c jest.config.js --watchAll=false --silent --coverage --bail",
+    "test:integration": "jest -c jest.integration.js --watchAll=false --runInBand --silent --coverage --bail",
+    "test:all": "jest -c jest.all.js --watchAll=false --runInBand --silent --coverage --bail",
     "prestart": "npm run build"
   },
   "author": "",
@@ -25,8 +27,10 @@
   },
   "dependencies": {
     "@mwinberry/doc-ts": "^0.1.9",
+    "@types/supertest": "^2.0.11",
     "axios": "^0.21.1",
     "express": "^4.17.1",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "supertest": "^6.1.3"
   }
 }

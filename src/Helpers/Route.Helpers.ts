@@ -1,6 +1,5 @@
 import { Router } from 'express';
-import { RouteDoc, getControllerDoc, docTsLogger, Generator } from '..';
-import { Middleware } from '../Types/Middleware.Type';
+import { RouteDoc, getControllerDoc, docTsLogger, Generator, Middleware, ControllerDoc } from '..';
 
 export function getRouteMethodNames(controller: Record<string, any>): string[] {
   return Object.getOwnPropertyNames(Object.getPrototypeOf(controller)).filter(name => {
@@ -9,7 +8,7 @@ export function getRouteMethodNames(controller: Record<string, any>): string[] {
   });
 }
 
-export function getRouteDocs(controller: Record<string, any>): RouteDoc[] {
+export function getRoutesDocumentation(controller: Record<string, any>): RouteDoc[] {
   const meta = getControllerDoc(Object.getPrototypeOf(controller));
   return Array.from(meta.routes.values()).map(r => {
     const paths = r.paths.map(p => meta.path + p);
@@ -17,7 +16,7 @@ export function getRouteDocs(controller: Record<string, any>): RouteDoc[] {
   });
 }
 
-export const applyGenerators = (
+export const applyModifiers = (
   originalFunction: (...args: any[]) => Promise<any> | any,
   generators: Generator[]
 ): Middleware => {
@@ -28,12 +27,28 @@ export const applyGenerators = (
   return newFn;
 };
 
-export const getGeneratedFn = (generators: Generator[], method: (...args: any) => Promise<any> | any): Middleware => {
-  return generators ? applyGenerators(method, generators) : method;
+export const getModifiedRouteMethod = (
+  generators: Generator[],
+  method: (...args: any) => Promise<any> | any
+): Middleware => {
+  return generators ? applyModifiers(method, generators) : method;
 };
 
-export const getGenerators = (routeDoc: RouteDoc): Generator[] => {
-  return (routeDoc && routeDoc.generators) || [];
+export const getRouteDoc = (controllerDoc: ControllerDoc, key: string): RouteDoc => {
+  let routeDoc = controllerDoc.routes.get(key);
+  if (!routeDoc) {
+    routeDoc = {
+      paths: [],
+      middleware: [],
+      method: 'GET',
+      generators: []
+    };
+  }
+  return routeDoc;
+};
+
+const getBoundFunction = (controller: Record<string, any>, methodName: string): any => {
+  return controller[methodName].bind(controller);
 };
 
 export function initializeRoutes(router: Router, controller: Record<string, any>): void {
@@ -43,7 +58,7 @@ export function initializeRoutes(router: Router, controller: Record<string, any>
     .filter(method => controllerDoc.routes.has(method))
     .map(method => {
       const routeDoc = controllerDoc.routes.get(method);
-      controller[method] = controller[method].bind(controller);
+      const boundMethod = getBoundFunction(controller, method);
       routeDoc.paths.map(path => {
         docTsLogger.log(
           `DocTs: Binding ${controller.constructor.name}.${method} to ${routeDoc.method} @ ${controllerDoc.path + path}`
@@ -51,7 +66,7 @@ export function initializeRoutes(router: Router, controller: Record<string, any>
         router[routeDoc.method.toLowerCase()](
           controllerDoc.path + path,
           ...routeDoc.middleware,
-          getGeneratedFn(getGenerators(routeDoc), controller[method])
+          getModifiedRouteMethod(routeDoc.generators, boundMethod)
         );
       });
     });
