@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "start": "nodemon ./src/server.ts",
+    "start": "nodemon ./dist/server.js",
+    "start:dev": "nodemon ./src/server.ts",
     "test": "jest --watchAll",
     "test:unit": "jest -c jest.config.js --watchAll=false --silent --coverage --bail",
     "test:integration": "jest -c jest.integration.js --watchAll=false --runInBand --silent --coverage --bail",

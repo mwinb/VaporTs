@@ -6,11 +6,20 @@ Install
 Build  
 `npm build`
 
-Start - runs build then executes dist/main.js  
-`npm start`
+Starting Server - runs build then executes dist/main.js  
+`npm run start`
 
-Running tests on loop  
+Starting Dev server with hot reloading
+`npm run start:dev`
+
+Running unit tests on loop  
 `npm test`
 
-Running unit tests once with coverage  
+Running unit tests with coverage  
 `npm run test:unit`
+
+Running integration tests with coverage  
+`npm run test:integration`
+
+Running integration and unit tests with coverage  
+`npm run test:all`

@@ -39,6 +39,8 @@ class ExampleController {}
 
 ## Route
 
+- `@Route` Does not alter the original class method declaration.
+
 ### Parameters:
 
 - `Method: string` (required)
@@ -77,6 +79,8 @@ class ExampleController {
 ## Validate
 
 In order to use Validate an instance of a class that uses one of the Validation Decorators is needed. Handles all validation failures with the HttpError class. See the DocTsValidator Class description below.
+
+- `@Validate` does not alter the original class method.
 
 ### Parameters:
 
@@ -230,7 +234,10 @@ class CustomValidatorExample {
 
 ## HttpErrorHandler
 
-The HttpErrorHandler is applied to all Routes and Validators by default, but can also be used as an individual decorator. This handler wraps asynchronous Route or Validate decorated functions in a try catch that listens for an HttpError to be thrown. The HttpError takes in the code and the response message. When caught by the handler, the express response status is set to the HttpError code and a json object with the code and message are sent. All uncaught errors respond with a 500 and an ambiguous error message. Uncaught errors are also logged to the console.
+The HttpErrorHandler is applied to all Routes and Validators by default, but may be disabled in the `RouteParams`. This handler wraps asynchronous Route or Validate decorated functions in a try catch that listens for an HttpError to be thrown. The HttpError takes in the code and the response message. When caught by the handler, the express response status is set to the HttpError code and a json object with the code and message are sent. All uncaught errors respond with a 500 and a non-specific error message. Uncaught errors are also logged to the console.
+
+- Using `@HttpHandler` alters the decorated method and is not recommended.
+- Using `@Route` maintains the class method functionality and only alters the bound method prior to being applied to the express route see the [example](https://github.com/mwinb/DocTS/tree/main/example) unit and integration tests for functionality.
 
 ### Example - response (caught):
 
@@ -248,7 +255,10 @@ res.status(500).send({ code: 500, message: 'Oops something went wrong.' });
 
 ## ResponseHandler
 
-The ResponseHandler functionality is applied to all Routes by default but can also be used as an individual decorator. This handler wraps an asynchronous Route and handles the `res.status` and `res.send` when the wrapped function returns data, and handles `res.sendStatus` when the function does not return data. The default status code is 200
+The ResponseHandler functionality is applied to all Routes by default, but may be disabled in the `RouteParams`. This handler wraps an asynchronous `@Route` method and handles `res.status` and `res.send` when the wrapped function returns data, and handles `res.sendStatus` when the function does not return data. The default status code is 200.
+
+- `@ResponseHandler` alters the decorated method and is not recommended.
+- Using `@Route` maintains the class functionality and only alters the bound method prior to being applied to the express route see the [examples](https://github.com/mwinb/DocTS/tree/main/example) unit and integration tests for functionality.
 
 ### Example:
 
@@ -257,7 +267,7 @@ The ResponseHandler functionality is applied to all Routes by default but can al
 class ExampleController {
   // Calls res.status(200).send(Example[]) if successful
   @Route('GET')
-  async getExamples(req: express.Request): Example[] {
+  async getExamples(): Example[] {
     return await this.exampleService.getAllExamples();
   }
   // Calls res.sendStatus(201) if successful
@@ -275,7 +285,7 @@ class ExampleController {
 
 ## DocApp
 
-The DocApp class is responsible for binding all routes, methods, and middleware to an express application. It is recommended that any DocApp classes (many can be initialized for version control purposes) be instantiated at entry point of the application.
+The DocApp class is responsible for binding all routes, methods, and middleware to an express application.
 
 ### Parameters:
 
@@ -290,7 +300,7 @@ The DocApp class is responsible for binding all routes, methods, and middleware 
     - `type LoggerFn = (message: any, ...additionalParams: any[]) => void | Promise<void>`
   - `controllers: Controller[]` (required)
     - any class with the Controller Decorator.
-    - Throws error with information about the class if a non-controller decorated classes are passed
+    - Throws error with information about the class if a undecorated class is passed
   - `expressApplication: Express.Application` (required)
   - `router: Express.Router` (required)
 
