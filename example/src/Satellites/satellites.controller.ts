@@ -9,7 +9,7 @@ import { Controller, Route, Validate } from '../../../src';
 @Controller('/satellite')
 class SatelliteController {
   exampleModel: SatelliteModel = {
-    id: 101010,
+    id: 1000,
     name: 'Sat Name',
     lat: 1234,
     lon: 1234,
@@ -19,7 +19,7 @@ class SatelliteController {
 
   constructor(public satService = new SatelliteService()) {}
 
-  @Route('GET', { applyHttpError: false })
+  @Route('GET')
   getAllSats() {
     return this.satService.getAll();
   }
@@ -42,16 +42,16 @@ class SatelliteController {
     return this.satService.patchOne(sat);
   }
 
-  @Route('GET', { path: '-api', applyHttpError: false })
+  @Route('GET', { path: '-api', handleErrors: false })
   getModel() {
     return `<!doctype html>
       <html lang="en">
       <head>
         <meta charset="utf-8">
-        <title>TS Express Starter</title>
+        <title>DocTS Example</title>
       </head>
       <body>
-        <h1>SatModel Example:</h1>
+        <h1>Satellite Example:</h1>
         <h2>
         <pre>${JSON.stringify(this.exampleModel, null, 2)}<pre>
         </h2>

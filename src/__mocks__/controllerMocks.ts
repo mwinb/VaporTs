@@ -47,7 +47,7 @@ export class MockControllerWithRoutes {
     return await this.mockFn(...args);
   }
 
-  @Route('GET', { applyHttpError: false })
+  @Route('GET', { handleErrors: false })
   async mockRouteNoHttpError(...args: any[]): Promise<any> {
     try {
       return await this.mockFn(...args);

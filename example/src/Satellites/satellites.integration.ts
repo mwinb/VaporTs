@@ -1,12 +1,12 @@
 import express from 'express';
-import request from 'supertest';
 import { DocApp } from '../../../src';
+import supertest, { SuperTest, Test } from 'supertest';
 import SatelliteController from './satellites.controller';
 
 const path = '/satellite';
 const expressApp = express();
 const satController = new SatelliteController();
-let appRequest: request.SuperTest<request.Test>;
+let appRequest: SuperTest<Test>;
 
 new DocApp({
   showApi: false,
@@ -17,8 +17,8 @@ new DocApp({
   expressApplication: expressApp
 });
 
-beforeEach(() => {
-  appRequest = request(expressApp);
+beforeAll(() => {
+  appRequest = supertest(expressApp);
 });
 
 describe('/satellite', () => {
@@ -81,7 +81,7 @@ describe('/satellite', () => {
         .patch(path)
         .send({
           name: 'Updated Sat',
-          id: '1000'
+          id: 'Id Should be a number.'
         })
         .expect(400);
     });

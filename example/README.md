@@ -1,4 +1,4 @@
-# Doc-TS Example
+# DocTS Example
 
 Install  
 `npm i`
@@ -9,7 +9,7 @@ Build
 Starting Server - runs build then executes dist/main.js  
 `npm run start`
 
-Starting Dev server with hot reloading
+Starting dev server with hot reloading
 `npm run start:dev`
 
 Running unit tests on loop  

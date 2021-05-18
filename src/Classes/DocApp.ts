@@ -60,6 +60,7 @@ export class DocApp implements DocAppConfig {
 
   initializeControllers(): void {
     this.controllers.forEach(controller => {
+      docTsLogger.log('DocTs:', `Initializing ${this.path || '/'} controllers.`);
       initControllerMiddleware(this.router, controller);
       initializeRoutes(this.router, controller);
       this.routes = [...this.routes, ...getRoutesDocumentation(controller)];
