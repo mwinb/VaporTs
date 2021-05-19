@@ -1,3 +1,3 @@
-import { Middleware } from './Middleware.Type';
+import { Handler } from '..';
 
-export type Generator = (...args: any[]) => Middleware;
+export type Generator = (...args: any[]) => Handler;

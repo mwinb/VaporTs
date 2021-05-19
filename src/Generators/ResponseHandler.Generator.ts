@@ -1,11 +1,11 @@
 import { Response } from 'express';
-import { Middleware, Generator } from '..';
+import { Handler, Generator } from '..';
 
 const handleResponse = (code: number, res: Response, result: any): void => {
   result !== undefined ? res.status(code).send(result) : res.sendStatus(code);
 };
 
-const generateResponseHandler = (code: number, originalFunction: (...args: any[]) => any): Middleware => {
+const generateResponseHandler = (code: number, originalFunction: (...args: any[]) => any): Handler => {
   return async function (...args: any[]) {
     const res: Response = args[1];
     const result = await originalFunction.apply(this, args);
@@ -15,7 +15,7 @@ const generateResponseHandler = (code: number, originalFunction: (...args: any[]
 };
 
 export const getResponseHandlerGenerator = (code: number): Generator => {
-  return function (originalFunction: (...args: any[]) => any): Middleware {
+  return function (originalFunction: (...args: any[]) => any): Handler {
     return generateResponseHandler(code, originalFunction);
   };
 };

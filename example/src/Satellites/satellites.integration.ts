@@ -11,7 +11,6 @@ let appRequest: SuperTest<Test>;
 new DocApp({
   showApi: false,
   logger: jest.fn(),
-  router: express.Router(),
   controllers: [satController],
   middleware: [express.json()],
   expressApplication: expressApp

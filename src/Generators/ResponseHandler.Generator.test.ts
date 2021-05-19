@@ -1,5 +1,5 @@
 import { Response, Request } from 'express';
-import { getResponseHandlerGenerator, Middleware } from '..';
+import { getResponseHandlerGenerator, Handler } from '..';
 import { getMockResponse } from '../__mocks__/Express/responseMock';
 import { MockResponseHandler } from '../__mocks__/ResponseHandlerMock';
 
@@ -16,7 +16,7 @@ afterEach(() => {
 });
 
 describe('ResponseHandler', () => {
-  let responseHandler: Middleware;
+  let responseHandler: Handler;
   let responseData: Record<string, any>;
   beforeEach(() => {
     responseData = {

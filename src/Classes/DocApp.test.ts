@@ -1,6 +1,5 @@
 import { Application } from 'express';
 import { DocApp, getRoutesDocumentation } from '..';
-import { getMockrouter } from '../__mocks__/Express/routerMock';
 import { getMockResponse } from '../__mocks__/Express/responseMock';
 import { mockMiddleware } from '../__mocks__/Express/mockMiddleware';
 import { MockControllerWithRoutes } from '../__mocks__/controllerMocks';
@@ -11,9 +10,9 @@ let mockExpressApp: Application;
 describe('Constructor', () => {
   let initializeControllers: jest.SpyInstance<any, any>;
   let initializeMiddleware: jest.SpyInstance<any, any>;
-  mockExpressApp = { use: jest.fn() } as any;
 
   beforeEach(() => {
+    mockExpressApp = { use: jest.fn(), get: jest.fn() } as any;
     initializeMiddleware = jest.spyOn(DocApp.prototype, 'initializeControllers');
     initializeControllers = jest.spyOn(DocApp.prototype, 'initializeMiddlewares');
   });
@@ -22,8 +21,7 @@ describe('Constructor', () => {
     beforeEach(() => {
       testDocApp = new DocApp({
         controllers: [new MockControllerWithRoutes()],
-        expressApplication: mockExpressApp,
-        router: getMockrouter() as any
+        expressApplication: mockExpressApp
       });
     });
 
@@ -36,7 +34,7 @@ describe('Constructor', () => {
     });
 
     it('does not add a RouteDoc to the app for the api', () => {
-      expect(testDocApp.routes[0].paths.pop()).not.toEqual('');
+      expect(testDocApp.routeDocs[0].paths.pop()).not.toEqual('');
     });
 
     it('does not add the api path to the app', () => {
@@ -58,45 +56,27 @@ describe('Constructor', () => {
         showApi: true,
         controllers: [new MockControllerWithRoutes()],
         middleware: [mockMiddleware],
-        expressApplication: mockExpressApp,
-        router: getMockrouter() as any
+        expressApplication: mockExpressApp
       });
     });
 
     it('adds a GET method to DocApps RouteDocs if the showApi method is set to true', () => {
-      expect(testDocApp.routes[0].method).toEqual('GET');
-      expect(testDocApp.routes[0].paths.shift()).toEqual('/');
+      expect(testDocApp.routeDocs[0].method).toEqual('GET');
+      expect(testDocApp.routeDocs[0].paths.shift()).toEqual('/');
     });
 
     it('adds the api path to the router if show api is true', () => {
-      expect(mockExpressApp.use).toHaveBeenLastCalledWith(testDocApp.path, testDocApp.api);
+      expect(testDocApp.expressApplication.get).toHaveBeenNthCalledWith(1, testDocApp.path, testDocApp.api);
     });
 
     it('adds all controllers route docs to the apps route docs', () => {
-      expect(testDocApp.routes.length).toBe(getRoutesDocumentation(new MockControllerWithRoutes()).length + 1);
+      expect(testDocApp.routeDocs.length).toBe(getRoutesDocumentation(new MockControllerWithRoutes()).length + 1);
     });
 
     it('returns an api with the list of routes and their methods', () => {
       const mockResponse = getMockResponse();
       testDocApp.api({} as any, mockResponse);
       expect(mockResponse.send).toHaveBeenCalled();
-    });
-  });
-
-  describe('Custom path', () => {
-    beforeEach(() => {
-      testDocApp = new DocApp({
-        path: '/testApp',
-        showApi: false,
-        controllers: [new MockControllerWithRoutes()],
-        middleware: [mockMiddleware],
-        expressApplication: mockExpressApp,
-        router: getMockrouter() as any
-      });
-    });
-
-    it('Sets the application base path to the provided path', () => {
-      expect(testDocApp.expressApplication.use).toHaveBeenLastCalledWith('/testApp', testDocApp.router);
     });
   });
 
@@ -107,14 +87,13 @@ describe('Constructor', () => {
         showApi: true,
         controllers: [new MockControllerWithRoutes()],
         middleware: [mockMiddleware],
-        expressApplication: mockExpressApp,
-        router: getMockrouter() as any
+        expressApplication: mockExpressApp
       });
     });
 
     it('sets the api doc path to an empty string if a custom path is provided', () => {
-      expect(testDocApp.routes[0].method).toEqual('GET');
-      expect(testDocApp.routes[0].paths.pop()).toEqual('');
+      expect(testDocApp.routeDocs[0].method).toEqual('GET');
+      expect(testDocApp.routeDocs[0].paths.pop()).toEqual('');
     });
   });
 
@@ -127,8 +106,7 @@ describe('Constructor', () => {
           showApi: true,
           controllers: [{}],
           middleware: [mockMiddleware],
-          expressApplication: mockExpressApp,
-          router: getMockrouter() as any
+          expressApplication: mockExpressApp
         });
       } catch (error) {
         thrownError = error;

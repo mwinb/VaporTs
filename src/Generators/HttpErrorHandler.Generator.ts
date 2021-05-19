@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { HttpError, docTsLogger, uncaughtExceptionMessage, Middleware } from '..';
+import { HttpError, docTsLogger, uncaughtExceptionMessage, Handler } from '..';
 
 export const handleHttpError = (error: Error, res: Response): void => {
   if (res.headersSent) return;
@@ -11,7 +11,7 @@ export const handleHttpError = (error: Error, res: Response): void => {
   }
 };
 
-export const generateHttpErrorHandler = (originalMethod: (...args: any[]) => any): Middleware => {
+export const generateHttpErrorHandler = (originalMethod: (...args: any[]) => any): Handler => {
   return async function (...args: any[]): Promise<any> {
     const res = args[1];
     try {

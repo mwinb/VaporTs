@@ -1,5 +1,5 @@
 import { LoggerFn } from '..';
-import { Application, Router } from 'express';
+import { Application } from 'express';
 
 export interface DocAppConfig {
   path?: string;
@@ -8,5 +8,4 @@ export interface DocAppConfig {
   logger?: LoggerFn;
   controllers: Record<string, any>[];
   expressApplication: Application;
-  router: Router;
 }

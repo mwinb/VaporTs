@@ -311,7 +311,6 @@ The DocApp class is responsible for binding all routes, methods, and middleware 
     - any class with the Controller Decorator.
     - Throws error with information about the class if a undecorated class is passed
   - `expressApplication: Express.Application` (required)
-  - `router: Express.Router` (required)
 
 ### Example:
 
@@ -324,8 +323,7 @@ const appV1 = new DocApp({
   showApi: true,
   middleware: [pathMiddleware, express.json()],
   controllers: [new SatelliteController()],
-  expressApplication: expressApp,
-  router: express.Router()
+  expressApplication: expressApp
 });
 
 expressApp.listen(port, () => {

@@ -28,20 +28,20 @@ export * from './Generators/HttpErrorHandler.Generator';
 
 // Interfaces
 export * from './Interfaces/RouteDoc.Interface';
+export * from './Interfaces/RouteParams.Interface';
 export * from './Interfaces/DocAppConfig.Interface';
 export * from './Interfaces/ValidatorDoc.Interface';
 export * from './Interfaces/ControllerDoc.Interface';
 
 // Types
+export * from './Types/Handler.Type';
 export * from './Types/LoggerFn.Type';
 export * from './Types/Generator.Type';
 export * from './Types/Evaluator.Type';
+export * from './Types/Decorator.Type';
 export * from './Types/Middleware.Type';
 export * from './Types/RouteMethod.Type';
-export * from './Types/RouteParams.Type';
-export * from './Types/RequestValidationField';
-export * from './Types/PropertyDecorator.Type';
-export * from './Types/PropertyDescriptorDecorator.Type';
+export * from './Types/RequestValidationField.Type';
 
 // Helpers
 export * from './Helpers/Route.Helpers';

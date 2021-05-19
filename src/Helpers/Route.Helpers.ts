@@ -51,7 +51,7 @@ const getBoundFunction = (controller: Record<string, any>, methodName: string): 
   return controller[methodName].bind(controller);
 };
 
-export function initializeRoutes(router: Router, controller: Record<string, any>): void {
+export function initializeRoutes(basePath: string, router: Router, controller: Record<string, any>): void {
   const methods = getRouteMethodNames(controller);
   const controllerDoc = getControllerDoc(Object.getPrototypeOf(controller));
   methods
@@ -64,7 +64,7 @@ export function initializeRoutes(router: Router, controller: Record<string, any>
           `DocTs: Binding ${controller.constructor.name}.${method} to ${routeDoc.method} @ ${controllerDoc.path + path}`
         );
         router[routeDoc.method.toLowerCase()](
-          controllerDoc.path + path,
+          basePath + controllerDoc.path + path,
           ...routeDoc.middleware,
           getModifiedRouteMethod(routeDoc.generators, boundMethod)
         );

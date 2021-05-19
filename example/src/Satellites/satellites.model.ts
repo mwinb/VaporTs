@@ -1,5 +1,5 @@
 import { Number, String } from '../../../src';
-import { satIdEvaluator } from '../Evaluators/satIdEvaluator';
+import { stringIsInteger } from '../Evaluators/isIntegerEvaluator';
 export type orbit = string;
 export type SatLon = number;
 export type SatLat = number;
@@ -54,7 +54,7 @@ export class PatchSatelliteValidator {
 }
 export class GetSatelliteValidator {
   @String({
-    evaluators: [satIdEvaluator]
+    evaluators: [stringIsInteger]
   })
   id: SatId;
 }

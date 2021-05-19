@@ -1,10 +1,10 @@
 import {
   RouteDoc,
   Generator,
-  getModifiedRouteMethod,
   getControllerDoc,
   initializeRoutes,
   getRouteMethodNames,
+  getModifiedRouteMethod,
   getRoutesDocumentation
 } from '..';
 import { Response } from 'express';
@@ -62,7 +62,7 @@ describe('initializing routes', () => {
     const mockRouter = getMockrouter() as any;
     const routeDocs = Array.from(getControllerDoc(testController).routes.entries());
     let callIndex = 1;
-    initializeRoutes(mockRouter, testController);
+    initializeRoutes('', mockRouter, testController);
     routeDocs.forEach((routerMethod: [string, RouteDoc]) => {
       console.log(routerMethod[1].paths);
       routerMethod[1].paths.forEach((p: string) => {

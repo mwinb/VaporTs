@@ -1,8 +1,8 @@
 import { Response, Request } from 'express';
 import { getMockResponse } from '../__mocks__/Express/responseMock';
 import { mockMiddleware } from '../__mocks__/Express/mockMiddleware';
-import { MockControllerWithRoutes } from '../__mocks__/controllerMocks';
 import { RouteDoc, getControllerDoc, HttpError, Generator } from '..';
+import { MockControllerWithRoutes } from '../__mocks__/controllerMocks';
 
 let testController: MockControllerWithRoutes;
 

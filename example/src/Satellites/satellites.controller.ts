@@ -19,7 +19,7 @@ class SatelliteController {
 
   constructor(public satService = new SatelliteService()) {}
 
-  @Route('GET')
+  @Route('GET', { responseCode: 200 })
   async getAllSats(): Promise<SatelliteModel[]> {
     return this.satService.getAll();
   }
@@ -27,7 +27,7 @@ class SatelliteController {
   @Route('GET', { path: '/:id' })
   @Validate(new GetSatelliteValidator(), 'params')
   async getSatById({ params: { id } }: express.Request): Promise<SatelliteModel> {
-    return this.satService.getOne(parseInt(id));
+    return this.satService.getOne(+id);
   }
 
   @Route('POST', { responseCode: 201 })

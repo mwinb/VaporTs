@@ -1,10 +1,10 @@
 import { Response, Request } from 'express';
 import { ErrorHandlerMock } from '../__mocks__/ErrorHandlerMock';
+import { HttpError, generateHttpErrorHandler, Handler } from '..';
 import { getMockResponse } from '../__mocks__/Express/responseMock';
-import { HttpError, generateHttpErrorHandler, Middleware } from '..';
 
 let mockResponse: Response;
-let httpErrorHandler: Middleware;
+let httpErrorHandler: Handler;
 let errorHandlerMock: ErrorHandlerMock;
 
 beforeEach(() => {

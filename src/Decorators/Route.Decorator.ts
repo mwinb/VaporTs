@@ -4,6 +4,7 @@ import {
   getRouteDoc,
   RouteParams,
   getControllerDoc,
+  DEFAULT_ROUTE_PARAMS,
   generateHttpErrorHandler,
   getResponseHandlerGenerator
 } from '..';
@@ -14,19 +15,16 @@ const addRouteConfigGenerators = (routeConfig: RouteParams, generators: Generato
   return generators;
 };
 
-export function Route(
-  method: RouteMethod,
-  { path = '', middleware = [], handleErrors = true, handleResponse = true, responseCode = 200 }: RouteParams = {}
-): (...args: any[]) => void {
+export function Route(method: RouteMethod, routeParams: RouteParams = {}): (...args: any[]) => void {
   return function (target: Record<string, any>, propertyKey: string): void {
     const controllerDoc = getControllerDoc(target);
-    const paths = typeof path === 'string' ? [path] : path;
     const routeDoc = getRouteDoc(controllerDoc, propertyKey);
-    const routeConfig = { path, middleware, handleErrors, handleResponse, responseCode };
+    const routeConfig = { ...DEFAULT_ROUTE_PARAMS, ...routeParams };
+    const paths = typeof routeConfig.path === 'string' ? [routeConfig.path] : routeConfig.path;
     controllerDoc.routes.set(propertyKey, {
       paths: paths,
       method: method,
-      middleware: middleware,
+      middleware: routeConfig.middleware,
       generators: addRouteConfigGenerators(routeConfig, routeDoc.generators)
     });
   };
