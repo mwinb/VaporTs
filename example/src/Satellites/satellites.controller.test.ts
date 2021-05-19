@@ -10,8 +10,8 @@ beforeEach(() => {
   satController = new SatelliteController();
 });
 describe('Satellites Controller', () => {
-  it('should get all satellites', () => {
-    const sats = satController.getAllSats();
+  it('should get all satellites', async () => {
+    const sats = await satController.getAllSats();
     expect(sats).toEqual(satController.satService.satellites);
   });
 
@@ -39,9 +39,9 @@ describe('Satellites Controller', () => {
   });
 
   describe('Adding Satellite', () => {
-    it('can add a satellite', () => {
+    it('can add a satellite', async () => {
       mockRequest = { body: { name: 'Sat Name', lat: 1234, lon: 1234, status: 'Example Status' } } as Request;
-      const newSat = satController.addSat(mockRequest);
+      const newSat = await satController.addSat(mockRequest);
       expect(newSat).toEqual({
         id: 3,
         lat: 1234,

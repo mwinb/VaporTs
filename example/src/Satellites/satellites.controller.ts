@@ -20,25 +20,25 @@ class SatelliteController {
   constructor(public satService = new SatelliteService()) {}
 
   @Route('GET')
-  getAllSats() {
+  async getAllSats(): Promise<SatelliteModel[]> {
     return this.satService.getAll();
   }
 
   @Route('GET', { path: '/:id' })
   @Validate(new GetSatelliteValidator(), 'params')
-  async getSatById({ params: { id } }: express.Request) {
+  async getSatById({ params: { id } }: express.Request): Promise<SatelliteModel> {
     return this.satService.getOne(parseInt(id));
   }
 
   @Route('POST', { responseCode: 201 })
   @Validate(new PostSatelliteValidator(), 'body')
-  addSat({ body: sat }: express.Request) {
+  async addSat({ body: sat }: express.Request): Promise<SatelliteModel> {
     return this.satService.addOne({ ...sat, id: undefined });
   }
 
   @Route('PATCH')
   @Validate(new PatchSatelliteValidator(), 'body')
-  async patchSat({ body: sat }: express.Request) {
+  async patchSat({ body: sat }: express.Request): Promise<SatelliteModel> {
     return this.satService.patchOne(sat);
   }
 

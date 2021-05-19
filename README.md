@@ -1,6 +1,6 @@
 # DocTS
 
-DocTs is a minimal framework built to support a simple and only slightly opinionated object oriented approach to implementing and unit testing Expressjs applications. DocTS is primarily focused on the use of two primary decorators. The Controller decorator, which provides a simple way to describe express controllers, their paths, and middleware, and the Route decorator, which provides simple HTTP method declaration, extension to the Controller path, individual middleware, and a prebuilt optional asynchronous http error response handler.
+DocTs is a minimal framework built to support a simple and only slightly opinionated object oriented approach to implementing and unit testing Expressjs applications. DocTS is primarily focused on the use of two primary decorators. The Controller decorator, which provides a simple way to describe express controllers, their paths, and middleware, and the Route decorator, which provides simple HTTP method declaration, extension to the Controller path, individual middleware, and optional error and response handling.
 
 ---
 
@@ -58,19 +58,19 @@ class ExampleController {}
 @Controller('/example')
 class ExampleController {
   @Route('GET')
-  async exampleGetFunction(req, res) {}
+  async exampleGetFunction(): Promise<ExampleData[]> {}
 
   @Route('POST', { responseCode: 201 })
-  async postWithCustomResponseCode(req) {}
+  async postWithCustomResponseCode({ body: postData }: express.Request): Promise<void> {}
 
   @Route('GET', { path: '/:id', middleware: [routeMiddleware] })
-  async exampleGetOneFunction(req, res) {}
+  async exampleGetOneFunction({ params: { id } }: express.Request): Promise<ExampleData> {}
 
   @Route('GET', { path: ['/pathone', '/pathtwo'] })
-  async exampleGetWithTwoPaths(req, res) {}
+  async exampleGetWithTwoPaths(req): Promise<ExampleData[]> {}
 
-  @Route('PATCH', { applyHttpError: false })
-  examplePatchNoHttpError(req, res, next) {}
+  @Route('PATCH', { handleErrors: false, handleResponse: false })
+  async examplePatchNoHandlers(req, res, next): Promise<void> {}
 }
 ```
 
@@ -107,7 +107,7 @@ Response handling is applied to all Routes by default, but may be disabled in th
 class ExampleController {
   // Calls res.status(200).send(Example[]) if successful
   @Route('GET')
-  async getExamples(): Example[] {
+  async getExamples(): Promise<Example[]> {
     return await this.exampleService.getAllExamples();
   }
   // Calls res.sendStatus(201) if successful
@@ -123,9 +123,10 @@ class ExampleController {
 
 ## Validate
 
-In order to use Validate an instance of a class that uses one of the Validation Decorators is needed. Handles all validation failures with the HttpError class. See the DocTsValidator Class description below.
+In order to use Validate an instance of a class that uses one of the Validation Decorators is needed. Handles all validation failures with the HttpError handler. See the DocTsValidator Class description below.
 
 - `@Validate` does not alter the original class method.
+- `@Validate` does not work without `@Route` (order does not matter)
 
 ### Parameters:
 
@@ -192,9 +193,9 @@ Field decorators can be used to create a DocTsValidator needed in the Validate D
     - Adds Array Validation to the field.
   - `evaluateEachItem: boolean` (optional, default: true)
     - Validates each item in array when field isArray.
-    - Currently disabling removes type evaluation and only ensures that the field is an Array.
+    - Disabling removes type evaluation and only ensures that the field is an Array.
   - `optional: boolean` (optional, default: false)
-    - Will not throw HttpError if undefined.
+    - Ignores if undefined.
     - Still validates the field if it exists.
   - `evaluators: Evaluator[]` (optional)
     - Additional custom validation functions to be run against the field.
@@ -337,7 +338,7 @@ expressApp.listen(port, () => {
 
 ## HttpError
 
-Extends the Error class and is caught with the HttpErrorHandler decorator or by default in Route decorated async functions. HttpErrorHandler can be disabled by setting the applyHttpError parameter in Route to false.
+Extends the Error class and is caught with the HttpError handler decorator or by default in Route decorated async functions. HttpError handler can be disabled by setting the `handleErrors` parameter in `RouteParams` to `false`.
 
 ### Parameters:
 
