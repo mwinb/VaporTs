@@ -1,6 +1,6 @@
 # DocTS
 
-DocTs is a minimal framework built to support a simple and only slightly opinionated object oriented approach to implementing and unit testing Expressjs applications. DocTS is primarily focused on the use of two primary decorators. The Controller decorator, which provides a simple way to describe express controllers, their paths, and middleware, and the Route decorator, which provides simple HTTP method declaration, extension to the Controller path, individual middleware, and optional error and response handling.
+DocTs is a minimal framework built to support a simple and only slightly opinionated object oriented approach to implementing and unit testing Expressjs applications. DocTS is primarily focused on the use of two primary decorators. The Controller decorator, which provides a simple way to describe express controllers, their paths, and middleware. The Route decorator, which provides simple HTTP method declaration, extension to the Controller path, individual middleware, and optional error, response, and validation handling.
 
 ---
 
@@ -123,10 +123,10 @@ class ExampleController {
 
 ## Validate
 
-In order to use Validate an instance of a class that uses one of the Validation Decorators is needed. Handles all validation failures with the HttpError handler. See the DocTsValidator Class description below.
+In order to use `@Validate` an instance of a class that uses one of the Validation Decorators is needed. `@Validate` Handles all validation failures with the HttpError handler. See the DocTsValidator Class description below.
 
 - `@Validate` does not alter the original class method.
-- `@Validate` does not work without `@Route` (order does not matter)
+- `@Validate` only works with `@Route` (order does not matter)
 
 ### Parameters:
 
