@@ -4,7 +4,7 @@ import {
   getControllerDoc,
   initializeRoutes,
   getRouteMethodNames,
-  getModifiedRouteMethod,
+  getWrappedRouteMethod,
   getRoutesDocumentation
 } from '..';
 import { Response } from 'express';
@@ -48,12 +48,12 @@ describe('getting generated fn', () => {
     generators = getControllerDoc(testController).routes.get('mockRoute').generators;
   });
   it('creates a generatedFn using a routes generators', async () => {
-    await getModifiedRouteMethod(generators, testController.mockRoute)({} as any, mockResponse, {});
+    await getWrappedRouteMethod(generators, testController.mockRoute)({} as any, mockResponse, {});
     expect(mockResponse.send).toHaveBeenCalledWith('Returned');
   });
 
   it('returns the original function if no generators exist', async () => {
-    expect(getModifiedRouteMethod(undefined, testController.mockRoute)).toEqual(testController.mockRoute);
+    expect(getWrappedRouteMethod(undefined, testController.mockRoute)).toEqual(testController.mockRoute);
   });
 });
 
@@ -64,7 +64,6 @@ describe('initializing routes', () => {
     let callIndex = 1;
     initializeRoutes('', mockRouter, testController);
     routeDocs.forEach((routerMethod: [string, RouteDoc]) => {
-      console.log(routerMethod[1].paths);
       routerMethod[1].paths.forEach((p: string) => {
         expect(mockRouter.get).toHaveBeenNthCalledWith(
           callIndex,

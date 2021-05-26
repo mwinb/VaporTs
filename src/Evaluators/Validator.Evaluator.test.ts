@@ -32,7 +32,6 @@ describe('Get Validator Evaluator', () => {
           stringField: 'string'
         });
       } catch (error) {
-        console.log(error);
         thrownError = error;
       }
       expect(thrownError).toBeDefined();

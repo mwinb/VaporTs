@@ -38,7 +38,9 @@ class SatelliteService {
 
   patchOne(newSat: SatelliteModel): SatelliteModel {
     this.throwIfNotFound(newSat.id);
-    return (this.satellites[newSat.id] = { ...this.satellites[newSat.id], ...newSat });
+    const patchedSat = { ...this.satellites[newSat.id], ...newSat };
+    this.satellites[newSat.id] = patchedSat;
+    return patchedSat;
   }
 }
 

@@ -41,7 +41,7 @@ const evaluateField = (
   objectToEvaluate: Record<string, any>,
   field: string
 ): boolean => {
-  const hasField = objectToEvaluate[field] !== undefined;
+  const hasField = objectToEvaluate[field] !== undefined && objectToEvaluate[field] !== null;
   const fieldEvaluator = getFieldEvaluator(fieldEvaluatorConfig.evaluators, objectToEvaluate, field);
   return fieldEvaluatorConfig.optional
     ? handleOptionalField(hasField, fieldEvaluator)

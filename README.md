@@ -126,7 +126,8 @@ class ExampleController {
 In order to use `@Validate` an instance of a class that uses one of the Validation Decorators is needed. `@Validate` Handles all validation failures with the HttpError handler. See the DocTsValidator Class description below.
 
 - `@Validate` does not alter the original class method.
-- `@Validate` only works with `@Route` (order does not matter)
+- `@Validate` only works with `@Route` (order in relation to `@Route` does not matter)
+- When using more than one `@Validate` they are executed bottom to top.
 
 ### Parameters:
 
@@ -159,6 +160,11 @@ class ExampleController {
   @Route('PATCH')
   @Validate(new ExampleValidator(), 'body')
   examplePatch(req, res) {}
+
+  @Validate(exampleBodyValidator, 'body') // Executes second.
+  @Validate(exampleHeaderValidator, 'headers', { strip: false }) // Executes first.
+  @Route('POST', { responseCode: 201 }) // Ordering does not matter.
+  async addSat({ body: sat }: express.Request): Promise<ExampleModel> {}
 }
 ```
 

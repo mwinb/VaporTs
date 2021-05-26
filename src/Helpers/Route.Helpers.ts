@@ -16,22 +16,20 @@ export function getRoutesDocumentation(controller: Record<string, any>): RouteDo
   });
 }
 
-export const applyModifiers = (
+export const applyWrappers = (
   originalFunction: (...args: any[]) => Promise<any> | any,
   generators: Generator[]
 ): Middleware => {
-  let newFn = originalFunction;
-  generators.forEach(g => {
-    newFn = g(newFn);
-  });
-  return newFn;
+  return generators.reduce((modifiedFunction, g) => {
+    return g(modifiedFunction);
+  }, originalFunction);
 };
 
-export const getModifiedRouteMethod = (
+export const getWrappedRouteMethod = (
   generators: Generator[],
   method: (...args: any) => Promise<any> | any
 ): Middleware => {
-  return generators ? applyModifiers(method, generators) : method;
+  return generators ? applyWrappers(method, generators) : method;
 };
 
 export const getRouteDoc = (controllerDoc: ControllerDoc, key: string): RouteDoc => {
@@ -66,7 +64,7 @@ export function initializeRoutes(basePath: string, router: Router, controller: R
         router[routeDoc.method.toLowerCase()](
           basePath + controllerDoc.path + path,
           ...routeDoc.middleware,
-          getModifiedRouteMethod(routeDoc.generators, boundMethod)
+          getWrappedRouteMethod(routeDoc.generators, boundMethod)
         );
       });
     });

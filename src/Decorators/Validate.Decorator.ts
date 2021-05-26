@@ -7,7 +7,6 @@ import {
   RequestField,
   VoidDecorator,
   ValidateConfig,
-  handleHttpError,
   getControllerDoc,
   isDocTsValidator,
   getArrayEvaluators,
@@ -22,17 +21,12 @@ export const generateValidatorHandler = (evaluator: Evaluator, requestFieldToVal
   return (ogMethod: any) => {
     return async function (...args: any[]) {
       const requestField = args[0][requestFieldToValidate];
-      const response = args[1];
-      try {
-        if (requestField !== undefined) {
-          evaluator(requestField);
-          return await ogMethod.apply(this, args);
-        } else {
-          docTsLogger.log(invalidRequestFieldMessage(requestFieldToValidate, ogMethod.name));
-          throw new HttpError(501, 'Not implemented.');
-        }
-      } catch (error) {
-        return handleHttpError(error, response);
+      if (requestField !== undefined) {
+        evaluator(requestField);
+        return await ogMethod.apply(this, args);
+      } else {
+        docTsLogger.log(invalidRequestFieldMessage(requestFieldToValidate, ogMethod.name));
+        throw new HttpError(501, 'Not implemented.');
       }
     };
   };

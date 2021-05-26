@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { getMockResponse } from '../__mocks__/Express/responseMock';
 import { MockControllerWithRouteValidation } from '../__mocks__/controllerMocks';
-import { getControllerDoc, getRouteDoc, getModifiedRouteMethod, ControllerDoc } from '..';
+import { getControllerDoc, getRouteDoc, getWrappedRouteMethod, ControllerDoc } from '..';
 
 describe('ValidateRoute', () => {
   let mockRouteValidatorController: MockControllerWithRouteValidation;
@@ -12,7 +12,7 @@ describe('ValidateRoute', () => {
     mockRouteValidatorController = new MockControllerWithRouteValidation();
     mockRouteValidatorController.mockRoute = mockRouteValidatorController.mockRoute.bind(mockRouteValidatorController);
     controllerDoc = getControllerDoc(mockRouteValidatorController);
-    validationHandler = getModifiedRouteMethod(
+    validationHandler = getWrappedRouteMethod(
       getRouteDoc(controllerDoc, 'mockRoute').generators,
       mockRouteValidatorController.mockRoute
     );
@@ -29,13 +29,18 @@ describe('ValidateRoute', () => {
     await validationHandler(mockReq);
     expect(mockReq.body['extraField']).toBeUndefined();
   });
-  it('sends a 400 status if it fails validation', async () => {
-    await validationHandler({ body: { booleanField: true } }, mockResponse);
-    expect(mockResponse.status).toHaveBeenLastCalledWith(400);
+  it('throws an HttpError with 400 status if it fails validation', async () => {
+    let httpError;
+    try {
+      await validationHandler({ body: { booleanField: true } }, mockResponse);
+    } catch (error) {
+      httpError = error;
+    }
+    expect(httpError.code).toBe(400);
   });
 
   it('handles validating an array of the Validator Type from request field', async () => {
-    validationHandler = getModifiedRouteMethod(
+    validationHandler = getWrappedRouteMethod(
       getRouteDoc(controllerDoc, 'mockArrayValidatorRoute').generators,
       mockRouteValidatorController.mockArrayValidatorRoute.bind(mockRouteValidatorController)
     );
@@ -46,7 +51,7 @@ describe('ValidateRoute', () => {
   });
 
   it('uses isJsonObjectEvaluator if an invalid DocTsEvaluator is passed', async () => {
-    validationHandler = getModifiedRouteMethod(
+    validationHandler = getWrappedRouteMethod(
       getRouteDoc(controllerDoc, 'mockInvalidValidatorRoute').generators,
       mockRouteValidatorController.mockInvalidValidatorRoute.bind(mockRouteValidatorController)
     );
@@ -54,16 +59,21 @@ describe('ValidateRoute', () => {
     expect(mockRouteValidatorController.mockFn).toHaveBeenCalledTimes(1);
   });
 
-  it('sends a 501 status if the request field is invalid', async () => {
+  it('throws an HttpError with 501 code if the request field is invalid', async () => {
     mockRouteValidatorController.mockInvalidRequestFieldRoute = mockRouteValidatorController.mockInvalidRequestFieldRoute.bind(
       mockRouteValidatorController
     );
-    validationHandler = getModifiedRouteMethod(
+    validationHandler = getWrappedRouteMethod(
       getRouteDoc(controllerDoc, 'mockInvalidRequestFieldRoute').generators,
       mockRouteValidatorController.mockInvalidRequestFieldRoute
     );
-    await validationHandler({ body: { stringField: 'string' } }, mockResponse);
+    let httpError;
+    try {
+      await validationHandler({ body: { stringField: 'string' } }, mockResponse);
+    } catch (error) {
+      httpError = error;
+    }
     expect(mockRouteValidatorController.mockFn).not.toHaveBeenCalled();
-    expect(mockResponse.status).toHaveBeenLastCalledWith(501);
+    expect(httpError.code).toBe(501);
   });
 });
