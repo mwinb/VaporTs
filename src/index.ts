@@ -3,6 +3,10 @@ export * from './Classes/DocApp';
 export * from './Classes/HttpError';
 export * from './Classes/DocTsLogger';
 
+// Curryware
+export * from './Curryware/ResponseHandler.Curryware';
+export * from './Curryware/HttpErrorHandler.Curryware';
+
 // Decorators
 export * from './Decorators/Route.Decorator';
 export * from './Decorators/Validate.Decorator';
@@ -15,6 +19,7 @@ export * from './Decorators/Validators/JsonObject.Decorator';
 export * from './Decorators/Validators/SetPropertyEvaluators.Decorator';
 
 // Evaluators
+export * from './Evaluators/Array.Evaluator';
 export * from './Evaluators/Number.Evaluator';
 export * from './Evaluators/String.Evaluator';
 export * from './Evaluators/Boolean.Evaluator';
@@ -22,9 +27,12 @@ export * from './Evaluators/Validator.Evaluator';
 export * from './Evaluators/JsonObject.Evaluator';
 export * from './Evaluators/DocTsValidator.Evaluator';
 
-// Handlers
-export * from './Generators/ResponseHandler.Generator';
-export * from './Generators/HttpErrorHandler.Generator';
+// Helpers
+export * from './Helpers/Route.Helpers';
+export * from './Helpers/Message.Helpers';
+export * from './Helpers/Evaluator.Helpers';
+export * from './Helpers/Controller.Helpers';
+export * from './Helpers/ValidatorDoc.Helpers';
 
 // Interfaces
 export * from './Interfaces/RouteDoc.Interface';
@@ -36,16 +44,9 @@ export * from './Interfaces/ControllerDoc.Interface';
 // Types
 export * from './Types/Handler.Type';
 export * from './Types/LoggerFn.Type';
-export * from './Types/Generator.Type';
+export * from './Types/Curryware.Type';
 export * from './Types/Evaluator.Type';
 export * from './Types/Decorator.Type';
 export * from './Types/Middleware.Type';
 export * from './Types/RouteMethod.Type';
 export * from './Types/RequestValidationField.Type';
-
-// Helpers
-export * from './Helpers/Route.Helpers';
-export * from './Helpers/Message.Helpers';
-export * from './Helpers/Controller.Helpers';
-export * from './Evaluators/Array.Evaluator';
-export * from './Helpers/ValidatorDoc.Helpers';

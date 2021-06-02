@@ -1,18 +1,18 @@
 import {
-  Generator,
+  Curryware,
   RouteMethod,
   getRouteDoc,
   RouteParams,
   getControllerDoc,
   DEFAULT_ROUTE_PARAMS,
-  generateHttpErrorHandler,
-  getResponseHandlerGenerator
+  curryHttpErrorHandler,
+  getResponseHandlerCurryware
 } from '..';
 
-const addRouteConfigGenerators = (routeConfig: RouteParams, generators: Generator[]): Generator[] => {
-  if (routeConfig.handleErrors) generators.push(generateHttpErrorHandler);
-  if (routeConfig.handleResponse) generators.push(getResponseHandlerGenerator(routeConfig.responseCode));
-  return generators;
+const addRouteConfigGenerators = (routeConfig: RouteParams, curriers: Curryware[]): Curryware[] => {
+  if (routeConfig.handleErrors) curriers.push(curryHttpErrorHandler);
+  if (routeConfig.handleResponse) curriers.push(getResponseHandlerCurryware(routeConfig.responseCode));
+  return curriers;
 };
 
 export function Route(method: RouteMethod, routeParams: RouteParams = {}): (...args: any[]) => void {
@@ -25,7 +25,7 @@ export function Route(method: RouteMethod, routeParams: RouteParams = {}): (...a
       paths: paths,
       method: method,
       middleware: routeConfig.middleware,
-      generators: addRouteConfigGenerators(routeConfig, routeDoc.generators)
+      curriers: addRouteConfigGenerators(routeConfig, routeDoc.curriers)
     });
   };
 }

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { RouteDoc, getControllerDoc, docTsLogger, Generator, Middleware, ControllerDoc } from '..';
+import { RouteDoc, getControllerDoc, docTsLogger, Curryware, Middleware, ControllerDoc } from '..';
 
 export function getRouteMethodNames(controller: Record<string, any>): string[] {
   return Object.getOwnPropertyNames(Object.getPrototypeOf(controller)).filter(name => {
@@ -18,18 +18,18 @@ export function getRoutesDocumentation(controller: Record<string, any>): RouteDo
 
 export const applyWrappers = (
   originalFunction: (...args: any[]) => Promise<any> | any,
-  generators: Generator[]
+  curriers: Curryware[]
 ): Middleware => {
-  return generators.reduce((modifiedFunction, g) => {
+  return curriers.reduce((modifiedFunction, g) => {
     return g(modifiedFunction);
   }, originalFunction);
 };
 
 export const getWrappedRouteMethod = (
-  generators: Generator[],
+  curriers: Curryware[],
   method: (...args: any) => Promise<any> | any
 ): Middleware => {
-  return generators ? applyWrappers(method, generators) : method;
+  return curriers ? applyWrappers(method, curriers) : method;
 };
 
 export const getRouteDoc = (controllerDoc: ControllerDoc, key: string): RouteDoc => {
@@ -39,7 +39,7 @@ export const getRouteDoc = (controllerDoc: ControllerDoc, key: string): RouteDoc
       paths: [],
       middleware: [],
       method: 'GET',
-      generators: []
+      curriers: []
     };
   }
   return routeDoc;
@@ -64,7 +64,7 @@ export function initializeRoutes(basePath: string, router: Router, controller: R
         router[routeDoc.method.toLowerCase()](
           basePath + controllerDoc.path + path,
           ...routeDoc.middleware,
-          getWrappedRouteMethod(routeDoc.generators, boundMethod)
+          getWrappedRouteMethod(routeDoc.curriers, boundMethod)
         );
       });
     });

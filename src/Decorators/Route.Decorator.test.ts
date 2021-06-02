@@ -1,7 +1,7 @@
 import { Response, Request } from 'express';
 import { getMockResponse } from '../__mocks__/Express/responseMock';
 import { mockMiddleware } from '../__mocks__/Express/mockMiddleware';
-import { RouteDoc, getControllerDoc, HttpError, Generator } from '..';
+import { RouteDoc, getControllerDoc, HttpError, Curryware } from '..';
 import { MockControllerWithRoutes } from '../__mocks__/controllerMocks';
 
 let testController: MockControllerWithRoutes;
@@ -34,7 +34,7 @@ describe('Router Decorator', () => {
   describe('HandleResponse', () => {
     let mockResponse: Response;
     let returnVal: string;
-    let generators: Generator[];
+    let curriers: Curryware[];
     beforeEach(() => {
       mockResponse = getMockResponse();
       returnVal = 'returnValue';
@@ -47,12 +47,12 @@ describe('Router Decorator', () => {
         testController.mockRoute = testController.mockRoute.bind(testController);
       });
 
-      describe('Default Response Hanlder Generator', async () => {
+      describe('Default Response Hanlder Curryware', () => {
         beforeEach(async () => {
-          generators = getControllerDoc(testController).routes.get('mockRoute').generators;
-          responseHandler = generators[1](testController.mockRoute);
+          curriers = getControllerDoc(testController).routes.get('mockRoute').curriers;
+          responseHandler = curriers[1](testController.mockRoute);
         });
-        it('adds the response handler generator by default', async () => {
+        it('adds the response handler Curryware by default', async () => {
           await responseHandler({}, mockResponse);
           expect(mockResponse.send).toHaveBeenCalledWith(returnVal);
         });
@@ -66,20 +66,20 @@ describe('Router Decorator', () => {
 
     it('takes a custom code', async () => {
       testController.mockRouteWithCustomCode = testController.mockRouteWithCustomCode.bind(testController);
-      generators = getControllerDoc(testController).routes.get('mockRouteWithCustomCode').generators;
+      curriers = getControllerDoc(testController).routes.get('mockRouteWithCustomCode').curriers;
 
-      await generators[1](testController.mockRouteWithCustomCode)({} as Request, mockResponse, {});
+      await curriers[1](testController.mockRouteWithCustomCode)({} as Request, mockResponse, {});
       expect(mockResponse.status).toHaveBeenLastCalledWith(201);
     });
 
     it('allows for disabling response handling', async () => {
-      generators = getControllerDoc(testController).routes.get('mockRouteWithoutResponseHandler').generators;
-      expect(generators.length).toEqual(1);
+      curriers = getControllerDoc(testController).routes.get('mockRouteWithoutResponseHandler').curriers;
+      expect(curriers.length).toEqual(1);
     });
   });
 
   describe('HttpError', () => {
-    let generators: Generator[];
+    let curriers: Curryware[];
     let mockResponse: Response;
     beforeEach(() => {
       jest.spyOn(testController, 'mockFn').mockRejectedValueOnce(new HttpError(404, 'Not Found'));
@@ -89,14 +89,14 @@ describe('Router Decorator', () => {
     });
 
     it('adds async httpError handling by default', async () => {
-      generators = getControllerDoc(testController).routes.get('mockRoute').generators;
-      await generators[0](testController.mockRoute)({} as Request, mockResponse, {});
+      curriers = getControllerDoc(testController).routes.get('mockRoute').curriers;
+      await curriers[0](testController.mockRoute)({} as Request, mockResponse, {});
       expect(mockResponse.status).toHaveBeenCalledWith(404);
     });
 
     it('allows disabling the async HttpError handling', async () => {
-      generators = getControllerDoc(testController).routes.get('mockRouteNoHttpError').generators;
-      expect(generators.length).toBe(1);
+      curriers = getControllerDoc(testController).routes.get('mockRouteNoHttpError').curriers;
+      expect(curriers.length).toBe(1);
     });
   });
 });

@@ -1,6 +1,6 @@
 import {
   RouteDoc,
-  Generator,
+  Curryware,
   getControllerDoc,
   initializeRoutes,
   getRouteMethodNames,
@@ -40,19 +40,19 @@ describe('Getting Route Documentation', () => {
 
 describe('getting generated fn', () => {
   let mockResponse: Response;
-  let generators: Generator[];
+  let curriers: Curryware[];
   beforeEach(() => {
     mockResponse = getMockResponse();
     jest.spyOn(testController, 'mockFn').mockResolvedValue('Returned');
     testController.mockRoute = testController.mockRoute.bind(testController);
-    generators = getControllerDoc(testController).routes.get('mockRoute').generators;
+    curriers = getControllerDoc(testController).routes.get('mockRoute').curriers;
   });
-  it('creates a generatedFn using a routes generators', async () => {
-    await getWrappedRouteMethod(generators, testController.mockRoute)({} as any, mockResponse, {});
+  it('creates a generatedFn using a routes curriers', async () => {
+    await getWrappedRouteMethod(curriers, testController.mockRoute)({} as any, mockResponse, {});
     expect(mockResponse.send).toHaveBeenCalledWith('Returned');
   });
 
-  it('returns the original function if no generators exist', async () => {
+  it('returns the original function if no curriers exist', async () => {
     expect(getWrappedRouteMethod(undefined, testController.mockRoute)).toEqual(testController.mockRoute);
   });
 });

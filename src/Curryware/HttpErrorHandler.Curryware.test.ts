@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
 import { ErrorHandlerMock } from '../__mocks__/ErrorHandlerMock';
-import { HttpError, generateHttpErrorHandler, Handler } from '..';
+import { HttpError, curryHttpErrorHandler, Handler } from '..';
 import { getMockResponse } from '../__mocks__/Express/responseMock';
 
 let mockResponse: Response;
@@ -11,7 +11,7 @@ beforeEach(() => {
   mockResponse = getMockResponse();
   errorHandlerMock = new ErrorHandlerMock(jest.fn());
   errorHandlerMock.mockFn.mockRejectedValue(new HttpError(403, 'Unauthorized'));
-  httpErrorHandler = generateHttpErrorHandler(errorHandlerMock.handlesHttpError.bind(errorHandlerMock));
+  httpErrorHandler = curryHttpErrorHandler(errorHandlerMock.handlesHttpError.bind(errorHandlerMock));
 });
 
 afterEach(() => {

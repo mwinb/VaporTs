@@ -1,5 +1,5 @@
 import { Response, Request } from 'express';
-import { getResponseHandlerGenerator, Handler } from '..';
+import { getResponseHandlerCurryware, Handler } from '..';
 import { getMockResponse } from '../__mocks__/Express/responseMock';
 import { MockResponseHandler } from '../__mocks__/ResponseHandlerMock';
 
@@ -23,7 +23,7 @@ describe('ResponseHandler', () => {
       someField: 'someValue'
     };
     mockClass.mockFn.mockResolvedValue(responseData);
-    responseHandler = getResponseHandlerGenerator(200)(mockClass.withReturn.bind(mockClass));
+    responseHandler = getResponseHandlerCurryware(200)(mockClass.withReturn.bind(mockClass));
   });
   describe('with return', () => {
     it('sets the status to the provided code', async () => {
@@ -39,7 +39,7 @@ describe('ResponseHandler', () => {
   describe('without return', () => {
     beforeEach(() => {
       mockClass.mockFn.mockImplementation();
-      responseHandler = getResponseHandlerGenerator(200)(mockClass.withReturn.bind(mockClass));
+      responseHandler = getResponseHandlerCurryware(200)(mockClass.withReturn.bind(mockClass));
     });
 
     it('calls sendStatus if no data is returned from the handled method.', async () => {

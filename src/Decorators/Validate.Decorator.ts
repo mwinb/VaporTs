@@ -1,7 +1,8 @@
 import {
+  Handler,
   Evaluator,
   HttpError,
-  Generator,
+  Curryware,
   docTsLogger,
   getRouteDoc,
   RequestField,
@@ -9,7 +10,7 @@ import {
   ValidateConfig,
   getControllerDoc,
   isDocTsValidator,
-  getArrayEvaluators,
+  getConfiguredEvaluators,
   isJsonObjectEvaluator,
   DEFAULT_VALIDATE_CONFIG,
   createValidatorEvaluator,
@@ -17,8 +18,8 @@ import {
   invalidDocTsValidatorWarningMessage
 } from '..';
 
-export const generateValidatorHandler = (evaluator: Evaluator, requestFieldToValidate: string): Generator => {
-  return (ogMethod: any) => {
+const getValidationHandlerCurryware = (evaluator: Evaluator, requestFieldToValidate: string): Curryware => {
+  return (ogMethod: Handler) => {
     return async function (...args: any[]) {
       const requestField = args[0][requestFieldToValidate];
       if (requestField !== undefined) {
@@ -32,10 +33,6 @@ export const generateValidatorHandler = (evaluator: Evaluator, requestFieldToVal
   };
 };
 
-const getValidatorHandlerGenerator = (evaluator: Evaluator, requestField: RequestField): Generator => {
-  return generateValidatorHandler(evaluator, requestField);
-};
-
 const warnAndReturnJsonEvaluator = (validator: Record<string, any>): Evaluator => {
   docTsLogger.log(invalidDocTsValidatorWarningMessage(validator));
   return isJsonObjectEvaluator;
@@ -47,8 +44,8 @@ const getRouteEvaluator = (validator: Record<string, any>, strip: boolean): Eval
     : warnAndReturnJsonEvaluator(validator);
 };
 
-const getValidateEvaluator = (validator: Record<string, any>, validateConfig: ValidateConfig): Evaluator => {
-  return getArrayEvaluators({
+const getValidationEvaluator = (validator: Record<string, any>, validateConfig: ValidateConfig): Evaluator => {
+  return getConfiguredEvaluators({
     ...validateConfig,
     evaluators: [getRouteEvaluator(validator, validateConfig.strip)]
   }).pop();
@@ -60,13 +57,13 @@ export const Validate = (
   validateConfig: ValidateConfig = {}
 ): VoidDecorator => {
   const config = { ...DEFAULT_VALIDATE_CONFIG, ...validateConfig };
-  const evaluator = getValidateEvaluator(validator, config);
+  const evaluator = getValidationEvaluator(validator, config);
   return (target: Record<string, any>, propertyKey: string) => {
     const controllerDoc = getControllerDoc(target);
     const routeDoc = getRouteDoc(controllerDoc, propertyKey);
     controllerDoc.routes.set(propertyKey, {
       ...routeDoc,
-      generators: [getValidatorHandlerGenerator(evaluator, requestFieldToValidate), ...routeDoc.generators]
+      curriers: [getValidationHandlerCurryware(evaluator, requestFieldToValidate), ...routeDoc.curriers]
     });
   };
 };

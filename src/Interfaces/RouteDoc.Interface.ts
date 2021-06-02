@@ -1,8 +1,8 @@
-import { Middleware, RouteMethod, Generator } from '..';
+import { Middleware, RouteMethod, Curryware } from '..';
 
 export interface RouteDoc {
   method: RouteMethod;
   paths: string[];
   middleware?: Middleware[];
-  generators?: Generator[];
+  curriers?: Curryware[];
 }

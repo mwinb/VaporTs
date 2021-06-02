@@ -13,7 +13,7 @@ describe('ValidateRoute', () => {
     mockRouteValidatorController.mockRoute = mockRouteValidatorController.mockRoute.bind(mockRouteValidatorController);
     controllerDoc = getControllerDoc(mockRouteValidatorController);
     validationHandler = getWrappedRouteMethod(
-      getRouteDoc(controllerDoc, 'mockRoute').generators,
+      getRouteDoc(controllerDoc, 'mockRoute').curriers,
       mockRouteValidatorController.mockRoute
     );
     mockResponse = getMockResponse();
@@ -41,7 +41,7 @@ describe('ValidateRoute', () => {
 
   it('handles validating an array of the Validator Type from request field', async () => {
     validationHandler = getWrappedRouteMethod(
-      getRouteDoc(controllerDoc, 'mockArrayValidatorRoute').generators,
+      getRouteDoc(controllerDoc, 'mockArrayValidatorRoute').curriers,
       mockRouteValidatorController.mockArrayValidatorRoute.bind(mockRouteValidatorController)
     );
     await validationHandler({
@@ -52,7 +52,7 @@ describe('ValidateRoute', () => {
 
   it('uses isJsonObjectEvaluator if an invalid DocTsEvaluator is passed', async () => {
     validationHandler = getWrappedRouteMethod(
-      getRouteDoc(controllerDoc, 'mockInvalidValidatorRoute').generators,
+      getRouteDoc(controllerDoc, 'mockInvalidValidatorRoute').curriers,
       mockRouteValidatorController.mockInvalidValidatorRoute.bind(mockRouteValidatorController)
     );
     await validationHandler({ body: { booleanField: true } }, mockResponse);
@@ -64,7 +64,7 @@ describe('ValidateRoute', () => {
       mockRouteValidatorController
     );
     validationHandler = getWrappedRouteMethod(
-      getRouteDoc(controllerDoc, 'mockInvalidRequestFieldRoute').generators,
+      getRouteDoc(controllerDoc, 'mockInvalidRequestFieldRoute').curriers,
       mockRouteValidatorController.mockInvalidRequestFieldRoute
     );
     let httpError;

@@ -11,7 +11,7 @@ export const handleHttpError = (error: Error, res: Response): void => {
   }
 };
 
-export const generateHttpErrorHandler = (originalMethod: (...args: any[]) => any): Handler => {
+export const curryHttpErrorHandler = (originalMethod: Handler): Handler => {
   return async function (...args: any[]): Promise<any> {
     const res = args[1];
     try {
