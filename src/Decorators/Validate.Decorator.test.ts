@@ -60,9 +60,8 @@ describe('ValidateRoute', () => {
   });
 
   it('throws an HttpError with 501 code if the request field is invalid', async () => {
-    mockRouteValidatorController.mockInvalidRequestFieldRoute = mockRouteValidatorController.mockInvalidRequestFieldRoute.bind(
-      mockRouteValidatorController
-    );
+    mockRouteValidatorController.mockInvalidRequestFieldRoute =
+      mockRouteValidatorController.mockInvalidRequestFieldRoute.bind(mockRouteValidatorController);
     validationHandler = getWrappedRouteMethod(
       getRouteDoc(controllerDoc, 'mockInvalidRequestFieldRoute').curriers,
       mockRouteValidatorController.mockInvalidRequestFieldRoute
