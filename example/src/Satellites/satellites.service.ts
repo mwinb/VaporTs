@@ -1,5 +1,5 @@
 import sats from './satellites.json';
-import { HttpError } from '../../../src';
+import { HttpError } from '@mwinberry/doc-ts';
 import SatelliteModel, { SatId } from './satellites.model';
 
 class SatelliteService {

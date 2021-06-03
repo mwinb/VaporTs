@@ -1,6 +1,6 @@
 import morgan from 'morgan';
 import express from 'express';
-import { DocApp, DocAppConfig } from '../../src';
+import { DocApp, DocAppConfig } from '@mwinberry/doc-ts';
 import SatelliteController from './Satellites/satellites.controller';
 
 const port = 5000;

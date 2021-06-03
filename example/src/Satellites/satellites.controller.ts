@@ -6,7 +6,7 @@ import {
 } from '../Validators/SatelliteValidators';
 import SatelliteModel from './satellites.model';
 import SatelliteService from './satellites.service';
-import { Controller, Route, Validate } from '../../../src';
+import { Controller, Route, Validate } from '@mwinberry/doc-ts';
 import jsonContentValidator from '../Validators/JsonContentValidator';
 
 @Controller('/satellite')

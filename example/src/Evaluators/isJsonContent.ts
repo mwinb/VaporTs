@@ -1,4 +1,4 @@
-import { HttpError } from '../../../src';
+import { HttpError } from '@mwinberry/doc-ts';
 
 export const isJsonContent = (arg: string) => {
   if (!arg.includes('application/json')) {
