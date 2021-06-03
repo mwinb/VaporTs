@@ -1,5 +1,5 @@
 import express from 'express';
-import { DocApp } from '../../../src';
+import { DocApp } from '@mwinberry/doc-ts';
 import supertest, { SuperTest, Test } from 'supertest';
 import SatelliteController from './satellites.controller';
 
