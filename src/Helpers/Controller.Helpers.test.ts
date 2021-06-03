@@ -1,9 +1,8 @@
 import { Router } from 'express';
 import { getMockrouter } from '../__mocks__/Express/routerMock';
 import { mockMiddleware } from '../__mocks__/Express/mockMiddleware';
-import { getControllerDoc, initControllerMiddleware, DocTsController } from '..';
+import { getControllerDoc, initControllerMiddleware, DocTsController, isDocTsController } from '..';
 import { MockControllerWithMiddleWare, MockControllerWithoutMiddleWare } from '../__mocks__/controllerMocks';
-import { isDocTsController } from './Controller.Helpers';
 
 let testController: DocTsController;
 beforeEach(() => {

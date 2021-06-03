@@ -11,9 +11,6 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "jsx": "react",
-    "jsxFactory": "h",
-    "jsxFragmentFactory": "Fragment",
     "esModuleInterop": true,
     "resolveJsonModule": true
   },
@@ -21,6 +18,7 @@
     "./src/**/*"
   ],
   "exclude": [
-    "./src/**/*test*"
+    "./src/**/*test*",
+    "./src/**/*integration*"
   ]
 }

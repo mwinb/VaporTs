@@ -1,8 +1,8 @@
-import { Request, Response } from 'express';
+import { Response, Request } from 'express';
 import { getMockResponse } from '../__mocks__/Express/responseMock';
 import { mockMiddleware } from '../__mocks__/Express/mockMiddleware';
+import { RouteDoc, getControllerDoc, HttpError, Curryware } from '..';
 import { MockControllerWithRoutes } from '../__mocks__/controllerMocks';
-import { RouteDoc, getControllerDoc, HttpError } from '..';
 
 let testController: MockControllerWithRoutes;
 
@@ -34,6 +34,7 @@ describe('Router Decorator', () => {
   describe('HandleResponse', () => {
     let mockResponse: Response;
     let returnVal: string;
+    let curriers: Curryware[];
     beforeEach(() => {
       mockResponse = getMockResponse();
       returnVal = 'returnValue';
@@ -41,49 +42,61 @@ describe('Router Decorator', () => {
     });
 
     describe('defaults', () => {
+      let responseHandler: any;
       beforeEach(async () => {
-        await testController.mockRoute({}, mockResponse);
-      });
-      it('applies the Response Handler by default', () => {
-        expect(mockResponse.send).toHaveBeenLastCalledWith(returnVal);
+        testController.mockRoute = testController.mockRoute.bind(testController);
       });
 
-      it('uses 200 for status code by default', () => {
-        expect(mockResponse.status).toHaveBeenLastCalledWith(200);
+      describe('Default Response Hanlder Curryware', () => {
+        beforeEach(async () => {
+          curriers = getControllerDoc(testController).routes.get('mockRoute').curriers;
+          responseHandler = curriers[1](testController.mockRoute);
+        });
+        it('adds the response handler Curryware by default', async () => {
+          await responseHandler({}, mockResponse);
+          expect(mockResponse.send).toHaveBeenCalledWith(returnVal);
+        });
+
+        it('uses 200 for status code by default', async () => {
+          await responseHandler({}, mockResponse);
+          expect(mockResponse.status).toHaveBeenLastCalledWith(200);
+        });
       });
     });
 
     it('takes a custom code', async () => {
-      await testController.mockRouteWithCustomCode({}, mockResponse);
+      testController.mockRouteWithCustomCode = testController.mockRouteWithCustomCode.bind(testController);
+      curriers = getControllerDoc(testController).routes.get('mockRouteWithCustomCode').curriers;
+
+      await curriers[1](testController.mockRouteWithCustomCode)({} as Request, mockResponse, {});
       expect(mockResponse.status).toHaveBeenLastCalledWith(201);
     });
 
     it('allows for disabling response handling', async () => {
-      await testController.mockRouteWithoutResponseHandler({}, mockResponse);
-      expect(mockResponse.status).not.toHaveBeenCalled();
+      curriers = getControllerDoc(testController).routes.get('mockRouteWithoutResponseHandler').curriers;
+      expect(curriers.length).toEqual(1);
     });
   });
 
   describe('HttpError', () => {
-    let mockRequest: Request;
+    let curriers: Curryware[];
     let mockResponse: Response;
-    let httpError: HttpError;
     beforeEach(() => {
-      mockRequest = {} as any;
+      jest.spyOn(testController, 'mockFn').mockRejectedValueOnce(new HttpError(404, 'Not Found'));
+      testController.mockRoute = testController.mockRoute.bind(testController);
+      testController.mockRouteNoHttpError = testController.mockRouteNoHttpError.bind(testController);
       mockResponse = getMockResponse();
-      httpError = new HttpError(404, 'Not Found');
     });
 
     it('adds async httpError handling by default', async () => {
-      jest.spyOn(testController, 'mockFn').mockRejectedValueOnce(httpError);
-      await testController.mockRoute(mockRequest, mockResponse);
+      curriers = getControllerDoc(testController).routes.get('mockRoute').curriers;
+      await curriers[0](testController.mockRoute)({} as Request, mockResponse, {});
       expect(mockResponse.status).toHaveBeenCalledWith(404);
     });
 
     it('allows disabling the async HttpError handling', async () => {
-      jest.spyOn(testController, 'mockFn').mockRejectedValueOnce(httpError);
-      await testController.mockRouteNoHttpError(mockRequest, mockResponse);
-      expect(testController.errorFn).toHaveBeenCalledWith(httpError);
+      curriers = getControllerDoc(testController).routes.get('mockRouteNoHttpError').curriers;
+      expect(curriers.length).toBe(1);
     });
   });
 });

@@ -1,4 +1,4 @@
-import { Evaluator } from '../Types/Evaluator.Type';
+import { Evaluator } from '..';
 
 export interface DocTsValidator {
   validatorDoc: ValidatorDoc;

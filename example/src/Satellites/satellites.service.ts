@@ -1,5 +1,6 @@
-import SatelliteModel, { SatId } from './satellites.model';
 import sats from './satellites.json';
+import { HttpError } from '../../../src';
+import SatelliteModel, { SatId } from './satellites.model';
 
 class SatelliteService {
   satellites: SatelliteModel[] = [];
@@ -14,13 +15,18 @@ class SatelliteService {
     return this.satellites.length - 1;
   }
 
-  isValidSatId = (id: SatId): boolean => id <= this.satCount && id >= 0;
+  throwIfNotFound(id: SatId): void {
+    if (!(id <= this.satCount && id >= 0)) {
+      throw new HttpError(404, `A satellite with the id: ${id} does not exist.`);
+    }
+  }
 
   getAll(): SatelliteModel[] {
     return this.satellites;
   }
 
   getOne(id: SatId): SatelliteModel {
+    this.throwIfNotFound(id);
     return this.satellites[id];
   }
 
@@ -31,8 +37,8 @@ class SatelliteService {
   }
 
   patchOne(newSat: SatelliteModel): SatelliteModel {
-    const oldSat = this.satellites[newSat.id];
-    const patchedSat = { ...oldSat, ...newSat };
+    this.throwIfNotFound(newSat.id);
+    const patchedSat = { ...this.satellites[newSat.id], ...newSat };
     this.satellites[newSat.id] = patchedSat;
     return patchedSat;
   }

@@ -4,7 +4,7 @@ export function Controller<T extends { new (...args: any[]): any }>(path: string
   return (target: T): T => {
     const controllerDoc = getControllerDoc(target.prototype);
     controllerDoc.path = path;
-    controllerDoc.middleware = [...controllerDoc.middleware, ...middleware];
+    controllerDoc.middleware = [...middleware, ...controllerDoc.middleware];
     return target;
   };
 }

@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { HttpError, docTsLogger, uncaughtExceptionMessage } from '..';
+import { HttpError, docTsLogger, uncaughtExceptionMessage, Handler } from '..';
 
 export const handleHttpError = (error: Error, res: Response): void => {
   if (res.headersSent) return;
@@ -9,4 +9,15 @@ export const handleHttpError = (error: Error, res: Response): void => {
     docTsLogger.log(uncaughtExceptionMessage(error));
     res.status(500).send({ code: 500, message: 'Oops something went wrong.' });
   }
+};
+
+export const curryHttpErrorHandler = (originalMethod: Handler): Handler => {
+  return async function (...args: any[]): Promise<any> {
+    const res = args[1];
+    try {
+      return await originalMethod.apply(this, args);
+    } catch (err) {
+      handleHttpError(err, res);
+    }
+  };
 };

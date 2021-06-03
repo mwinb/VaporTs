@@ -1,29 +1,27 @@
 import {
+  Handler,
   Evaluator,
   HttpError,
+  Curryware,
   docTsLogger,
+  getRouteDoc,
   RequestField,
+  VoidDecorator,
   ValidateConfig,
-  handleHttpError,
+  getControllerDoc,
   isDocTsValidator,
-  getArrayEvaluators,
+  getConfiguredEvaluators,
   isJsonObjectEvaluator,
   DEFAULT_VALIDATE_CONFIG,
   createValidatorEvaluator,
   invalidRequestFieldMessage,
-  PropertyDescriptorDecorator,
   invalidDocTsValidatorWarningMessage
 } from '..';
 
-const getEvaluatorMethodOverride = (
-  evaluator: Evaluator,
-  ogMethod: (...args: any[]) => void | Promise<void>,
-  requestFieldToValidate: string
-): ((...args: any[]) => Promise<void>) => {
-  return async function (...args: any[]) {
-    const requestField = args[0][requestFieldToValidate];
-    const response = args[1];
-    try {
+const getValidationHandlerCurryware = (evaluator: Evaluator, requestFieldToValidate: string): Curryware => {
+  return (ogMethod: Handler) => {
+    return async function (...args: any[]) {
+      const requestField = args[0][requestFieldToValidate];
       if (requestField !== undefined) {
         evaluator(requestField);
         return await ogMethod.apply(this, args);
@@ -31,20 +29,8 @@ const getEvaluatorMethodOverride = (
         docTsLogger.log(invalidRequestFieldMessage(requestFieldToValidate, ogMethod.name));
         throw new HttpError(501, 'Not implemented.');
       }
-    } catch (error) {
-      return handleHttpError(error, response);
-    }
+    };
   };
-};
-
-const applyEvaluator = (
-  evaluator: Evaluator,
-  propertyDescriptor: PropertyDescriptor,
-  requestField: RequestField
-): PropertyDescriptor => {
-  const ogMethod = propertyDescriptor.value;
-  propertyDescriptor.value = getEvaluatorMethodOverride(evaluator, ogMethod, requestField);
-  return propertyDescriptor;
 };
 
 const warnAndReturnJsonEvaluator = (validator: Record<string, any>): Evaluator => {
@@ -58,8 +44,8 @@ const getRouteEvaluator = (validator: Record<string, any>, strip: boolean): Eval
     : warnAndReturnJsonEvaluator(validator);
 };
 
-const getValidateEvaluator = (validator: Record<string, any>, validateConfig: ValidateConfig): Evaluator => {
-  return getArrayEvaluators({
+const getValidationEvaluator = (validator: Record<string, any>, validateConfig: ValidateConfig): Evaluator => {
+  return getConfiguredEvaluators({
     ...validateConfig,
     evaluators: [getRouteEvaluator(validator, validateConfig.strip)]
   }).pop();
@@ -69,10 +55,15 @@ export const Validate = (
   validator: Record<string, any>,
   requestFieldToValidate: RequestField,
   validateConfig: ValidateConfig = {}
-): PropertyDescriptorDecorator => {
+): VoidDecorator => {
   const config = { ...DEFAULT_VALIDATE_CONFIG, ...validateConfig };
-  const evaluator = getValidateEvaluator(validator, config);
-  return (_target: Record<string, any>, _propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
-    return applyEvaluator(evaluator, descriptor, requestFieldToValidate);
+  const evaluator = getValidationEvaluator(validator, config);
+  return (target: Record<string, any>, propertyKey: string) => {
+    const controllerDoc = getControllerDoc(target);
+    const routeDoc = getRouteDoc(controllerDoc, propertyKey);
+    controllerDoc.routes.set(propertyKey, {
+      ...routeDoc,
+      curriers: [getValidationHandlerCurryware(evaluator, requestFieldToValidate), ...routeDoc.curriers]
+    });
   };
 };

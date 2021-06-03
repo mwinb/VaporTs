@@ -4,7 +4,6 @@ import {
   MockSubValidatorWithOptionalSubValidator
 } from '../__mocks__/ValidatorMocks';
 import { createValidatorEvaluator, Evaluator, isStringEvaluator } from '..';
-
 describe('Get Validator Evaluator', () => {
   it('returns an evaluator for a DocTsValidator', () => {
     expect(typeof createValidatorEvaluator(new MockValidatorClass() as any, true) === 'function').toBeTruthy();
@@ -33,18 +32,11 @@ describe('Get Validator Evaluator', () => {
           stringField: 'string'
         });
       } catch (error) {
-        console.log(error);
         thrownError = error;
       }
       expect(thrownError).toBeDefined();
       expect(thrownError.message).toBe(
-        `subValidator is a required field in ${JSON.stringify(
-          {
-            stringField: 'string'
-          },
-          null,
-          2
-        )}`
+        `subValidator is a required field in ${JSON.stringify({ stringField: 'string' }, null, 2)}`
       );
     });
   });

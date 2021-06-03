@@ -1,19 +1,21 @@
+import morgan from 'morgan';
 import express from 'express';
-import { DocApp } from '@mwinberry/doc-ts';
+import { DocApp, DocAppConfig } from '../../src';
 import SatelliteController from './Satellites/satellites.controller';
 
 const port = 5000;
-const expressApp = express();
-const appV1 = new DocApp({
-  path: '/v1',
+const config: DocAppConfig = {
   showApi: true,
+  expressApplication: express(),
   controllers: [new SatelliteController()],
-  expressApplication: expressApp,
-  router: express.Router(),
-  middleware: [express.json()]
-});
+  middleware: [express.json(), morgan('combined')]
+};
 
-expressApp.listen(port, () => {
-  console.log(`App listening on the port ${port}`);
+const appV1 = new DocApp(config);
+const appV2 = new DocApp({ ...config, path: '/v2' });
+
+appV1.expressApplication.listen(port, () => {
+  console.log(`DocApp listening on the port ${port}`);
   if (appV1.showApi) console.log(`View v1: http://localhost:${port}${appV1.path}`);
+  if (appV2.showApi) console.log(`View v2: http://localhost:${port}${appV2.path}`);
 });
