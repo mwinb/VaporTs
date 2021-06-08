@@ -9,6 +9,11 @@ DocTs is a minimal framework built to support a simple and only slightly opinion
 `npm i --save @mwinberry/doc-ts`
 
 ---
+### Example application
+- https://github.com/mwinb/DocTS/tree/main/example
+### Starter with mongo
+- https://github.com/mwinb/docts_mongo_starter
+---
 
 # Decorators
 
@@ -354,7 +359,5 @@ Extends the Error class and is caught with the HttpError handler decorator or by
 ```typescript
 throw new HttpError(404, 'Not Found');
 ```
-
-### Example application @ https://github.com/mwinb/DocTS/tree/main/example
 
 #### Created By Michael Winberry
