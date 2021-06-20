@@ -1,4 +1,4 @@
-# Vaporjs
+# VaporTs
 
 ## Description:
 
