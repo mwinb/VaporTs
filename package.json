@@ -1,5 +1,5 @@
 {
-  "name": "vaporjs",
+  "name": "vaports",
   "version": "0.0.0",
   "description": "An experimental extension of DocTs that aims to create an event driven express and typescript based framework that allows for loosely coupled and easy to test servers.",
   "main": "lib/index.js",
