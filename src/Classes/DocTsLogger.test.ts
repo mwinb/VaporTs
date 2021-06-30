@@ -20,4 +20,10 @@ describe('DocTs Logger', () => {
     testLogger.log('log');
     expect(mockLogger).toHaveBeenCalledTimes(1);
   });
+
+  it('allows for setting the logger fn', () => {
+    const newLogger = jest.fn();
+    testLogger.log = newLogger;
+    expect(testLogger.log).toEqual(newLogger);
+  });
 });

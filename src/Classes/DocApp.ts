@@ -31,17 +31,9 @@ export class DocApp implements DocAppConfig {
     this._controllers = controllers;
   }
 
-  constructor({
-    path = '',
-    controllers,
-    showApi = false,
-    middleware = [],
-    expressApplication,
-    logger = console.log
-  }: DocAppConfig) {
+  constructor({ path = '', controllers, showApi = false, middleware = [], expressApplication }: DocAppConfig) {
     this.path = path;
     this.showApi = showApi;
-    docTsLogger.log = logger;
     this.middleware = middleware;
     this.controllers = controllers;
     this.expressApplication = expressApplication;
