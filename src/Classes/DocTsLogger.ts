@@ -1,6 +1,6 @@
 import { LoggerFn } from '..';
 
-export class DocTsLogger {
+export class DocLogger {
   constructor(private loggerFn: LoggerFn = console.log) {}
 
   get log() {
@@ -12,4 +12,4 @@ export class DocTsLogger {
   }
 }
 
-export const docTsLogger = new DocTsLogger();
+export const docLogger = new DocLogger();
