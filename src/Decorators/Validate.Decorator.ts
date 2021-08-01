@@ -3,7 +3,7 @@ import {
   Evaluator,
   HttpError,
   Curryware,
-  docTsLogger,
+  docLogger,
   getRouteDoc,
   RequestField,
   VoidDecorator,
@@ -26,7 +26,7 @@ const getValidationHandlerCurryware = (evaluator: Evaluator, requestFieldToValid
         evaluator(requestField);
         return await ogMethod.apply(this, args);
       } else {
-        docTsLogger.log(invalidRequestFieldMessage(requestFieldToValidate, ogMethod.name));
+        docLogger.log(invalidRequestFieldMessage(requestFieldToValidate, ogMethod.name));
         throw new HttpError(501, 'Not implemented.');
       }
     };
@@ -34,7 +34,7 @@ const getValidationHandlerCurryware = (evaluator: Evaluator, requestFieldToValid
 };
 
 const warnAndReturnJsonEvaluator = (validator: Record<string, any>): Evaluator => {
-  docTsLogger.log(invalidDocTsValidatorWarningMessage(validator));
+  docLogger.log(invalidDocTsValidatorWarningMessage(validator));
   return isJsonObjectEvaluator;
 };
 

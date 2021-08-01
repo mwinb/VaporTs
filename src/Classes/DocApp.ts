@@ -1,6 +1,6 @@
 import {
   RouteDoc,
-  docTsLogger,
+  docLogger,
   DocAppConfig,
   DocTsController,
   initializeRoutes,
@@ -31,17 +31,9 @@ export class DocApp implements DocAppConfig {
     this._controllers = controllers;
   }
 
-  constructor({
-    path = '',
-    controllers,
-    showApi = false,
-    middleware = [],
-    expressApplication,
-    logger = console.log
-  }: DocAppConfig) {
+  constructor({ path = '', controllers, showApi = false, middleware = [], expressApplication }: DocAppConfig) {
     this.path = path;
     this.showApi = showApi;
-    docTsLogger.log = logger;
     this.middleware = middleware;
     this.controllers = controllers;
     this.expressApplication = expressApplication;
@@ -57,7 +49,7 @@ export class DocApp implements DocAppConfig {
 
   initializeControllers(): void {
     this.controllers.forEach(controller => {
-      docTsLogger.log(initializeControllersMessage(this.path));
+      docLogger.log(initializeControllersMessage(this.path));
       initControllerMiddleware(this.expressApplication, controller);
       initializeRoutes(this.path, this.expressApplication, controller);
       this.routeDocs = [...this.routeDocs, ...getRoutesDocumentation(controller)];

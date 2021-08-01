@@ -1,7 +1,7 @@
 import { Evaluator } from '..';
 
 export const invalidDocTsValidatorWarningMessage = (validator: Record<string, any>): string => {
-  return `\nDocTs: ${validator} is not a valid DocTsValidator.\nField will be validated with isJsonObject validator\n`;
+  return `${validator} is not a valid DocTsValidator.\nField will be validated with isJsonObject validator\n`;
 };
 
 export const requiredFieldWarningMessage = (key: string, object: Record<string, any>): string => {
@@ -13,17 +13,26 @@ export const failedEvaluatorMessage = (evaluator: Evaluator, object: Record<stri
 };
 
 export const invalidRequestFieldMessage = (requestFieldToValidate: string, functionName: string): string => {
-  return `\nDocTs: Invalid request field ${requestFieldToValidate} in Validate @ ${functionName}. \n`;
+  return `Invalid request field ${requestFieldToValidate} in Validate @ ${functionName}. \n`;
 };
 
 export const uncaughtExceptionMessage = (error: Error): string => {
-  return `\nDoc Ts: Uncaught Exception Error: ${error.message}\n${error.stack}\n`;
+  return `Uncaught Exception Error: ${error.message}\n${error.stack}\n`;
 };
 
 export const initializeControllersMessage = (path?: string): string => {
-  return `DocTs: Initializing ${path || '/'} controllers.`;
+  return `Initializing ${path || '/'} controllers.`;
 };
 
 export const invalidControllerMessage = (controller: Record<string, any>): string => {
-  return `DocTs: ${controller} is not a valid DocTsController. Ensure that it is decorated with @Controller.`;
+  return `${controller} is not a valid DocTsController. Ensure that it is decorated with @Controller.`;
+};
+
+export const bindingRouteMessage = (
+  controllerName: string,
+  controllerMethod: string,
+  routeVerb: string,
+  fullPath: string
+): string => {
+  return `Binding ${controllerName}.${controllerMethod} to ${routeVerb} @ ${fullPath}`;
 };
