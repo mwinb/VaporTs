@@ -1,14 +1,13 @@
 import { LoggerFn } from '..';
 
 export class DocLogger {
-  constructor(private loggerFn: LoggerFn = console.log) {}
-
-  get log() {
-    return this.loggerFn;
+  public prefix: string;
+  constructor(private loggerFn: LoggerFn = console.log) {
+    this.prefix = 'DocTs';
   }
 
-  set log(newLogger: LoggerFn) {
-    this.loggerFn = newLogger;
+  log(message?: any, ...optionalParams: any[]): void {
+    this.loggerFn(`[${new Date().toISOString()}] ${this.prefix}: ${message}`, ...optionalParams);
   }
 }
 

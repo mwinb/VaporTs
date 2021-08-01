@@ -1,6 +1,6 @@
 import {
   RouteDoc,
-  docTsLogger,
+  docLogger,
   DocAppConfig,
   DocTsController,
   initializeRoutes,
@@ -49,7 +49,7 @@ export class DocApp implements DocAppConfig {
 
   initializeControllers(): void {
     this.controllers.forEach(controller => {
-      docTsLogger.log(initializeControllersMessage(this.path));
+      docLogger.log(initializeControllersMessage(this.path));
       initControllerMiddleware(this.expressApplication, controller);
       initializeRoutes(this.path, this.expressApplication, controller);
       this.routeDocs = [...this.routeDocs, ...getRoutesDocumentation(controller)];

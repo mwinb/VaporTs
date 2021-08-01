@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { RouteDoc, getControllerDoc, docTsLogger, Curryware, Middleware, ControllerDoc } from '..';
+import { RouteDoc, getControllerDoc, docLogger, Curryware, Middleware, ControllerDoc, bindingRouteMessage } from '..';
 
 export function getRouteMethodNames(controller: Record<string, any>): string[] {
   return Object.getOwnPropertyNames(Object.getPrototypeOf(controller)).filter(name => {
@@ -58,8 +58,8 @@ export function initializeRoutes(basePath: string, router: Router, controller: R
       const routeDoc = controllerDoc.routes.get(method);
       const boundMethod = getBoundFunction(controller, method);
       routeDoc.paths.map(path => {
-        docTsLogger.log(
-          `DocTs: Binding ${controller.constructor.name}.${method} to ${routeDoc.method} @ ${controllerDoc.path + path}`
+        docLogger.log(
+          bindingRouteMessage(controller.constructor.name, method, routeDoc.method, `${controllerDoc.path}${path}`)
         );
         router[routeDoc.method.toLowerCase()](
           basePath + controllerDoc.path + path,
@@ -68,5 +68,4 @@ export function initializeRoutes(basePath: string, router: Router, controller: R
         );
       });
     });
-  docTsLogger.log('\n');
 }

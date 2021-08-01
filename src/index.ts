@@ -1,7 +1,7 @@
 // Classes
 export * from './Classes/DocApp';
 export * from './Classes/HttpError';
-export { docLogger as docTsLogger } from './Classes/DocTsLogger';
+export { docLogger } from './Classes/DocTsLogger';
 
 // Curryware
 export * from './Curryware/ResponseHandler.Curryware';
