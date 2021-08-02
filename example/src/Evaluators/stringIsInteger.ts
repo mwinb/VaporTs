@@ -1,4 +1,4 @@
-import { HttpError } from '@mwinberry/doc-ts';
+import { HttpError } from 'vaports';
 
 export const stringIsInteger = (arg: any): boolean => {
   if (!Number.isInteger(+arg)) {

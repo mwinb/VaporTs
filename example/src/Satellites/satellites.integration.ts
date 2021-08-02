@@ -1,5 +1,5 @@
 import express from 'express';
-import { DocApp } from '@mwinberry/doc-ts';
+import { VaporApp } from 'vaports';
 import supertest, { SuperTest, Test } from 'supertest';
 import SatelliteController from './satellites.controller';
 
@@ -8,9 +8,8 @@ const expressApp = express();
 const satController = new SatelliteController();
 let appRequest: SuperTest<Test>;
 
-new DocApp({
+new VaporApp({
   showApi: false,
-  logger: jest.fn(),
   controllers: [satController],
   middleware: [express.json()],
   expressApplication: expressApp

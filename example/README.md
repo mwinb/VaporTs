@@ -1,4 +1,4 @@
-# DocTS Example
+# VaporTs Example
 
 Install  
 `npm i`

@@ -1,4 +1,4 @@
-import { String, Number } from '@mwinberry/doc-ts';
+import { String, Number } from 'vaports';
 import { stringIsInteger } from '../Evaluators/stringIsInteger';
 import { SatName, SatLat, SatLon, orbit, SatStatus, SatId } from '../Satellites/satellites.model';
 
