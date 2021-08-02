@@ -1,19 +1,18 @@
-# DocTS
+# VaporTs
 
-DocTs is a minimal framework built to support a simple and only slightly opinionated object oriented approach to implementing and unit testing Expressjs applications. DocTS is primarily focused on the use of two primary decorators. The Controller decorator, which provides a simple way to describe express controllers, their paths, and middleware. The Route decorator, which provides simple HTTP method declaration, extension to the Controller path, individual middleware, and optional error, response, and validation handling.
+VaporTs is a minimal framework built to support a simple and only slightly opinionated object oriented approach to implementing and unit testing Expressjs applications. VaporTs is primarily focused on the use of two primary decorators. The Controller decorator, which provides a simple way to describe express controllers, their paths, and middleware. The Route decorator, which provides simple HTTP method declaration, extension to the Controller path, individual middleware, and optional error, response, and validation handling.
 
 ---
 
 ## Installation:
 
-`npm i --save @mwinberry/doc-ts`
+`npm i --save vaports`
 
 ---
+
 ### Example application
-- https://github.com/mwinb/DocTS/tree/main/example
-### Starter with mongo
-- https://github.com/mwinb/docts_mongo_starter
----
+
+- https://github.com/mwinb/VaporTs/tree/main/example
 
 # Decorators
 
@@ -83,9 +82,9 @@ class ExampleController {
 
 ### handleErrors
 
-Error handling is applied to all Routes and Validators by default, but may be disabled in the `RouteParams`. This handler wraps asynchronous Route or Validate decorated functions in a try catch that listens for an HttpError to be thrown. The HttpError takes in the code and the response message. When caught by the handler, the express response status is set to the HttpError code and a json object with the code and message are sent. All non HttpErrors are caught and handled with a 500 and a non-specific error message. Non HttpErrors are also logged with the DocApp logger (default: `console.log`);
+Error handling is applied to all Routes and Validators by default, but may be disabled in the `RouteParams`. This handler wraps asynchronous Route or Validate decorated functions in a try catch that listens for an HttpError to be thrown. The HttpError takes in the code and the response message. When caught by the handler, the express response status is set to the HttpError code and a json object with the code and message are sent. All non HttpErrors are caught and handled with a 500 and a non-specific error message. Non HttpErrors are also logged with the VaporApp logger;
 
-- Using `@Route` maintains the class method functionality and only alters the bound method prior to being applied to the express route see the [example](https://github.com/mwinb/DocTS/tree/main/example) unit and integration tests for functionality.
+- Using `@Route` maintains the class method functionality and only alters the bound method prior to being applied to the express route see the [example](https://github.com/mwinb/VaporTs/tree/main/example) unit and integration tests for functionality.
 
 ### Example - response (caught):
 
@@ -103,7 +102,7 @@ res.status(500).send({ code: 500, message: 'Oops something went wrong.' });
 
 Response handling is applied to all Routes by default, but may be disabled in the `RouteParams`. This handler wraps an `@Route` decorated method. When the decorated method returns data it is handled with `res.status` and `res.send`. For void methods `res.sendStatus` is used instead. The default status code is `200`, but can be changed in the `RouteParams`.
 
-- Using `@Route` maintains the class functionality and only alters the bound method prior to being applied to the express route see the [examples](https://github.com/mwinb/DocTS/tree/main/example) unit and integration tests for functionality.
+- Using `@Route` maintains the class functionality and only alters the bound method prior to being applied to the express route see the [examples](https://github.com/mwinb/VaporTs/tree/main/example) unit and integration tests for functionality.
 
 ### Example:
 
@@ -128,7 +127,7 @@ class ExampleController {
 
 ## Validate
 
-In order to use `@Validate` an instance of a class that uses one of the Validation Decorators is needed. `@Validate` Handles all validation failures with the HttpError handler. See the DocTsValidator Class description below.
+In order to use `@Validate` an instance of a class that uses one of the Validation Decorators is needed. `@Validate` Handles all validation failures with the HttpError handler. See the VaporValidator Class description below.
 
 - `@Validate` does not alter the original class method.
 - `@Validate` only works with `@Route` (order in relation to `@Route` does not matter)
@@ -136,8 +135,8 @@ In order to use `@Validate` an instance of a class that uses one of the Validati
 
 ### Parameters:
 
-- `validator: DocTsValidator` (required)
-  - The DocTsValidator meta data is applied to any class that uses a validator decorator.
+- `validator: VaporValidator` (required)
+  - The VaporValidator meta data is applied to any class that uses a validator decorator.
   - Throws an `HttpError` with a `400` status and information about the value and field that failed.
 - `requestFieldToValidate: string` (required)
   - The Express Request(req) field upon which validation will be run:
@@ -177,7 +176,7 @@ class ExampleController {
 
 ## Validators
 
-Field decorators can be used to create a DocTsValidator needed in the Validate Decorator. There are two types of Validators:
+Field decorators can be used to create a VaporValidator needed in the Validate Decorator. There are two types of Validators:
 
 ## Primitive
 
@@ -216,7 +215,7 @@ Field decorators can be used to create a DocTsValidator needed in the Validate D
 ### Example
 
 ```typescript
-class ExampleDocTsValidator {
+class ExampleVaporValidator {
   @String({ evaluators: [isObjectId] })
   id: ObjectId;
 
@@ -243,7 +242,7 @@ class ExampleDocTsValidator {
 
 - Params
 
-  - `validator: DocTsValidator` (required)
+  - `validator: VaporValidator` (required)
   - `validationConfig: ValidatorConfig` (required)
     - `isArray: boolean` (optional, default: false)
       - Adds Array Validation to the field.
@@ -259,7 +258,7 @@ class ExampleDocTsValidator {
     - `strip: boolean` (optional, default: true)
       - Removes any fields not specified in the provided Validator.
 
-- Defaults to JsonObject validation if DocTsValidator is not passed in the validator param.
+- Defaults to JsonObject validation if VaporValidator is not passed in the validator param.
 
 ### `@SetPropertyEvaluators`
 
@@ -279,8 +278,8 @@ class SpecializedValidators {
   })
   id: ObjectId;
 
-  @Validator(new ExampleDocTsValidator(), { isArray: true })
-  examples: ExampleDocTsValidator[];
+  @Validator(new ExampleVaporValidator(), { isArray: true })
+  examples: ExampleVaporValidator[];
 }
 ```
 
@@ -303,21 +302,18 @@ class CustomValidatorExample {
 
 # Classes
 
-## DocApp
+## VaporApp
 
-The DocApp class is responsible for binding all routes, methods, and middleware to an express application.
+The VaporApp class is responsible for binding all routes, methods, and middleware to an express application.
 
 ### Parameters:
 
-- `DocAppConfig: {}`
+- `VaporConfig: {}`
   - `path: string` (optional, defaults to root)
   - `showApi: boolean` (optional, default: false)
     - This provides a simple html page @GET/path that lists all routes as links and their respective methods.
   - `middleware: Middleware[]` (optional)
     - Sets the path middleware.
-  - `logger: LoggerFn` (optional, default: console.log)
-    - Allows user to redirect with a custom logger function.
-    - `type LoggerFn = (message: any, ...additionalParams: any[]) => void | Promise<void>`
   - `controllers: Controller[]` (required)
     - any class with the Controller Decorator.
     - Throws error with information about the class if a undecorated class is passed
@@ -329,7 +325,7 @@ The DocApp class is responsible for binding all routes, methods, and middleware 
 // server.ts
 const port = 5000;
 const expressApp = express();
-const appV1 = new DocApp({
+const appV1 = new VaporApp({
   path: '/v1',
   showApi: true,
   middleware: [pathMiddleware, express.json()],

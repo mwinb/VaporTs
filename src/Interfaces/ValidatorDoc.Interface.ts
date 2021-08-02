@@ -1,6 +1,6 @@
 import { Evaluator } from '..';
 
-export interface DocTsValidator {
+export interface VaporValidator {
   validatorDoc: ValidatorDoc;
 }
 

@@ -74,5 +74,5 @@ export class MockValidatorClass {
 
 export class MockValidatorClassWithNonValidatorObject {
   @Validator({})
-  nonDocTsValidatorField: any;
+  nonValidatorField: any;
 }

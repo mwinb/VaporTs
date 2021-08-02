@@ -1,7 +1,7 @@
 import {
   HttpError,
   Evaluator,
-  DocTsValidator,
+  VaporValidator,
   getValidatorDoc,
   ValidatorFieldConfig,
   failedEvaluatorMessage,
@@ -63,7 +63,7 @@ const stripFields = (objectToStrip: Record<string, any>, fieldValidators: Map<st
   });
 };
 
-export const createValidatorEvaluator = (arg: DocTsValidator, strip: boolean): Evaluator => {
+export const createValidatorEvaluator = (arg: VaporValidator, strip: boolean): Evaluator => {
   const validatorDoc = getValidatorDoc(arg);
   return (objectToEvaluate: Record<string, any>) => {
     strip && stripFields(objectToEvaluate, validatorDoc.fieldValidators);

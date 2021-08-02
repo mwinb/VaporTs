@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { ControllerDoc, RouteDoc, DocTsController } from '..';
+import { ControllerDoc, RouteDoc, VaporController } from '..';
 
 export function getControllerDoc(target: Record<string, any>): ControllerDoc {
   if (!target.controllerDoc) {
@@ -17,6 +17,6 @@ export function initControllerMiddleware(router: Router, controller: Record<stri
   if (routeDoc.middleware.length) router.use(routeDoc.path, ...routeDoc.middleware);
 }
 
-export const isDocTsController = (object: Record<string, any>): object is DocTsController => {
+export const isVaporController = (object: Record<string, any>): object is VaporController => {
   return 'controllerDoc' in Object.getPrototypeOf(object);
 };

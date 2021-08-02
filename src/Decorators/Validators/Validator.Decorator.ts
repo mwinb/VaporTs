@@ -1,18 +1,18 @@
 import {
   JsonObject,
-  docLogger,
-  DocTsValidator,
+  vaporLogger,
+  VaporValidator,
   ValidatorConfig,
-  isDocTsValidator,
+  isVaporValidator,
   ValidatorFieldConfig,
   SetPropertyEvaluators,
   createValidatorEvaluator,
   DEFAULT_VALIDATOR_FIELD_CONFIG,
-  invalidDocTsValidatorWarningMessage
+  invalidValidatorWarningMessage
 } from '../..';
 
 export const EvaluateValidator = (
-  validator: DocTsValidator,
+  validator: VaporValidator,
   validatorConfig: ValidatorFieldConfig,
   strip: boolean
 ): PropertyDecorator => {
@@ -26,13 +26,13 @@ export const warnAndEvaluateAsJsonObject = (
   validator: Record<string, any>,
   validatorConfig: ValidatorFieldConfig
 ): PropertyDecorator => {
-  docLogger.log(invalidDocTsValidatorWarningMessage(validator));
+  vaporLogger.log(invalidValidatorWarningMessage(validator));
   return JsonObject(validatorConfig);
 };
 
 export const Validator = (validator: Record<string, any>, validatorConfig: ValidatorConfig = {}): PropertyDecorator => {
   const config = { ...DEFAULT_VALIDATOR_FIELD_CONFIG, ...validatorConfig };
-  return isDocTsValidator(validator)
+  return isVaporValidator(validator)
     ? EvaluateValidator(validator, config, config.strip)
     : warnAndEvaluateAsJsonObject(validator, config);
 };

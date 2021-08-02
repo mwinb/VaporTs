@@ -1,10 +1,10 @@
 import { Application } from 'express';
-import { DocApp, getRoutesDocumentation } from '..';
+import { VaporApp, getRoutesDocumentation } from '..';
 import { getMockResponse } from '../__mocks__/Express/responseMock';
 import { mockMiddleware } from '../__mocks__/Express/mockMiddleware';
 import { MockControllerWithRoutes } from '../__mocks__/controllerMocks';
 
-let testDocApp: DocApp;
+let testDocApp: VaporApp;
 let mockExpressApp: Application;
 
 describe('Constructor', () => {
@@ -13,13 +13,13 @@ describe('Constructor', () => {
 
   beforeEach(() => {
     mockExpressApp = { use: jest.fn(), get: jest.fn() } as any;
-    initializeMiddleware = jest.spyOn(DocApp.prototype, 'initializeControllers');
-    initializeControllers = jest.spyOn(DocApp.prototype, 'initializeMiddlewares');
+    initializeMiddleware = jest.spyOn(VaporApp.prototype, 'initializeControllers');
+    initializeControllers = jest.spyOn(VaporApp.prototype, 'initializeMiddlewares');
   });
 
   describe('All Required Set', () => {
     beforeEach(() => {
-      testDocApp = new DocApp({
+      testDocApp = new VaporApp({
         controllers: [new MockControllerWithRoutes()],
         expressApplication: mockExpressApp
       });
@@ -52,7 +52,7 @@ describe('Constructor', () => {
 
   describe('No Api', () => {
     beforeEach(() => {
-      testDocApp = new DocApp({
+      testDocApp = new VaporApp({
         showApi: true,
         controllers: [new MockControllerWithRoutes()],
         middleware: [mockMiddleware],
@@ -82,7 +82,7 @@ describe('Constructor', () => {
 
   describe('Custom Path and show api', () => {
     beforeEach(() => {
-      testDocApp = new DocApp({
+      testDocApp = new VaporApp({
         path: '/testApp',
         showApi: true,
         controllers: [new MockControllerWithRoutes()],
@@ -98,10 +98,10 @@ describe('Constructor', () => {
   });
 
   describe('Invalid controllers', () => {
-    it('throws an error if a provided controller is not a DocTsController', () => {
+    it('throws an error if a provided controller is not a VaporController', () => {
       let thrownError;
       try {
-        testDocApp = new DocApp({
+        testDocApp = new VaporApp({
           path: '/testApp',
           showApi: true,
           controllers: [{}],

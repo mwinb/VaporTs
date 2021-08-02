@@ -1,7 +1,7 @@
 // Classes
-export * from './Classes/DocApp';
+export * from './Classes/VaporApp';
 export * from './Classes/HttpError';
-export { docLogger } from './Classes/DocTsLogger';
+export { vaporLogger } from './Classes/VaporLogger';
 
 // Curryware
 export * from './Curryware/ResponseHandler.Curryware';
@@ -25,7 +25,7 @@ export * from './Evaluators/String.Evaluator';
 export * from './Evaluators/Boolean.Evaluator';
 export * from './Evaluators/Validator.Evaluator';
 export * from './Evaluators/JsonObject.Evaluator';
-export * from './Evaluators/DocTsValidator.Evaluator';
+export * from './Evaluators/VaporValidator.Evaluator';
 
 // Helpers
 export * from './Helpers/Route.Helpers';
@@ -37,7 +37,7 @@ export * from './Helpers/ValidatorDoc.Helpers';
 // Interfaces
 export * from './Interfaces/RouteDoc.Interface';
 export * from './Interfaces/RouteParams.Interface';
-export * from './Interfaces/DocAppConfig.Interface';
+export * from './Interfaces/VaporConfig.Interface';
 export * from './Interfaces/ValidatorDoc.Interface';
 export * from './Interfaces/ControllerDoc.Interface';
 

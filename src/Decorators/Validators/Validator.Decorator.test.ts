@@ -9,10 +9,10 @@ describe('ValidatorObject', () => {
     validatorFieldEvaluator = getValidatorDoc(validatorClass).fieldValidators.get('validatorField').evaluators[0];
   });
 
-  it('should use the isJsonObject validator if @ValidatorObject is called with a non DocTsValidator', () => {
+  it('should use the isJsonObject validator if @ValidatorObject is called with a non VaporValidator', () => {
     expect(
       getValidatorDoc(new MockValidatorClassWithNonValidatorObject())
-        .fieldValidators.get('nonDocTsValidatorField')
+        .fieldValidators.get('nonValidatorField')
         .evaluators.pop()
     ).toEqual(isJsonObjectEvaluator);
   });

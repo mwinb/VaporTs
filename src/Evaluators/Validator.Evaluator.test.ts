@@ -5,7 +5,7 @@ import {
 } from '../__mocks__/ValidatorMocks';
 import { createValidatorEvaluator, Evaluator, isStringEvaluator } from '..';
 describe('Get Validator Evaluator', () => {
-  it('returns an evaluator for a DocTsValidator', () => {
+  it('returns an evaluator for a VaporValidator', () => {
     expect(typeof createValidatorEvaluator(new MockValidatorClass() as any, true) === 'function').toBeTruthy();
   });
 

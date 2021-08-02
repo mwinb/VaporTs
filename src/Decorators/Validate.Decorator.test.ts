@@ -19,7 +19,7 @@ describe('ValidateRoute', () => {
     mockResponse = getMockResponse();
   });
 
-  it('returns a method that validates the provider DocTsValidator against an Express.Request.body object', async () => {
+  it('returns a method that validates the provider VaporValidator against an Express.Request.body object', async () => {
     await validationHandler({ body: { stringField: 'String' } }, mockResponse);
     expect(mockRouteValidatorController.mockFn).toHaveBeenCalledTimes(1);
   });
@@ -50,7 +50,7 @@ describe('ValidateRoute', () => {
     expect(mockRouteValidatorController.mockFn).toHaveBeenCalledTimes(1);
   });
 
-  it('uses isJsonObjectEvaluator if an invalid DocTsEvaluator is passed', async () => {
+  it('uses isJsonObjectEvaluator if an invalid VaporEvaluator is passed', async () => {
     validationHandler = getWrappedRouteMethod(
       getRouteDoc(controllerDoc, 'mockInvalidValidatorRoute').curriers,
       mockRouteValidatorController.mockInvalidValidatorRoute.bind(mockRouteValidatorController)

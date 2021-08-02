@@ -1,9 +1,9 @@
 import { LoggerFn } from '..';
 
-export class DocLogger {
+export class VaporLogger {
   public prefix: string;
   constructor(private loggerFn: LoggerFn = console.log) {
-    this.prefix = 'DocTs';
+    this.prefix = 'VaporTs';
   }
 
   log(message?: any, ...optionalParams: any[]): void {
@@ -11,4 +11,4 @@ export class DocLogger {
   }
 }
 
-export const docLogger = new DocLogger();
+export const vaporLogger = new VaporLogger();

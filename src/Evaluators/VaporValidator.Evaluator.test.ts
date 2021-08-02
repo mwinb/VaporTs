@@ -1,12 +1,12 @@
-import { isDocTsValidator } from '..';
+import { isVaporValidator } from '..';
 import { MockValidatorClass } from '../__mocks__/ValidatorMocks';
 
-describe('objectIsDocTsEvaluator', () => {
+describe('objectIsVaporValidator', () => {
   it('returns true if object has validatorDoc on prototype', () => {
-    expect(isDocTsValidator(new MockValidatorClass()));
+    expect(isVaporValidator(new MockValidatorClass()));
   });
 
   it('returns false if it does not have validatorDoc on prototype', () => {
-    expect(isDocTsValidator({})).toBeFalsy();
+    expect(isVaporValidator({})).toBeFalsy();
   });
 });

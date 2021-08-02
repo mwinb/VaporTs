@@ -6,6 +6,6 @@ export interface ControllerDoc {
   middleware: Middleware[];
 }
 
-export interface DocTsController {
+export interface VaporController {
   controllerDoc?: ControllerDoc;
 }

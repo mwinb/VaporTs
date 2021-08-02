@@ -1,7 +1,7 @@
 import { Evaluator } from '..';
 
-export const invalidDocTsValidatorWarningMessage = (validator: Record<string, any>): string => {
-  return `${validator} is not a valid DocTsValidator.\nField will be validated with isJsonObject validator\n`;
+export const invalidValidatorWarningMessage = (validator: Record<string, any>): string => {
+  return `${validator} is not a valid Validator.\nField will be validated with isJsonObject validator\n`;
 };
 
 export const requiredFieldWarningMessage = (key: string, object: Record<string, any>): string => {
@@ -25,7 +25,7 @@ export const initializeControllersMessage = (path?: string): string => {
 };
 
 export const invalidControllerMessage = (controller: Record<string, any>): string => {
-  return `${controller} is not a valid DocTsController. Ensure that it is decorated with @Controller.`;
+  return `${controller} is not a valid Controller. Ensure that it is decorated with @Controller.`;
 };
 
 export const bindingRouteMessage = (

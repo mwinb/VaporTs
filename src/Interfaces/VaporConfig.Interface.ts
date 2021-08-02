@@ -1,6 +1,6 @@
 import { Application } from 'express';
 
-export interface DocAppConfig {
+export interface VaporConfig {
   path?: string;
   showApi?: boolean;
   middleware?: any[];

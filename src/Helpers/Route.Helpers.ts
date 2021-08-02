@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { RouteDoc, getControllerDoc, docLogger, Curryware, Middleware, ControllerDoc, bindingRouteMessage } from '..';
+import { RouteDoc, getControllerDoc, vaporLogger, Curryware, Middleware, ControllerDoc, bindingRouteMessage } from '..';
 
 export function getRouteMethodNames(controller: Record<string, any>): string[] {
   return Object.getOwnPropertyNames(Object.getPrototypeOf(controller)).filter(name => {
@@ -58,7 +58,7 @@ export function initializeRoutes(basePath: string, router: Router, controller: R
       const routeDoc = controllerDoc.routes.get(method);
       const boundMethod = getBoundFunction(controller, method);
       routeDoc.paths.map(path => {
-        docLogger.log(
+        vaporLogger.log(
           bindingRouteMessage(controller.constructor.name, method, routeDoc.method, `${controllerDoc.path}${path}`)
         );
         router[routeDoc.method.toLowerCase()](

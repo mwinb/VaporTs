@@ -1,10 +1,10 @@
 import {
   RouteDoc,
-  docLogger,
-  DocAppConfig,
-  DocTsController,
+  vaporLogger,
+  VaporConfig,
+  VaporController,
   initializeRoutes,
-  isDocTsController,
+  isVaporController,
   getRoutesDocumentation,
   invalidControllerMessage,
   initControllerMiddleware,
@@ -12,26 +12,26 @@ import {
 } from '..';
 import { Request, Response, Application } from 'express';
 
-export class DocApp implements DocAppConfig {
+export class VaporApp implements VaporConfig {
   public path: string;
   public routeDocs: RouteDoc[] = [];
   public showApi: boolean;
   public middleware: any[];
   public expressApplication: Application;
-  private _controllers: DocTsController[];
+  private _controllers: VaporController[];
 
-  get controllers(): DocTsController[] {
+  get controllers(): VaporController[] {
     return this._controllers;
   }
 
-  set controllers(controllers: DocTsController[]) {
+  set controllers(controllers: VaporController[]) {
     controllers.forEach(controller => {
-      if (!isDocTsController(controller)) throw new Error(invalidControllerMessage(controller));
+      if (!isVaporController(controller)) throw new Error(invalidControllerMessage(controller));
     });
     this._controllers = controllers;
   }
 
-  constructor({ path = '', controllers, showApi = false, middleware = [], expressApplication }: DocAppConfig) {
+  constructor({ path = '', controllers, showApi = false, middleware = [], expressApplication }: VaporConfig) {
     this.path = path;
     this.showApi = showApi;
     this.middleware = middleware;
@@ -49,7 +49,7 @@ export class DocApp implements DocAppConfig {
 
   initializeControllers(): void {
     this.controllers.forEach(controller => {
-      docLogger.log(initializeControllersMessage(this.path));
+      vaporLogger.log(initializeControllersMessage(this.path));
       initControllerMiddleware(this.expressApplication, controller);
       initializeRoutes(this.path, this.expressApplication, controller);
       this.routeDocs = [...this.routeDocs, ...getRoutesDocumentation(controller)];
@@ -70,7 +70,7 @@ export class DocApp implements DocAppConfig {
       <html lang="en">
       <head>
         <meta charset="utf-8">
-        <title>DocTS ${this.path} API</title>
+        <title>${this.path} API</title>
       </head>
       <body>
         <H1>Active Routes:</H1>

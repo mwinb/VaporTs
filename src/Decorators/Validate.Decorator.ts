@@ -3,19 +3,19 @@ import {
   Evaluator,
   HttpError,
   Curryware,
-  docLogger,
+  vaporLogger,
   getRouteDoc,
   RequestField,
   VoidDecorator,
   ValidateConfig,
   getControllerDoc,
-  isDocTsValidator,
+  isVaporValidator,
   getConfiguredEvaluators,
   isJsonObjectEvaluator,
   DEFAULT_VALIDATE_CONFIG,
   createValidatorEvaluator,
   invalidRequestFieldMessage,
-  invalidDocTsValidatorWarningMessage
+  invalidValidatorWarningMessage
 } from '..';
 
 const getValidationHandlerCurryware = (evaluator: Evaluator, requestFieldToValidate: string): Curryware => {
@@ -26,7 +26,7 @@ const getValidationHandlerCurryware = (evaluator: Evaluator, requestFieldToValid
         evaluator(requestField);
         return await ogMethod.apply(this, args);
       } else {
-        docLogger.log(invalidRequestFieldMessage(requestFieldToValidate, ogMethod.name));
+        vaporLogger.log(invalidRequestFieldMessage(requestFieldToValidate, ogMethod.name));
         throw new HttpError(501, 'Not implemented.');
       }
     };
@@ -34,12 +34,12 @@ const getValidationHandlerCurryware = (evaluator: Evaluator, requestFieldToValid
 };
 
 const warnAndReturnJsonEvaluator = (validator: Record<string, any>): Evaluator => {
-  docLogger.log(invalidDocTsValidatorWarningMessage(validator));
+  vaporLogger.log(invalidValidatorWarningMessage(validator));
   return isJsonObjectEvaluator;
 };
 
 const getRouteEvaluator = (validator: Record<string, any>, strip: boolean): Evaluator => {
-  return isDocTsValidator(validator)
+  return isVaporValidator(validator)
     ? createValidatorEvaluator(validator, strip)
     : warnAndReturnJsonEvaluator(validator);
 };
