@@ -3,6 +3,7 @@ export const getMockResponse = (): any => {
     status: jest.fn().mockReturnThis(),
     sendStatus: jest.fn().mockReturnThis(),
     json: jest.fn().mockReturnThis(),
-    send: jest.fn().mockReturnThis()
+    send: jest.fn().mockReturnThis(),
+    type: jest.fn().mockReturnThis()
   };
 };

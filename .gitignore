@@ -1,8 +1,8 @@
 node_modules
 /lib
-/example/coverage
-/example/node_modules
-/example/dist
+example/*/coverage
+example/*/node_modules
+example/*/dist
 .vscode
 coverage
 .env

@@ -78,6 +78,12 @@ describe('Constructor', () => {
       testDocApp.api({} as any, mockResponse);
       expect(mockResponse.send).toHaveBeenCalled();
     });
+
+    it('sets the content type to html when calling the api', () => {
+      const mockResponse = getMockResponse();
+      testDocApp.api({} as any, mockResponse);
+      expect(mockResponse.type).toHaveBeenCalled();
+    });
   });
 
   describe('Custom Path and show api', () => {

@@ -65,7 +65,7 @@ export class VaporApp implements VaporConfig {
   }
 
   api(_req: Request, res: Response): void {
-    res.send(
+    res.type('html').send(
       `<!doctype html>
       <html lang="en">
       <head>

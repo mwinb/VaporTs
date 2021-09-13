@@ -10,9 +10,9 @@ VaporTs is a minimal framework built to support a simple and only slightly opini
 
 ---
 
-### Example application
+### Example applications
 
-- https://github.com/mwinb/VaporTs/tree/main/example
+- https://github.com/mwinb/VaporTs/tree/main/example/express
 
 # Decorators
 
