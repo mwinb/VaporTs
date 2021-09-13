@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Stargate-1",
+    "lat": 245,
+    "lon": 1050,
+    "orbit": "leo",
+    "status": "All is well."
+  },
+  {
+    "name": "Stargate-2",
+    "lat": 479,
+    "lon": 243,
+    "orbit": "geo",
+    "status": "Feeling a bit ill."
+  },
+  {
+    "name": "Stargate-3",
+    "lat": 479,
+    "lon": 243,
+    "orbit": "geo",
+    "status": "Completely FUBAR."
+  }
+]
