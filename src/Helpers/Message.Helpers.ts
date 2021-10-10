@@ -28,6 +28,10 @@ export const invalidControllerMessage = (controller: Record<string, any>): strin
   return `${controller} is not a valid Controller. Ensure that it is decorated with @Controller.`;
 };
 
+export const invalidVapeRouter = (missingMethod: string) => {
+  return `Invalid VapeRouter provided in RouterConfig. Required method ${missingMethod} is required.`
+}
+
 export const bindingRouteMessage = (
   controllerName: string,
   controllerMethod: string,
