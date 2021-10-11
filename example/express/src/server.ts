@@ -1,6 +1,6 @@
 import morgan from 'morgan';
 import express from 'express';
-import { VaporApp, VaporConfig } from 'vaports';
+import { VaporApp, VaporConfig } from '../../../src';
 import SatelliteController from './Satellites/satellites.controller';
 
 const port = 5000;

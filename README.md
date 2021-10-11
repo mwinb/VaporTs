@@ -28,14 +28,14 @@ VaporTs is a minimal framework built to support a simple and only slightly opini
 #### Without middleware:
 
 ```typescript
-@Controller('/example')
+@Controller('example')
 class ExampleController {}
 ```
 
 #### With Middleware:
 
 ```typescript
-@Controller('/example', [controllerMiddleware])
+@Controller('example', [controllerMiddleware])
 class ExampleController {}
 ```
 
@@ -59,7 +59,7 @@ class ExampleController {}
 ### Examples:
 
 ```typescript
-@Controller('/example')
+@Controller('example')
 class ExampleController {
   @Route('GET')
   async exampleGetFunction(): Promise<ExampleData[]> {}
@@ -107,7 +107,7 @@ Response handling is applied to all Routes by default, but may be disabled in th
 ### Example:
 
 ```typescript
-@Controller('/example')
+@Controller('example')
 class ExampleController {
   // Calls res.status(200).send(Example[]) if successful
   @Route('GET')
@@ -159,7 +159,7 @@ class ExampleValidator {
   someString: string;
 }
 
-@Controller('/example')
+@Controller('example')
 class ExampleController {
   @Route('PATCH')
   @Validate(new ExampleValidator(), 'body')
@@ -309,7 +309,7 @@ The VaporApp class is responsible for binding all routes, methods, and middlewar
 ### Parameters:
 
 - `VaporConfig: {}`
-  - `path: string` (optional, defaults to root)
+  - `path: string` (optional, defaults to '/')
   - `showApi: boolean` (optional, default: false)
     - This provides a simple html page @GET/path that lists all routes as links and their respective methods.
   - `middleware: Middleware[]` (optional)

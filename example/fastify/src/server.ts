@@ -8,7 +8,6 @@ async function main() {
     showApi: true,
     expressApplication: app,
     controllers: [new SatelliteController()],
-    path: '/'
   };
   const appV1 = new VaporApp(config);
 

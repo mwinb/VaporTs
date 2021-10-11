@@ -26,7 +26,7 @@ describe('Constructor', () => {
     });
 
     it('sets the path to root by default', () => {
-      expect(testDocApp.path).toBe('');
+      expect(testDocApp.path).toBe('/');
     });
 
     it('sets show api to false by default', () => {
@@ -62,7 +62,7 @@ describe('Constructor', () => {
 
     it('adds a GET method to DocApps RouteDocs if the showApi method is set to true', () => {
       expect(testDocApp.routeDocs[0].method).toEqual('GET');
-      expect(testDocApp.routeDocs[0].paths.shift()).toEqual('/');
+      expect(testDocApp.routeDocs[0].paths.shift()).toEqual('');
     });
 
     it('adds the api path to the router if show api is true', () => {

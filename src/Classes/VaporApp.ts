@@ -32,7 +32,7 @@ export class VaporApp implements VaporConfig {
     this._controllers = controllers;
   }
 
-  constructor({ path = '', controllers, showApi = false, middleware = [], expressApplication }: VaporConfig) {
+  constructor({ path = '/', controllers, showApi = false, middleware = [], expressApplication }: VaporConfig) {
     this.path = path;
     this.showApi = showApi;
     this.middleware = middleware;
@@ -59,7 +59,7 @@ export class VaporApp implements VaporConfig {
 
   initializeApi(): void {
     if (this.showApi) {
-      this.routeDocs.unshift({ method: 'GET', paths: [this.path.length ? '' : '/'] });
+      this.routeDocs.unshift({ method: 'GET', paths: [''] });
       this.api = this.api.bind(this);
       this.expressApplication.get(this.path, this.api);
     }

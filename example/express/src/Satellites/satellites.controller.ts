@@ -9,7 +9,7 @@ import SatelliteService from './satellites.service';
 import { Controller, Route, Validate } from 'vaports';
 import jsonContentValidator from '../Validators/JsonContentValidator';
 
-@Controller('/satellite')
+@Controller('satellite')
 class SatelliteController {
   exampleModel: SatelliteModel = {
     id: 1000,

@@ -1,5 +1,5 @@
 import express from 'express';
-import { VaporApp } from 'vaports';
+import { VaporApp } from '../../../../src';
 import supertest, { SuperTest, Test } from 'supertest';
 import SatelliteController from './satellites.controller';
 
