@@ -1,5 +1,6 @@
 import {
   RouteDoc,
+  AppAdapter,
   vaporLogger,
   VaporConfig,
   VaporController,
@@ -10,14 +11,14 @@ import {
   initControllerMiddleware,
   initializeControllersMessage
 } from '..';
-import { Request, Response, Application } from 'express';
+import { Request, Response } from 'express';
 
 export class VaporApp implements VaporConfig {
   public path: string;
   public routeDocs: RouteDoc[] = [];
   public showApi: boolean;
   public middleware: any[];
-  public expressApplication: Application;
+  public expressApplication: AppAdapter;
   private _controllers: VaporController[];
 
   get controllers(): VaporController[] {
@@ -36,7 +37,7 @@ export class VaporApp implements VaporConfig {
     this.showApi = showApi;
     this.middleware = middleware;
     this.controllers = controllers;
-    this.expressApplication = expressApplication;
+    this.expressApplication = new AppAdapter(expressApplication);
 
     this.initializeApi();
     this.initializeMiddlewares();

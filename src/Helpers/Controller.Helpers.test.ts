@@ -1,8 +1,7 @@
-import { Router } from 'express';
-import { getMockrouter } from '../__mocks__/Express/routerMock';
 import { mockMiddleware } from '../__mocks__/Express/mockMiddleware';
-import { getControllerDoc, initControllerMiddleware, VaporController, isVaporController } from '..';
+import { getMockExpressLikeApp } from '../__mocks__/ExpressLikeAppMock';
 import { MockControllerWithMiddleWare, MockControllerWithoutMiddleWare } from '../__mocks__/controllerMocks';
+import { getControllerDoc, initControllerMiddleware, VaporController, isVaporController, AppAdapter } from '..';
 
 let testController: VaporController;
 beforeEach(() => {
@@ -17,18 +16,18 @@ describe('getControllerDoc', () => {
 });
 
 describe('initControllerMiddleware', () => {
-  let router: Router;
+  let router: AppAdapter;
   beforeEach(() => {
-    router = getMockrouter() as any;
+    router = new AppAdapter(getMockExpressLikeApp());
   });
   it('does not initialize the controllers middleware if no middleware was provided', () => {
     initControllerMiddleware(router, testController);
-    expect(router.use).not.toHaveBeenCalled();
+    expect(router.app.use).not.toHaveBeenCalled();
   });
   it('initializes the controllers middle ware', () => {
     testController = new MockControllerWithMiddleWare();
     initControllerMiddleware(router, testController);
-    expect(router.use).toHaveBeenCalledWith(testController.controllerDoc.path, mockMiddleware);
+    expect(router.app.use).toHaveBeenCalledWith(testController.controllerDoc.path, mockMiddleware);
   });
 });
 

@@ -29,8 +29,8 @@ export const invalidControllerMessage = (controller: Record<string, any>): strin
 };
 
 export const invalidVapeRouter = (missingMethod: string) => {
-  return `Invalid VapeRouter provided in RouterConfig. Required method ${missingMethod} is required.`
-}
+  return `Invalid expressApplication provided in RouterConfig. Required method ${missingMethod} is required.`;
+};
 
 export const bindingRouteMessage = (
   controllerName: string,

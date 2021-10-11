@@ -1,8 +1,7 @@
-
 // Classes
 export * from './Classes/VaporApp';
 export * from './Classes/HttpError';
-export * from './Classes/VapeRouter';
+export * from './Classes/AppAdapter';
 export { vaporLogger } from './Classes/VaporLogger';
 
 // Curryware
@@ -38,7 +37,7 @@ export * from './Helpers/ValidatorDoc.Helpers';
 
 // Interfaces
 export * from './Interfaces/RouteDoc.Interface';
-export * from './Interfaces/VapeRouter.Interface';
+export * from './Interfaces/AppAdapter.Interface';
 export * from './Interfaces/RouteParams.Interface';
 export * from './Interfaces/VaporConfig.Interface';
 export * from './Interfaces/ValidatorDoc.Interface';

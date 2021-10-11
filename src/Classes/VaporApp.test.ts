@@ -1,18 +1,18 @@
-import { Application } from 'express';
-import { VaporApp, getRoutesDocumentation } from '..';
 import { getMockResponse } from '../__mocks__/Express/responseMock';
 import { mockMiddleware } from '../__mocks__/Express/mockMiddleware';
+import { VaporApp, getRoutesDocumentation, ExpressLikeApp } from '..';
 import { MockControllerWithRoutes } from '../__mocks__/controllerMocks';
+import { getMockExpressLikeApp } from '../__mocks__/ExpressLikeAppMock';
 
 let testDocApp: VaporApp;
-let mockExpressApp: Application;
+let mockExpressApp: ExpressLikeApp;
 
 describe('Constructor', () => {
-  let initializeControllers: jest.SpyInstance<any, any>;
   let initializeMiddleware: jest.SpyInstance<any, any>;
+  let initializeControllers: jest.SpyInstance<any, any>;
 
   beforeEach(() => {
-    mockExpressApp = { use: jest.fn(), get: jest.fn() } as any;
+    mockExpressApp = getMockExpressLikeApp();
     initializeMiddleware = jest.spyOn(VaporApp.prototype, 'initializeControllers');
     initializeControllers = jest.spyOn(VaporApp.prototype, 'initializeMiddlewares');
   });
@@ -66,7 +66,7 @@ describe('Constructor', () => {
     });
 
     it('adds the api path to the router if show api is true', () => {
-      expect(testDocApp.expressApplication.get).toHaveBeenNthCalledWith(1, testDocApp.path, testDocApp.api);
+      expect(mockExpressApp.get).toHaveBeenNthCalledWith(1, testDocApp.path, testDocApp.api);
     });
 
     it('adds all controllers route docs to the apps route docs', () => {

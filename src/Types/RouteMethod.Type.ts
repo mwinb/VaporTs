@@ -1,1 +1,1 @@
-export type RouteMethod = 'POST' | 'PATCH' | 'PUT' | 'GET' | 'DELETE' | 'HEAD' | 'CONNECT' | 'OPTIONS' | 'TRACE';
+export type RouteMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE' | 'ALL' | 'HEAD';

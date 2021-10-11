@@ -1,4 +1,4 @@
 /**
- * Needs to have the methods in VapeRouterInterface
+ * Needs to have the methods in AppAdapterInterface
  */
-export type ExpressLikeApp =  any;
+export type ExpressLikeApp = any;

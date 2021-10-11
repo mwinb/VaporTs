@@ -1,13 +1,12 @@
 import { VaporApp, VaporConfig } from '../../../src';
 import SatelliteController from './Satellites/satellites.controller';
 import fastify from 'fastify';
-
 async function main() {
   const app = fastify();
   const port = 5000;
   const config: VaporConfig = {
     showApi: true,
-    expressApplication: app as any,
+    expressApplication: app,
     controllers: [new SatelliteController()],
     path: '/'
   };

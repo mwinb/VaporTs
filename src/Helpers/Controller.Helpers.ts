@@ -1,5 +1,4 @@
-import { Router } from 'express';
-import { ControllerDoc, RouteDoc, VaporController } from '..';
+import { ControllerDoc, RouteDoc, AppAdapter, VaporController } from '..';
 
 export function getControllerDoc(target: Record<string, any>): ControllerDoc {
   if (!target.controllerDoc) {
@@ -12,7 +11,7 @@ export function getControllerDoc(target: Record<string, any>): ControllerDoc {
   return target.controllerDoc;
 }
 
-export function initControllerMiddleware(router: Router, controller: Record<string, any>): void {
+export function initControllerMiddleware(router: AppAdapter, controller: Record<string, any>): void {
   const routeDoc = getControllerDoc(controller);
   if (routeDoc.middleware.length) router.use(routeDoc.path, ...routeDoc.middleware);
 }

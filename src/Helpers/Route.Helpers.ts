@@ -1,5 +1,13 @@
-import { Router } from 'express';
-import { RouteDoc, getControllerDoc, vaporLogger, Curryware, Middleware, ControllerDoc, bindingRouteMessage } from '..';
+import {
+  RouteDoc,
+  Curryware,
+  Middleware,
+  AppAdapter,
+  vaporLogger,
+  ControllerDoc,
+  getControllerDoc,
+  bindingRouteMessage
+} from '..';
 
 export function getRouteMethodNames(controller: Record<string, any>): string[] {
   return Object.getOwnPropertyNames(Object.getPrototypeOf(controller)).filter(name => {
@@ -49,7 +57,7 @@ const getBoundFunction = (controller: Record<string, any>, methodName: string): 
   return controller[methodName].bind(controller);
 };
 
-export function initializeRoutes(basePath: string, router: Router, controller: Record<string, any>): void {
+export function initializeRoutes(basePath: string, router: AppAdapter, controller: Record<string, any>): void {
   const methods = getRouteMethodNames(controller);
   const controllerDoc = getControllerDoc(Object.getPrototypeOf(controller));
   methods

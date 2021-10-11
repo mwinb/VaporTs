@@ -1,11 +1,11 @@
-export interface VapeRouterInterface {
+export interface AppAdapterInterface {
   get: Function;
   put: Function;
-  post: Function;
-  patch: Function;
-  delete: Function;
   all: Function;
   use: Function;
+  post: Function;
   head: Function;
+  patch: Function;
+  delete: Function;
   listen: Function;
 }
