@@ -1,6 +1,6 @@
 # VaporTs
 
-VaporTs is a minimal framework built to support a simple and only slightly opinionated object oriented approach to implementing and unit testing Expressjs applications. VaporTs is primarily focused on the use of two primary decorators. The Controller decorator, which provides a simple way to describe express controllers, their paths, and middleware. The Route decorator, which provides simple HTTP method declaration, extension to the Controller path, individual middleware, and optional error, response, and validation handling.
+VaporTs is a minimal framework built to support a simple and only slightly opinionated object oriented approach to implementing and unit testing Expressjs applications. VaporTs is primarily focused on the use of two primary decorators. The Controller decorator, which provides a simple way to describe express like api's, their paths, and middleware. The Route decorator, which provides simple HTTP method declaration, extension to the Controller path, individual middleware, and optional error, response, and validation handling.
 
 ---
 
@@ -48,7 +48,7 @@ class ExampleController {}
 ### Parameters:
 
 - `Method: string` (required)
-  - `'POST' | 'PATCH' | 'PUT' | 'GET' | 'DELETE' | 'HEAD' | 'CONNECT' | 'OPTIONS' | 'TRACE'`
+  - `'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE' | 'ALL' | 'HEAD'`
 - `RouteParams: { } `(optional)
   - `path: string | string[]` (optional)
   - `middleware: Middleware[]` (optional)
@@ -304,7 +304,7 @@ class CustomValidatorExample {
 
 ## VaporApp
 
-The VaporApp class is responsible for binding all routes, methods, and middleware to an express application.
+The VaporApp class is responsible for binding all routes, methods, and middleware to an express like application.
 
 ### Parameters:
 
@@ -317,7 +317,8 @@ The VaporApp class is responsible for binding all routes, methods, and middlewar
   - `controllers: Controller[]` (required)
     - any class with the Controller Decorator.
     - Throws error with information about the class if a undecorated class is passed
-  - `expressApplication: Express.Application` (required)
+  - `expressApplication: ExpressLikeApp` (required)
+    - Must have all methods defined in `AdapterAppInterface`
 
 ### Example:
 
