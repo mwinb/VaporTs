@@ -6,7 +6,8 @@ import {
   vaporLogger,
   ControllerDoc,
   getControllerDoc,
-  bindingRouteMessage
+  bindingRouteMessage,
+  generatePath
 } from '..';
 
 export function getRouteMethodNames(controller: Record<string, any>): string[] {
@@ -66,12 +67,13 @@ export function initializeRoutes(basePath: string, router: AppAdapter, controlle
       const routeDoc = controllerDoc.routes.get(method);
       const boundMethod = getBoundFunction(controller, method);
       routeDoc.paths.map(path => {
+        const controllerPath = generatePath(basePath, controllerDoc.path);
+        const routeFullPath = generatePath(controllerPath, path);
         vaporLogger.log(
-          bindingRouteMessage(controller.constructor.name, method, routeDoc.method, `${controllerDoc.path}${path}`)
+          bindingRouteMessage(controller.constructor.name, method, routeDoc.method, controllerPath)
         );
         router[routeDoc.method.toLowerCase()](
-          basePath + controllerDoc.path + path,
-          ...routeDoc.middleware,
+          routeFullPath,
           getWrappedRouteMethod(routeDoc.curriers, boundMethod)
         );
       });

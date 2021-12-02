@@ -5,7 +5,8 @@ import {
   initializeRoutes,
   getRouteMethodNames,
   getWrappedRouteMethod,
-  getRoutesDocumentation
+  getRoutesDocumentation,
+  generatePath
 } from '..';
 import { Response } from 'express';
 import { getMockrouter } from '../__mocks__/Express/routerMock';
@@ -67,8 +68,7 @@ describe('initializing routes', () => {
       routerMethod[1].paths.forEach((p: string) => {
         expect(mockRouter.get).toHaveBeenNthCalledWith(
           callIndex,
-          '/test' + p,
-          ...routerMethod[1].middleware,
+          generatePath('/test', p),
           expect.anything()
         );
         callIndex += 1;

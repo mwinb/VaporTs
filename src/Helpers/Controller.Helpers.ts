@@ -1,4 +1,4 @@
-import { ControllerDoc, RouteDoc, AppAdapter, VaporController } from '..';
+import { ControllerDoc, RouteDoc, AppAdapter, VaporController, generatePath, Middleware } from '..';
 
 export function getControllerDoc(target: Record<string, any>): ControllerDoc {
   if (!target.controllerDoc) {
@@ -11,9 +11,13 @@ export function getControllerDoc(target: Record<string, any>): ControllerDoc {
   return target.controllerDoc;
 }
 
-export function initControllerMiddleware(router: AppAdapter, controller: Record<string, any>): void {
-  const routeDoc = getControllerDoc(controller);
-  if (routeDoc.middleware.length) router.use(routeDoc.path, ...routeDoc.middleware);
+const useControllerMiddleware = (path: string, middleware: Middleware[], router: AppAdapter): void => {
+  if (middleware.length) router.use(path, ...middleware); 
+}
+
+export function initControllerMiddleware(router: AppAdapter, controller: Record<string, any>, basePath: string): void {
+  const controllerDoc = getControllerDoc(controller);
+  useControllerMiddleware(generatePath(basePath, controllerDoc.path), controllerDoc.middleware, router);
 }
 
 export const isVaporController = (object: Record<string, any>): object is VaporController => {

@@ -1,7 +1,7 @@
 import { Middleware, RouteDoc } from '..';
 
 export interface ControllerDoc {
-  path: string | string[];
+  path: string; 
   routes: Map<string, RouteDoc>;
   middleware: Middleware[];
 }

@@ -8,7 +8,7 @@ const config: VaporConfig = {
   showApi: true,
   expressApplication: express(),
   controllers: [new SatelliteController()],
-  middleware: [express.json(), morgan('combined')]
+  middleware: [express.json()]
 };
 
 const appV1 = new VaporApp(config);

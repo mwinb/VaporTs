@@ -29,6 +29,7 @@ export * from './Evaluators/JsonObject.Evaluator';
 export * from './Evaluators/VaporValidator.Evaluator';
 
 // Helpers
+export * from './Helpers/Vaports.Helpers';
 export * from './Helpers/Route.Helpers';
 export * from './Helpers/Message.Helpers';
 export * from './Helpers/Evaluator.Helpers';

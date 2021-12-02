@@ -95,9 +95,9 @@ describe('/satellite', () => {
     });
   });
 
-  describe('-api', () => {
+  describe('api', () => {
     it('returns the html for the example model', async () => {
-      const { text, type } = await appRequest.get(`${path}-api`).expect(200);
+      const { text, type } = await appRequest.get(`${path}/api`).expect(200);
       expect(type).toBe('text/html');
       expect(text).toContain(JSON.stringify(satController.exampleModel, null, 2));
     });

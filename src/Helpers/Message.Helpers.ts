@@ -20,8 +20,8 @@ export const uncaughtExceptionMessage = (error: Error): string => {
   return `Uncaught Exception Error: ${error.message}\n${error.stack}\n`;
 };
 
-export const initializeControllersMessage = (path?: string): string => {
-  return `Initializing ${path || '/'} controllers.`;
+export const initializeControllersMessage = (path: string): string => {
+  return `Initializing ${path} controllers.`;
 };
 
 export const invalidControllerMessage = (controller: Record<string, any>): string => {

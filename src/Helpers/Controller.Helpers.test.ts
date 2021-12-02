@@ -21,12 +21,12 @@ describe('initControllerMiddleware', () => {
     router = new AppAdapter(getMockExpressLikeApp());
   });
   it('does not initialize the controllers middleware if no middleware was provided', () => {
-    initControllerMiddleware(router, testController);
+    initControllerMiddleware(router, testController, '/');
     expect(router.app.use).not.toHaveBeenCalled();
   });
   it('initializes the controllers middle ware', () => {
     testController = new MockControllerWithMiddleWare();
-    initControllerMiddleware(router, testController);
+    initControllerMiddleware(router, testController, '/');
     expect(router.app.use).toHaveBeenCalledWith(testController.controllerDoc.path, mockMiddleware);
   });
 });

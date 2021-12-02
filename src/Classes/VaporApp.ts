@@ -3,22 +3,24 @@ import {
   AppAdapter,
   vaporLogger,
   VaporConfig,
+  generatePath,
   VaporController,
   initializeRoutes,
   isVaporController,
   getRoutesDocumentation,
   invalidControllerMessage,
   initControllerMiddleware,
-  initializeControllersMessage
+  initializeControllersMessage,
 } from '..';
 import { Request, Response } from 'express';
 
 export class VaporApp implements VaporConfig {
   public path: string;
-  public routeDocs: RouteDoc[] = [];
   public showApi: boolean;
   public middleware: any[];
+  public routeDocs: RouteDoc[] = [];
   public expressApplication: AppAdapter;
+
   private _controllers: VaporController[];
 
   get controllers(): VaporController[] {
@@ -32,8 +34,8 @@ export class VaporApp implements VaporConfig {
     this._controllers = controllers;
   }
 
-  constructor({ path = '/', controllers, showApi = false, middleware = [], expressApplication }: VaporConfig) {
-    this.path = path;
+  constructor({ path, controllers, showApi = false, middleware = [], expressApplication }: VaporConfig) {
+    this.path = generatePath('/', path);
     this.showApi = showApi;
     this.middleware = middleware;
     this.controllers = controllers;
@@ -51,7 +53,7 @@ export class VaporApp implements VaporConfig {
   initializeControllers(): void {
     this.controllers.forEach(controller => {
       vaporLogger.log(initializeControllersMessage(this.path));
-      initControllerMiddleware(this.expressApplication, controller);
+      initControllerMiddleware(this.expressApplication, controller, this.path);
       initializeRoutes(this.path, this.expressApplication, controller);
       this.routeDocs = [...this.routeDocs, ...getRoutesDocumentation(controller)];
     });
@@ -79,7 +81,8 @@ export class VaporApp implements VaporConfig {
           let routesHtml = '';
           this.routeDocs.forEach(val => {
             val.paths.forEach((p: string) => {
-              routesHtml += `<h3>${val.method} : <a href="${this.path}${p}">${this.path}${p}</a></h3>`;
+              const path = generatePath(this.path, p);
+              routesHtml += `<h3>${val.method} : <a href="${path}">${path}</a></h3>`;
             });
           });
           return routesHtml;

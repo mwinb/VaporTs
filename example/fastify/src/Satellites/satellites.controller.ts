@@ -7,8 +7,8 @@ import SatelliteModel from './satellites.model';
 import SatelliteService from './satellites.service';
 import { Controller, Route, Validate } from 'vaports';
 import jsonContentValidator from '../Validators/JsonContentValidator';
-
-@Controller('satellite')
+import morgan from 'morgan';
+@Controller('satellite', [morgan('tiny')])
 class SatelliteController {
   exampleModel: SatelliteModel = {
     id: 1000,
@@ -21,7 +21,25 @@ class SatelliteController {
 
   constructor(public satService = new SatelliteService()) {}
 
-  @Route('GET', { responseCode: 200 })
+  @Route('GET', { path: 'api', handleErrors: false })
+  getModel(_, { type }) {
+    type('html');
+    return `<!doctype html>
+      <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>DocTS Example</title>
+      </head>
+      <body>
+        <h1>Satellite Example:</h1>
+        <h2>
+        <pre>${JSON.stringify(this.exampleModel, null, 2)}<pre>
+        </h2>
+      </body>
+      </html>`;
+  }
+
+  @Route('GET')
   async getAllSats(): Promise<SatelliteModel[]> {
     return this.satService.getAll();
   }
@@ -46,23 +64,6 @@ class SatelliteController {
     return this.satService.patchOne(sat);
   }
 
-  @Route('GET', { path: '-api', handleErrors: false })
-  getModel(_, res) {
-    res.type('html');
-    return `<!doctype html>
-      <html lang="en">
-      <head>
-        <meta charset="utf-8">
-        <title>DocTS Example</title>
-      </head>
-      <body>
-        <h1>Satellite Example:</h1>
-        <h2>
-        <pre>${JSON.stringify(this.exampleModel, null, 2)}<pre>
-        </h2>
-      </body>
-      </html>`;
-  }
 }
 
 export default SatelliteController;
