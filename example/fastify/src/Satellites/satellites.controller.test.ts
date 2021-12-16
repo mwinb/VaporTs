@@ -1,7 +1,6 @@
 import SatelliteModel from './satellites.model';
 import SatelliteController from './satellites.controller';
 import { getMockResponse } from '../../../../src/__mocks__/Express/responseMock';
-
 let mockRequest;
 let satController: SatelliteController;
 
