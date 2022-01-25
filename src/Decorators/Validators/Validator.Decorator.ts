@@ -6,9 +6,9 @@ import {
   isVaporValidator,
   ValidatorFieldConfig,
   SetPropertyEvaluators,
-  createValidatorEvaluator,
   DEFAULT_VALIDATOR_FIELD_CONFIG,
-  invalidValidatorWarningMessage
+  invalidValidatorWarningMessage,
+  createValidatorEvaluatorFromReqField
 } from '../..';
 
 export const EvaluateValidator = (
@@ -18,7 +18,7 @@ export const EvaluateValidator = (
 ): PropertyDecorator => {
   return SetPropertyEvaluators({
     ...validatorConfig,
-    evaluators: [createValidatorEvaluator(validator, strip), ...validatorConfig.evaluators]
+    evaluators: [createValidatorEvaluatorFromReqField(validator, strip), ...validatorConfig.evaluators]
   });
 };
 

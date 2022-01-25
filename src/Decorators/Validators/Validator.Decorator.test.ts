@@ -19,25 +19,35 @@ describe('ValidatorObject', () => {
   it('Sets the validator map key to the property name and adds the ValidatorEvaluator', () => {
     expect(
       validatorFieldEvaluator({
-        stringField: 'string',
-        booleanField: false,
-        numberField: 10,
-        subSubValidator: {
-          stringField: 'string'
-        }
+        req: {
+          body: {
+            stringField: 'string',
+            booleanField: false,
+            numberField: 10,
+            subSubValidator: {
+              stringField: 'string'
+            }
+          }
+        },
+        field: 'body'
       })
     ).toBeTruthy();
   });
 
   it('Should strip extra unvalidated fields by default', () => {
     const objectToValidate = {
-      stringField: 'string',
-      booleanField: false,
-      numberField: 10,
-      subSubValidator: {
-        stringField: 'string'
+      req: {
+        body: {
+          stringField: 'string',
+          booleanField: false,
+          numberField: 10,
+          subSubValidator: {
+            stringField: 'string'
+          },
+          extraField: 'Remove Me'
+        }
       },
-      extraField: 'Remove Me'
+      field: 'body'
     };
     validatorFieldEvaluator(objectToValidate);
     expect(objectToValidate['extraField']).toBeUndefined();

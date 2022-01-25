@@ -36,6 +36,7 @@ export * from './Helpers/ValidatorDoc.Helpers';
 
 // Interfaces
 export * from './Interfaces/RouteDoc.Interface';
+export * from './Interfaces/ReqField.Interface';
 export * from './Interfaces/RouteParams.Interface';
 export * from './Interfaces/VaporConfig.Interface';
 export * from './Interfaces/ValidatorDoc.Interface';

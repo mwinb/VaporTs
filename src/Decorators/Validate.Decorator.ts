@@ -13,9 +13,9 @@ import {
   getConfiguredEvaluators,
   isJsonObjectEvaluator,
   DEFAULT_VALIDATE_CONFIG,
-  createValidatorEvaluator,
   invalidRequestFieldMessage,
-  invalidValidatorWarningMessage
+  invalidValidatorWarningMessage,
+  createValidatorEvaluatorFromReqField
 } from '..';
 
 const getValidationHandlerCurryware = (evaluator: Evaluator, requestFieldToValidate: string): Curryware => {
@@ -23,7 +23,7 @@ const getValidationHandlerCurryware = (evaluator: Evaluator, requestFieldToValid
     return async function (...args: any[]) {
       const requestField = args[0][requestFieldToValidate];
       if (requestField !== undefined) {
-        evaluator(requestField);
+        evaluator({ req: args[0], field: requestFieldToValidate });
         return await ogMethod.apply(this, args);
       } else {
         vaporLogger.log(invalidRequestFieldMessage(requestFieldToValidate, ogMethod.name));
@@ -35,12 +35,12 @@ const getValidationHandlerCurryware = (evaluator: Evaluator, requestFieldToValid
 
 const warnAndReturnJsonEvaluator = (validator: Record<string, any>): Evaluator => {
   vaporLogger.log(invalidValidatorWarningMessage(validator));
-  return isJsonObjectEvaluator;
+  return (arg: Record<string, any>) => isJsonObjectEvaluator(arg.req[arg.field]);
 };
 
 const getRouteEvaluator = (validator: Record<string, any>, strip: boolean): Evaluator => {
   return isVaporValidator(validator)
-    ? createValidatorEvaluator(validator, strip)
+    ? createValidatorEvaluatorFromReqField(validator, strip)
     : warnAndReturnJsonEvaluator(validator);
 };
 

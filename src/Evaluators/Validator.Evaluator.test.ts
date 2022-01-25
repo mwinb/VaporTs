@@ -3,24 +3,31 @@ import {
   MockValidatorWithSubValidator,
   MockSubValidatorWithOptionalSubValidator
 } from '../__mocks__/ValidatorMocks';
-import { createValidatorEvaluator, Evaluator, isStringEvaluator } from '..';
+import { createValidatorEvaluatorFromReqField, Evaluator, isStringEvaluator } from '..';
 describe('Get Validator Evaluator', () => {
   it('returns an evaluator for a VaporValidator', () => {
-    expect(typeof createValidatorEvaluator(new MockValidatorClass() as any, true) === 'function').toBeTruthy();
+    expect(
+      typeof createValidatorEvaluatorFromReqField(new MockValidatorClass() as any, true) === 'function'
+    ).toBeTruthy();
   });
 
   describe('ValidatorEvaluator - non optional fields', () => {
     let validatorEvaluator: Evaluator;
     beforeEach(() => {
-      validatorEvaluator = createValidatorEvaluator(new MockValidatorWithSubValidator() as any, true);
+      validatorEvaluator = createValidatorEvaluatorFromReqField(new MockValidatorWithSubValidator() as any, true);
     });
     it('returns true if the provided object passes all field evaluators', () => {
       expect(
         validatorEvaluator({
-          stringField: 'string',
-          subValidator: {
-            stringField: 'string'
-          }
+          req: {
+            body: {
+              stringField: 'string',
+              subValidator: {
+                stringField: 'string'
+              }
+            }
+          },
+          field: 'body'
         })
       ).toBeTruthy();
     });
@@ -29,7 +36,12 @@ describe('Get Validator Evaluator', () => {
       let thrownError;
       try {
         validatorEvaluator({
-          stringField: 'string'
+          req: {
+            body: {
+              stringField: 'string'
+            }
+          },
+          field: 'body'
         });
       } catch (error) {
         thrownError = error;
@@ -44,15 +56,23 @@ describe('Get Validator Evaluator', () => {
   describe('ValidatorEvaulator - with optional fields', () => {
     let validatorEvaluator: Evaluator;
     beforeEach(() => {
-      validatorEvaluator = createValidatorEvaluator(new MockSubValidatorWithOptionalSubValidator() as any, true);
+      validatorEvaluator = createValidatorEvaluatorFromReqField(
+        new MockSubValidatorWithOptionalSubValidator() as any,
+        true
+      );
     });
 
     it('ignores optional fields if they are not provided', () => {
       expect(
         validatorEvaluator({
-          stringField: 'string',
-          booleanField: false,
-          numberField: 10
+          req: {
+            body: {
+              stringField: 'string',
+              booleanField: false,
+              numberField: 10
+            }
+          },
+          field: 'body'
         })
       ).toBeTruthy();
     });
@@ -61,12 +81,17 @@ describe('Get Validator Evaluator', () => {
       let thrownError;
       try {
         validatorEvaluator({
-          stringField: 'string',
-          booleanField: false,
-          numberField: 10,
-          optionalSubSubValidator: {
-            stringField: 100
-          }
+          req: {
+            body: {
+              stringField: 'string',
+              booleanField: false,
+              numberField: 10,
+              optionalSubSubValidator: {
+                stringField: 100
+              }
+            }
+          },
+          field: 'body'
         });
       } catch (error) {
         thrownError = error;

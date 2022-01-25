@@ -28,11 +28,14 @@ const getFieldEvaluator = (
   field: string
 ): (() => boolean) => {
   return () => {
-    return evaluators.every(evaluator => {
-      const passes = evaluator(objectToEvaluate[field]);
-      if (!passes) throw new HttpError(400, failedEvaluatorMessage(evaluator, objectToEvaluate, field));
-      return passes;
-    });
+    const val = objectToEvaluate[field];
+    return typeof val === 'object'
+      ? evaluators[0]({ req: objectToEvaluate, field: field })
+      : evaluators.every(evaluator => {
+          const passes = evaluator(objectToEvaluate[field]);
+          if (!passes) throw new HttpError(400, failedEvaluatorMessage(evaluator, objectToEvaluate, field));
+          return passes;
+        });
   };
 };
 
@@ -41,7 +44,7 @@ const evaluateField = (
   objectToEvaluate: Record<string, any>,
   field: string
 ): boolean => {
-  const hasField = objectToEvaluate[field] !== undefined && objectToEvaluate[field] !== null;
+  const hasField = objectToEvaluate[field] !== undefined;
   const fieldEvaluator = getFieldEvaluator(fieldEvaluatorConfig.evaluators, objectToEvaluate, field);
   return fieldEvaluatorConfig.optional
     ? handleOptionalField(hasField, fieldEvaluator)
@@ -51,22 +54,23 @@ const evaluateField = (
 const evaluateValidatorFields = (
   flattenedFieldValidators: [string, ValidatorFieldConfig][],
   objectToEvaluate: Record<string, any>
-): boolean => {
-  return flattenedFieldValidators.every(([field, fieldEvaluatorConfig]) =>
-    evaluateField(fieldEvaluatorConfig, objectToEvaluate, field)
-  );
-};
-
-const stripFields = (objectToStrip: Record<string, any>, fieldValidators: Map<string, ValidatorFieldConfig>): void => {
-  Object.keys(objectToStrip).forEach(key => {
-    if (!fieldValidators.has(key)) delete objectToStrip[key];
+): { result: boolean; stripped: Record<string, any> } => {
+  const stripped = {};
+  const result = flattenedFieldValidators.every(([field, fieldEvaluatorConfig]) => {
+    stripped[field] = objectToEvaluate[field];
+    return evaluateField(fieldEvaluatorConfig, objectToEvaluate, field);
   });
+  return { result, stripped };
 };
 
-export const createValidatorEvaluator = (arg: VaporValidator, strip: boolean): Evaluator => {
+export const createValidatorEvaluatorFromReqField = (arg: VaporValidator, strip: boolean): Evaluator => {
   const validatorDoc = getValidatorDoc(arg);
   return (objectToEvaluate: Record<string, any>) => {
-    strip && stripFields(objectToEvaluate, validatorDoc.fieldValidators);
-    return evaluateValidatorFields(Array.from(validatorDoc.fieldValidators.entries()), objectToEvaluate);
+    const { result, stripped } = evaluateValidatorFields(
+      Array.from(validatorDoc.fieldValidators.entries()),
+      objectToEvaluate.req[objectToEvaluate.field]
+    );
+    if (strip) objectToEvaluate.req[objectToEvaluate.field] = stripped;
+    return result;
   };
 };
