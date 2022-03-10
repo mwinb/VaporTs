@@ -1,4 +1,4 @@
-import { Controller, Route, Validate } from '..';
+import { Controller, Route, Validate, MiddleWare } from '..';
 import { MockSubSubValidator } from './ValidatorMocks';
 import { mockMiddleware } from './Express/mockMiddleware';
 
@@ -24,17 +24,17 @@ export class MockControllerWithRoutes {
 
   @Route('GET', { path: '/:param' })
   async mockRouteWithPath(): Promise<any> {
-    return await this.mockFn();
+    return this.mockFn();
   }
 
   @Route('GET', { middleware: [mockMiddleware] })
   async mockRouteWithMiddleware(...args: any[]): Promise<any> {
-    return await this.mockFn(...args);
+    return this.mockFn(...args);
   }
 
   @Route('GET', { path: ['/pathone', '/pathtwo'] })
   async mockRouteWithMultiplePaths(...args: any[]): Promise<any> {
-    return await this.mockFn(...args);
+    return this.mockFn(...args);
   }
 
   @Route('GET', { handleResponse: false })
@@ -44,7 +44,7 @@ export class MockControllerWithRoutes {
 
   @Route('GET', { responseCode: 201 })
   async mockRouteWithCustomCode(...args: any[]): Promise<any> {
-    return await this.mockFn(...args);
+    return this.mockFn(...args);
   }
 
   @Route('GET', { handleErrors: false })
@@ -55,6 +55,13 @@ export class MockControllerWithRoutes {
       this.errorFn(err);
     }
   }
+
+  @MiddleWare([mockMiddleware])
+  @Route('GET')
+  mockRouteWithMiddleWareDecorator(...args: any[]): Promise<any> {
+    return this.mockFn(...args);
+  }
+
 }
 
 @Controller('/test')
