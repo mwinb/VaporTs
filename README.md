@@ -5,14 +5,23 @@ VaporTs is a minimal framework built to support a simple and only slightly opini
 ---
 
 ## Installation:
-
+### Existing project:
 `npm i --save vaports`
+### Using the CLI: 
+```sh
+> npm i -g @vaports/cli
+> mkdir PROJECT_NAME
+> cd PROJECT_NAME && vaports
+```
 
 ---
 
 ### Example applications
 
 - https://github.com/mwinb/VaporTs/tree/main/example/express
+
+### CLI
+- https://github.com/mwinb/VaporTs-CLI
 
 # Decorators
 

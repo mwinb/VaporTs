@@ -1,6 +1,6 @@
 {
   "name": "vaports",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A micro framework for typescript express apps.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -13,7 +13,8 @@
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
-    "version": "npm run format && git add -A src"
+    "version": "npm run format && git add -A src",
+    "updateBrowsersList": "npx browserslist@latest --update-db"
   },
   "files": [
     "lib/**/*"
